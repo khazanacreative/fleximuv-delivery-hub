@@ -165,4 +165,15 @@
   .morph-button {
     @apply bg-gradient-to-br from-primary/90 to-primary/80 hover:from-primary hover:to-primary/90 text-primary-foreground rounded-xl backdrop-blur-sm shadow-sm border border-primary/20;
   }
+
+  /* Left-aligned form styles */
+  .form-left-aligned input,
+  .form-left-aligned select,
+  .form-left-aligned textarea,
+  .form-left-aligned label,
+  .form-left-aligned .form-group,
+  .form-left-aligned .form-section,
+  .form-left-aligned .form-row {
+    @apply text-left;
+  }
 }

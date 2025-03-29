@@ -26,8 +26,8 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
           collapsed ? "ml-16" : "ml-64"
         )}>
           <main className="flex-1 overflow-auto">
-            <div className="mx-auto px-6 py-6 max-w-7xl">
-              {/* Updated to px-6 for proper 24px margin */}
+            <div className="mx-auto px-6 max-w-7xl">
+              {/* Updated to px-6 (24px) for left margin */}
               <Suspense fallback={<PageLoader />}>
                 {children || <Outlet />}
               </Suspense>

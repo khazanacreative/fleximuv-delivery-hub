@@ -229,7 +229,7 @@ const Sidebar = () => {
           
           {/* Description area - only shows when sidebar is expanded */}
           {!collapsed && activeDescription && (
-            <div className="px-4 py-3 mt-auto mb-4 mx-2 text-xs text-muted-foreground bg-sidebar-accent/20 rounded-lg">
+            <div className="px-4 py-3 mt-2 mb-4 mx-2 text-xs text-muted-foreground bg-sidebar-accent/20 rounded-lg">
               {activeDescription}
             </div>
           )}
