@@ -54,11 +54,16 @@ export interface Order {
   // Add properties used in OrderForm.tsx
   orderNumber?: string;
   customerPhone?: string;
+  customerEmail?: string;
   packageDetails?: string;
   deliveryNotes?: string;
   paymentMethod?: string;
   paymentStatus?: string;
   updatedAt?: Date;
+  
+  // New properties for tracking
+  trackingCode?: string;
+  isGuestOrder?: boolean;
 }
 
 // Driver

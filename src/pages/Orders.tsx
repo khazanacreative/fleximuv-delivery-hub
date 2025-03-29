@@ -9,7 +9,7 @@ import RoleGate from "@/components/permissions/RoleGate";
 import { mockOrders } from "@/data/mock-data";
 import { Order, OrderStatus } from "@/types";
 
-// Import newly created components
+// Import components
 import OrdersTable from "@/components/orders/OrdersTable";
 import OrderDetails from "@/components/orders/OrderDetails";
 import OrderForm from "@/components/orders/OrderForm";
@@ -18,7 +18,7 @@ import OrderFilters from "@/components/orders/OrderFilters";
 
 const Orders = () => {
   const { user } = useAuth();
-  const { can, isAdmin, isPartner, isDriver } = usePermissions();
+  const { can, isAdmin, isPartner, isDriver, isFleetPartner, isIndependentCourier } = usePermissions();
   const { toast } = useToast();
   const [orders, setOrders] = useState(mockOrders);
   const [filteredOrders, setFilteredOrders] = useState(mockOrders);
@@ -52,29 +52,41 @@ const Orders = () => {
   const applyFilters = useCallback(() => {
     let permissionFiltered = orders;
     
+    // Filter orders based on user role
     if (!isAdmin) {
-      if (isPartner && user?.hasDrivers) {
+      if (isFleetPartner) {
+        // Fleet partners see orders they can fulfill
         permissionFiltered = orders.filter(order => 
           !order.partnerId || order.partnerId === user?.id
         );
       } else if (isPartner && !user?.hasDrivers) {
+        // Business partners only see their own orders
         permissionFiltered = orders.filter(order => 
           order.customerId === user?.id
         );
       } else if (isDriver) {
-        permissionFiltered = orders.filter(order => 
-          !order.partnerId || order.partnerId === user?.id || order.driverId === user?.id
-        );
+        if (isIndependentCourier) {
+          // Independent couriers see available orders and their own
+          permissionFiltered = orders.filter(order => 
+            !order.partnerId || order.partnerId === user?.id || order.driverId === user?.id
+          );
+        } else {
+          // Regular drivers only see orders assigned to them
+          permissionFiltered = orders.filter(order => 
+            order.driverId === user?.id
+          );
+        }
       }
     }
     
+    // Apply status filters if any are selected
     if (Object.values(statusFilters).every(v => v === false)) {
       setFilteredOrders(permissionFiltered);
     } else {
       const activeFilters = Object.keys(statusFilters).filter(key => statusFilters[key]);
       setFilteredOrders(permissionFiltered.filter(order => activeFilters.includes(order.status)));
     }
-  }, [statusFilters, orders, isAdmin, isPartner, isDriver, user]);
+  }, [statusFilters, orders, isAdmin, isPartner, isDriver, isFleetPartner, isIndependentCourier, user]);
 
   useEffect(() => {
     applyFilters();
@@ -90,13 +102,24 @@ const Orders = () => {
   };
 
   const handleShareLocation = (order) => {
-    toast({
-      title: "Link Generated",
-      description: "Live tracking link has been copied. Ready to share via WhatsApp.",
-    });
-    
-    const trackingUrl = `https://track.example.com/order/${order.id}`;
-    window.open(`https://wa.me/?text=Track your order here: ${trackingUrl}`, '_blank');
+    if (order.trackingCode) {
+      const baseUrl = window.location.origin;
+      const trackingUrl = `${baseUrl}/track/${order.trackingCode}`;
+      window.open(`https://wa.me/?text=Track your order here: ${trackingUrl}`, '_blank');
+      
+      toast({
+        title: "Link Shared",
+        description: "Tracking link has been shared via WhatsApp",
+      });
+    } else {
+      toast({
+        title: "Link Generated",
+        description: "Live tracking link has been copied. Ready to share via WhatsApp.",
+      });
+      
+      const trackingUrl = `https://track.example.com/order/${order.id}`;
+      window.open(`https://wa.me/?text=Track your order here: ${trackingUrl}`, '_blank');
+    }
   };
 
   const handleCancelOrder = (order) => {
@@ -108,7 +131,8 @@ const Orders = () => {
       return;
     }
 
-    const updatedOrders = orders.filter(o => o.id !== order.id);
+    const updatedOrder = { ...order, status: 'cancelled' as OrderStatus };
+    const updatedOrders = orders.map(o => o.id === order.id ? updatedOrder : o);
     setOrders(updatedOrders);
     
     // Save to localStorage for persistence
@@ -116,7 +140,7 @@ const Orders = () => {
     
     toast({
       title: "Order Cancelled",
-      description: "The order has been successfully cancelled and removed from the list.",
+      description: "The order has been successfully cancelled.",
     });
   };
 
@@ -139,42 +163,8 @@ const Orders = () => {
     });
   };
 
-  const generateOrderNumber = () => {
-    // Generate a unique order number format: FLX-YYYYMMDD-XXXX
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const random = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
-    
-    return `FLX-${year}${month}${day}-${random}`;
-  };
-
   const handleAddOrder = (newOrderData: any) => {
-    // Create a new order with generated ID and order number
-    const newOrder: Order = {
-      id: `ord-${Date.now()}`,
-      orderNumber: generateOrderNumber(),
-      customerName: newOrderData.customerName,
-      customerId: user?.id || "",
-      customerPhone: newOrderData.customerPhone,
-      partnerId: "",
-      pickupAddress: newOrderData.pickupAddress,
-      deliveryAddress: newOrderData.deliveryAddress,
-      packageDetails: newOrderData.packageDetails,
-      deliveryNotes: newOrderData.deliveryNotes,
-      status: 'pending' as OrderStatus,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      scheduledFor: newOrderData.scheduledDate ? new Date(newOrderData.scheduledDate) : undefined,
-      amount: parseFloat(newOrderData.amount) || 0,
-      serviceType: newOrderData.serviceType,
-      paymentMethod: newOrderData.paymentMethod,
-      paymentStatus: 'pending',
-      notes: newOrderData.notes || "",
-    };
-
-    const updatedOrders = [newOrder, ...orders];
+    const updatedOrders = [newOrderData, ...orders];
     setOrders(updatedOrders);
     
     // Save to localStorage for persistence
@@ -182,11 +172,11 @@ const Orders = () => {
     
     toast({
       title: "Order Created",
-      description: `New order #${newOrder.orderNumber} has been successfully created.`,
+      description: `New order #${newOrderData.orderNumber} has been successfully created.`,
     });
     
-    // Close the dialog after order creation
-    setCreateOrderOpen(false);
+    // Apply filters to update the displayed orders
+    applyFilters();
   };
 
   return (

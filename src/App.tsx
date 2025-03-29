@@ -21,6 +21,7 @@ const Orders = lazy(() => import("@/pages/Orders"));
 const Finances = lazy(() => import("@/pages/Finances"));
 const Settings = lazy(() => import("@/pages/Settings"));
 const Reports = lazy(() => import("@/pages/Reports"));
+const OrderTracker = lazy(() => import("@/components/orders/OrderTracker"));
 
 // Create placeholders for lazy-loaded pages
 const PartnersPage = () => (
@@ -59,6 +60,12 @@ const ReportsPage = () => (
   </Suspense>
 );
 
+const TrackingPage = () => (
+  <Suspense fallback={<PageLoader />}>
+    <OrderTracker />
+  </Suspense>
+);
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -72,6 +79,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/landing" element={<Landing />} />
+            <Route path="/track/:trackingCode" element={<TrackingPage />} />
             
             <Route path="/" element={<Layout />}>
               <Route path="dashboard" element={<Dashboard />} />
