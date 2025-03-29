@@ -150,9 +150,11 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const effectivePartnerId = isBusinessPartner && selectedPartnerId 
+      const effectivePartnerId = isBusinessPartner && selectedPartnerId && selectedPartnerId !== 'none'
         ? selectedPartnerId 
         : (user?.role === 'partner' ? user?.id : '');
+      
+      const effectiveDriverId = selectedDriverId && selectedDriverId !== 'none' ? selectedDriverId : '';
       
       if (isEditMode && orderToEdit && updateOrder) {
         const updatedOrder: Order = {
@@ -161,8 +163,8 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
           customerPhone: formData.customerPhone,
           customerEmail: formData.customerEmail,
           partnerId: effectivePartnerId,
-          driverId: selectedDriverId,
-          status: selectedDriverId && orderToEdit.status === 'pending' ? 'assigned' : orderToEdit.status,
+          driverId: effectiveDriverId,
+          status: effectiveDriverId && orderToEdit.status === 'pending' ? 'assigned' : orderToEdit.status,
           updatedAt: new Date(),
           pickupAddress: formData.pickupAddress,
           deliveryAddress: formData.deliveryAddress,
@@ -192,8 +194,8 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
           customerPhone: formData.customerPhone,
           customerEmail: formData.customerEmail,
           partnerId: effectivePartnerId,
-          driverId: selectedDriverId,
-          status: selectedDriverId ? 'assigned' : 'pending',
+          driverId: effectiveDriverId,
+          status: effectiveDriverId ? 'assigned' : 'pending',
           createdAt: new Date(),
           updatedAt: new Date(),
           pickupAddress: formData.pickupAddress,
@@ -417,7 +419,7 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
                           <SelectValue placeholder="Select a courier partner" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">No specific partner</SelectItem>
+                          <SelectItem value="none">No specific partner</SelectItem>
                           {availablePartners.map((partner) => (
                             <SelectItem key={partner.id} value={partner.id}>
                               {partner.name} - Independent Courier
@@ -439,7 +441,7 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
                           <SelectValue placeholder="Select a driver" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">None (Assign Later)</SelectItem>
+                          <SelectItem value="none">None (Assign Later)</SelectItem>
                           {availableDrivers.map((driver) => (
                             <SelectItem key={driver.id} value={driver.id}>
                               {driver.name} - {driver.vehicleType}
