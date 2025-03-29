@@ -1,18 +1,19 @@
-
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useToast } from "@/hooks/use-toast";
-import { Driver } from "@/types";
+import { Driver, User } from "@/types";
 import DriversList from "@/components/drivers/DriversList";
 import DriversHeader from "@/components/drivers/DriversHeader";
 import DriversDialogs from "@/components/drivers/DriversDialogs";
 import { useDrivers } from "@/hooks/use-drivers";
+import IndependentCouriersList from "@/components/drivers/IndependentCouriersList";
+import { mockUsers } from "@/data/mock-data";
 
 const Drivers = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { isAdmin, isFleetPartner, isIndependentCourier } = usePermissions();
+  const { isAdmin, isFleetPartner, isIndependentCourier, isBusinessPartner } = usePermissions();
   
   // Determine if the user can manage drivers
   const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
@@ -22,6 +23,7 @@ const Drivers = () => {
     isAdmin,
     isFleetPartner,
     isIndependentCourier,
+    isBusinessPartner,
     canManageDrivers
   });
   
@@ -42,6 +44,11 @@ const Drivers = () => {
   const [driverToEdit, setDriverToEdit] = useState<Driver | null>(null);
   const [viewProfileOpen, setViewProfileOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+  
+  // For business partners, get list of independent couriers
+  const independentCouriers = mockUsers.filter(
+    user => user.role === 'partner' && user.partnerType === 'courier'
+  );
 
   const handleViewProfile = (driver: Driver) => {
     setSelectedDriver(driver);
@@ -83,13 +90,22 @@ const Drivers = () => {
         canManageDrivers={canManageDrivers}
       />
 
-      <DriversList
-        drivers={filteredDrivers}
-        onViewProfile={handleViewProfile}
-        onDeleteDriver={handleDeleteDriver}
-        onStatusChange={handleDriverStatusChange}
-        onEditDriver={handleEditDriver}
-      />
+      {isBusinessPartner ? (
+        // Business partners only see list of independent couriers
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">Available Independent Couriers</h2>
+          <IndependentCouriersList couriers={independentCouriers} />
+        </div>
+      ) : (
+        // Other users see the regular drivers list
+        <DriversList
+          drivers={filteredDrivers}
+          onViewProfile={handleViewProfile}
+          onDeleteDriver={handleDeleteDriver}
+          onStatusChange={handleDriverStatusChange}
+          onEditDriver={handleEditDriver}
+        />
+      )}
 
       <DriversDialogs
         addDriverOpen={addDriverOpen}

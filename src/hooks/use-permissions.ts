@@ -34,6 +34,11 @@ export const usePermissions = () => {
     // Check if a user can manage drivers (admin, fleet partner, or independent courier)
     canManageDrivers: user?.role === 'admin' || 
                       (user?.role === 'partner' && user?.partnerType === 'fleet') ||
-                      (user?.role === 'partner' && user?.partnerType === 'courier')
+                      (user?.role === 'partner' && user?.partnerType === 'courier'),
+                      
+    // Check if user can see independent couriers (admin, business partner, fleet partner)
+    canSeeIndependentCouriers: user?.role === 'admin' || 
+                               (user?.role === 'partner' && user?.partnerType === 'business') ||
+                               (user?.role === 'partner' && user?.partnerType === 'fleet'),
   };
 };

@@ -24,8 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Order, Driver } from '@/types';
+import { Order, Driver, User } from '@/types';
 import { Switch } from '@/components/ui/switch';
+import { mockUsers } from '@/data/mock-data';
 
 interface OrderFormProps {
   isOpen: boolean;
@@ -35,12 +36,14 @@ interface OrderFormProps {
 
 const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
   const { user } = useAuth();
-  const { isFleetPartner, isIndependentCourier } = usePermissions();
+  const { isFleetPartner, isIndependentCourier, isBusinessPartner } = usePermissions();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isGuestOrder, setIsGuestOrder] = useState(false);
   const [availableDrivers, setAvailableDrivers] = useState<Driver[]>([]);
+  const [availablePartners, setAvailablePartners] = useState<User[]>([]);
   const [selectedDriverId, setSelectedDriverId] = useState('');
+  const [selectedPartnerId, setSelectedPartnerId] = useState('');
   const [trackingLink, setTrackingLink] = useState('');
   const [showTrackingLink, setShowTrackingLink] = useState(false);
   const [formData, setFormData] = useState({
@@ -73,7 +76,20 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
         }
       }
     }
-  }, [isFleetPartner, isIndependentCourier, user]);
+    
+    // Load available partners (independent couriers) for business partners
+    if (isBusinessPartner) {
+      try {
+        // Filter mockUsers to only include independent couriers
+        const independentCouriers = mockUsers.filter(
+          u => u.role === 'partner' && u.partnerType === 'courier'
+        );
+        setAvailablePartners(independentCouriers);
+      } catch (error) {
+        console.error("Error loading available partners:", error);
+      }
+    }
+  }, [isFleetPartner, isIndependentCourier, isBusinessPartner, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -122,6 +138,11 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
       const orderNumber = generateOrderNumber();
       const trackingCode = generateTrackingCode();
       
+      // Use selected partner's ID if Business Partner has selected a partner
+      const effectivePartnerId = isBusinessPartner && selectedPartnerId 
+        ? selectedPartnerId 
+        : (user?.role === 'partner' ? user?.id : '');
+      
       const newOrder: Order = {
         id: `order-${Date.now()}`,
         orderNumber: orderNumber,
@@ -129,7 +150,7 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
         customerName: formData.customerName,
         customerPhone: formData.customerPhone,
         customerEmail: formData.customerEmail,
-        partnerId: user?.role === 'partner' ? user?.id : '',
+        partnerId: effectivePartnerId,
         driverId: selectedDriverId,
         status: selectedDriverId ? 'assigned' : 'pending',
         createdAt: new Date(),
@@ -191,6 +212,7 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
     });
     setIsGuestOrder(false);
     setSelectedDriverId('');
+    setSelectedPartnerId('');
     setShowTrackingLink(false);
     setTrackingLink('');
     setIsLoading(false);
@@ -341,6 +363,30 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
                     </Select>
                   </div>
                   
+                  {/* Add Partner Selection for Business Partners */}
+                  {isBusinessPartner && (
+                    <div className="grid gap-2">
+                      <Label htmlFor="partnerId">Select Courier Partner</Label>
+                      <Select
+                        value={selectedPartnerId}
+                        onValueChange={setSelectedPartnerId}
+                      >
+                        <SelectTrigger id="partnerId">
+                          <SelectValue placeholder="Select a courier partner" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">No specific partner</SelectItem>
+                          {availablePartners.map((partner) => (
+                            <SelectItem key={partner.id} value={partner.id}>
+                              {partner.name} - Independent Courier
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                  
+                  {/* Driver assignment section for partners with fleet */}
                   {(isFleetPartner || isIndependentCourier) && availableDrivers.length > 0 && (
                     <div className="grid gap-2">
                       <Label htmlFor="driverId">Assign Driver (Optional)</Label>

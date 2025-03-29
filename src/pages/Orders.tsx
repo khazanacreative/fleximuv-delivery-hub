@@ -15,6 +15,7 @@ import OrderDetails from "@/components/orders/OrderDetails";
 import OrderForm from "@/components/orders/OrderForm";
 import LocationMap from "@/components/orders/LocationMap";
 import OrderFilters from "@/components/orders/OrderFilters";
+import DriverEarnings from "@/components/dashboard/DriverEarnings";
 
 const Orders = () => {
   const { user } = useAuth();
@@ -181,43 +182,65 @@ const Orders = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Package className="h-8 w-8" />
-            Orders
-          </h2>
-          <p className="text-muted-foreground">
-            Manage all delivery orders and stay connected through WhatsApp notifications
-          </p>
+      {isDriver && !isIndependentCourier ? (
+        <div className="space-y-8">
+          <DriverEarnings />
+          <div className="border-t pt-6">
+            <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2 mb-6">
+              <Package className="h-8 w-8" />
+              Your Assigned Orders
+            </h2>
+            <OrdersTable 
+              filteredOrders={filteredOrders}
+              handleViewDetails={handleViewDetails}
+              handleShowLocation={handleShowLocation}
+              handleShareLocation={handleShareLocation}
+              handleAcceptOrder={handleAcceptOrder}
+              handleCancelOrder={handleCancelOrder}
+            />
+          </div>
         </div>
-        
-        <div className="flex gap-2">
-          <OrderFilters 
-            statusFilters={statusFilters}
-            setStatusFilters={setStatusFilters}
-          />
-          
-          <RoleGate permissions={['create_orders']}>
-            <Button
-              onClick={() => setCreateOrderOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Create Order
-            </Button>
-          </RoleGate>
-        </div>
-      </div>
+      ) : (
+        <>
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+                <Package className="h-8 w-8" />
+                Orders
+              </h2>
+              <p className="text-muted-foreground">
+                Manage all delivery orders and stay connected through WhatsApp notifications
+              </p>
+            </div>
+            
+            <div className="flex gap-2">
+              <OrderFilters 
+                statusFilters={statusFilters}
+                setStatusFilters={setStatusFilters}
+              />
+              
+              <RoleGate permissions={['create_orders']}>
+                <Button
+                  onClick={() => setCreateOrderOpen(true)}
+                  className="flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Create Order
+                </Button>
+              </RoleGate>
+            </div>
+          </div>
 
-      <OrdersTable 
-        filteredOrders={filteredOrders}
-        handleViewDetails={handleViewDetails}
-        handleShowLocation={handleShowLocation}
-        handleShareLocation={handleShareLocation}
-        handleAcceptOrder={handleAcceptOrder}
-        handleCancelOrder={handleCancelOrder}
-      />
+          <OrdersTable 
+            filteredOrders={filteredOrders}
+            handleViewDetails={handleViewDetails}
+            handleShowLocation={handleShowLocation}
+            handleShareLocation={handleShareLocation}
+            handleAcceptOrder={handleAcceptOrder}
+            handleCancelOrder={handleCancelOrder}
+          />
+        </>
+      )}
 
       <OrderDetails 
         viewOrderDetails={viewOrderDetails}
