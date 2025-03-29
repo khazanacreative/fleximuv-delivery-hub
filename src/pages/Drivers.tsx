@@ -179,7 +179,7 @@ const Drivers = () => {
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                  <span className="text-sm">{driver.currentLocation}</span>
+                  <span className="text-sm">{driver.currentLocation || 'No location data'}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-1">
@@ -189,7 +189,7 @@ const Drivers = () => {
                   </div>
                   <div className="text-sm">
                     <span className="font-medium">{driver.vehicleType}</span>
-                    <span className="text-muted-foreground"> • {driver.licensePlate}</span>
+                    <span className="text-muted-foreground"> • {driver.licensePlate || driver.vehicleNumber || 'N/A'}</span>
                   </div>
                 </div>
               </div>

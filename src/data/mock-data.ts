@@ -88,7 +88,9 @@ export const mockDrivers: Driver[] = [
     completedOrders: 156,
     rating: 4.8,
     balance: 450000,
-    createdAt: new Date('2023-05-20')
+    createdAt: new Date('2023-05-20'),
+    currentLocation: 'Jl. Raya Darmo No. 45, Surabaya',
+    licensePlate: 'L 1234 AB'
   },
   {
     id: '2',
@@ -102,7 +104,9 @@ export const mockDrivers: Driver[] = [
     completedOrders: 89,
     rating: 4.5,
     balance: 320000,
-    createdAt: new Date('2023-07-10')
+    createdAt: new Date('2023-07-10'),
+    currentLocation: 'Jl. Mayjend Sungkono No. 89, Surabaya',
+    licensePlate: 'L 5678 CD'
   },
   {
     id: '3',
@@ -116,7 +120,9 @@ export const mockDrivers: Driver[] = [
     completedOrders: 210,
     rating: 4.9,
     balance: 520000,
-    createdAt: new Date('2023-04-15')
+    createdAt: new Date('2023-04-15'),
+    currentLocation: 'Jl. Gubeng Kertajaya No. 12, Surabaya',
+    licensePlate: 'L 9012 EF'
   },
   {
     id: '4',
@@ -130,7 +136,9 @@ export const mockDrivers: Driver[] = [
     completedOrders: 75,
     rating: 4.6,
     balance: 280000,
-    createdAt: new Date('2023-08-05')
+    createdAt: new Date('2023-08-05'),
+    currentLocation: 'Jl. Dharmahusada No. 140, Surabaya',
+    licensePlate: 'L 3456 GH'
   }
 ];
 
@@ -148,7 +156,11 @@ export const mockOrders: Order[] = [
     createdAt: new Date('2023-09-10T08:30:00'),
     completedAt: new Date('2023-09-10T09:45:00'),
     amount: 45000,
-    serviceType: 'Food Delivery'
+    serviceType: 'Food Delivery',
+    customer: 'Dewi Kartika',
+    date: new Date('2023-09-10T08:30:00'),
+    items: ['Nasi Goreng', 'Soto Ayam'],
+    driver: 'Budi Setiawan'
   },
   {
     id: 'ORD-002',
@@ -162,7 +174,11 @@ export const mockOrders: Order[] = [
     createdAt: new Date('2023-09-10T14:15:00'),
     amount: 68000,
     serviceType: 'Package Delivery',
-    notes: 'Fragile items inside'
+    notes: 'Fragile items inside',
+    customer: 'Ahmad Yani',
+    date: new Date('2023-09-10T14:15:00'),
+    items: ['Large package (3kg)'],
+    driver: 'Rina Wati'
   },
   {
     id: 'ORD-003',
@@ -175,7 +191,10 @@ export const mockOrders: Order[] = [
     createdAt: new Date('2023-09-10T17:20:00'),
     scheduledFor: new Date('2023-09-11T10:00:00'),
     amount: 52000,
-    serviceType: 'Pharmacy Delivery'
+    serviceType: 'Pharmacy Delivery',
+    customer: 'Anita Susanti',
+    date: new Date('2023-09-10T17:20:00'),
+    items: ['Medicine', 'Medical supplies']
   },
   {
     id: 'ORD-004',
@@ -189,7 +208,11 @@ export const mockOrders: Order[] = [
     createdAt: new Date('2023-09-10T19:45:00'),
     amount: 75000,
     serviceType: 'School Shuttle',
-    notes: 'Pick up at 6:30 AM'
+    notes: 'Pick up at 6:30 AM',
+    customer: 'Suryadi',
+    date: new Date('2023-09-10T19:45:00'),
+    items: ['School transportation'],
+    driver: 'Wahyu Pratama'
   },
   {
     id: 'ORD-005',
@@ -201,7 +224,10 @@ export const mockOrders: Order[] = [
     status: 'pending',
     createdAt: new Date('2023-09-11T08:10:00'),
     amount: 42000,
-    serviceType: 'Document Delivery'
+    serviceType: 'Document Delivery',
+    customer: 'Dewi Kartika',
+    date: new Date('2023-09-11T08:10:00'),
+    items: ['Legal documents']
   }
 ];
 

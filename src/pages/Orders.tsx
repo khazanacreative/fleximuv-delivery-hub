@@ -175,15 +175,15 @@ const Orders = () => {
             {orders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell className="font-medium">#{order.id.substring(0, 6)}</TableCell>
-                <TableCell>{order.customer}</TableCell>
-                <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
-                <TableCell>{order.items.join(", ")}</TableCell>
+                <TableCell>{order.customer || order.customerName}</TableCell>
+                <TableCell>{new Date(order.date || order.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{order.items ? order.items.join(", ") : order.serviceType}</TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(order.status)}>
                     {order.status}
                   </Badge>
                 </TableCell>
-                <TableCell>{order.driver}</TableCell>
+                <TableCell>{order.driver || (order.driverId ? `Driver #${order.driverId}` : "Unassigned")}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

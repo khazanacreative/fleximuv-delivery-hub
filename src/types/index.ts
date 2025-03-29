@@ -44,6 +44,11 @@ export interface Order {
   amount: number;
   serviceType: string;
   notes?: string;
+  // Add missing properties needed for Orders.tsx
+  customer?: string; // For backward compatibility with existing code
+  date?: Date; // For backward compatibility
+  items?: string[]; // For backward compatibility
+  driver?: string; // For backward compatibility
 }
 
 // Driver
@@ -60,6 +65,9 @@ export interface Driver {
   rating: number;
   balance: number;
   createdAt: Date;
+  // Add missing properties needed for Drivers.tsx
+  currentLocation?: string;
+  licensePlate?: string;
 }
 
 // Transaction
