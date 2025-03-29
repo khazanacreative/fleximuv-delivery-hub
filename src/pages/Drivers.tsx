@@ -78,6 +78,12 @@ const Drivers = () => {
       prev.map(driver => driver.id === updatedDriver.id ? updatedDriver : driver)
     );
     
+    // Save to localStorage for persistence
+    const updatedDrivers = drivers.map(driver => 
+      driver.id === updatedDriver.id ? updatedDriver : driver
+    );
+    localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
+    
     toast({
       title: "Driver Updated",
       description: "Driver information has been successfully updated",
@@ -102,7 +108,11 @@ const Drivers = () => {
       licensePlate: newDriverData.licensePlate,
     };
 
-    setDrivers(prev => [newDriverObj, ...prev]);
+    const updatedDrivers = [newDriverObj, ...drivers];
+    setDrivers(updatedDrivers);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
       title: "Driver Added",
@@ -111,7 +121,11 @@ const Drivers = () => {
   };
 
   const handleDeleteDriver = (driverId: string) => {
-    setDrivers(prev => prev.filter(driver => driver.id !== driverId));
+    const updatedDrivers = drivers.filter(driver => driver.id !== driverId);
+    setDrivers(updatedDrivers);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
       title: "Driver Removed",
@@ -121,13 +135,31 @@ const Drivers = () => {
 
   const handleDriverStatusChange = (driver: Driver, newStatus: 'available' | 'busy' | 'offline') => {
     const updatedDriver = { ...driver, status: newStatus };
-    setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
+    const updatedDrivers = drivers.map(d => d.id === driver.id ? updatedDriver : d);
+    setDrivers(updatedDrivers);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
       title: newStatus === 'offline' ? "Driver Deactivated" : "Driver Activated",
       description: `Driver status has been set to ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
     });
   };
+
+  // Load drivers from localStorage on component mount
+  useEffect(() => {
+    const savedDrivers = localStorage.getItem('fleximov_drivers');
+    if (savedDrivers) {
+      try {
+        const parsedDrivers = JSON.parse(savedDrivers);
+        setDrivers(parsedDrivers);
+        setFilteredDrivers(parsedDrivers);
+      } catch (error) {
+        console.error("Error parsing saved drivers:", error);
+      }
+    }
+  }, []);
 
   const openWhatsApp = (phone: string) => {
     const formattedPhone = phone.replace(/\D/g, '');
@@ -149,9 +181,7 @@ const Drivers = () => {
   };
 
   // Check if the current user can add drivers
-  const canManageDrivers = isAdmin || 
-                          (user?.role === 'partner' && user?.hasDrivers === true) || 
-                          (user?.role === 'driver' && user?.partnerType === 'courier');
+  const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
 
   return (
     <div className="space-y-6">
@@ -215,7 +245,10 @@ const Drivers = () => {
       {driverToEdit && (
         <EditDriverDialog
           isOpen={editDriverOpen}
-          onOpenChange={setEditDriverOpen}
+          onOpenChange={(open) => {
+            setEditDriverOpen(open);
+            if (!open) setDriverToEdit(null);
+          }}
           driver={driverToEdit}
           onUpdateDriver={handleUpdateDriver}
         />

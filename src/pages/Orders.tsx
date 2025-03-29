@@ -35,6 +35,20 @@ const Orders = () => {
     cancelled: false,
   });
 
+  // Load orders from localStorage on component mount
+  useEffect(() => {
+    const savedOrders = localStorage.getItem('fleximov_orders');
+    if (savedOrders) {
+      try {
+        const parsedOrders = JSON.parse(savedOrders);
+        setOrders(parsedOrders);
+        setFilteredOrders(parsedOrders);
+      } catch (error) {
+        console.error("Error parsing saved orders:", error);
+      }
+    }
+  }, []);
+
   const applyFilters = useCallback(() => {
     let permissionFiltered = orders;
     
@@ -94,7 +108,11 @@ const Orders = () => {
       return;
     }
 
-    setOrders(prev => prev.filter(o => o.id !== order.id));
+    const updatedOrders = orders.filter(o => o.id !== order.id);
+    setOrders(updatedOrders);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
     
     toast({
       title: "Order Cancelled",
@@ -109,9 +127,11 @@ const Orders = () => {
       partnerId: user?.id || order.partnerId
     };
     
-    setOrders(prev => 
-      prev.map(o => o.id === order.id ? updatedOrder : o)
-    );
+    const updatedOrders = orders.map(o => o.id === order.id ? updatedOrder : o);
+    setOrders(updatedOrders);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
     
     toast({
       title: "Order Accepted",
@@ -119,8 +139,54 @@ const Orders = () => {
     });
   };
 
-  const handleAddOrder = (newOrder: Order) => {
-    setOrders(prev => [newOrder, ...prev]);
+  const generateOrderNumber = () => {
+    // Generate a unique order number format: FLX-YYYYMMDD-XXXX
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const random = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+    
+    return `FLX-${year}${month}${day}-${random}`;
+  };
+
+  const handleAddOrder = (newOrderData: any) => {
+    // Create a new order with generated ID and order number
+    const newOrder: Order = {
+      id: `ord-${Date.now()}`,
+      orderNumber: generateOrderNumber(),
+      customerName: newOrderData.customerName,
+      customerId: user?.id || "",
+      customerPhone: newOrderData.customerPhone,
+      partnerId: "",
+      pickupAddress: newOrderData.pickupAddress,
+      deliveryAddress: newOrderData.deliveryAddress,
+      packageDetails: newOrderData.packageDetails,
+      deliveryNotes: newOrderData.deliveryNotes,
+      status: 'pending' as OrderStatus,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      scheduledFor: newOrderData.scheduledDate ? new Date(newOrderData.scheduledDate) : undefined,
+      amount: parseFloat(newOrderData.amount) || 0,
+      serviceType: newOrderData.serviceType,
+      paymentMethod: newOrderData.paymentMethod,
+      paymentStatus: 'pending',
+      notes: newOrderData.notes || "",
+    };
+
+    const updatedOrders = [newOrder, ...orders];
+    setOrders(updatedOrders);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
+    
+    toast({
+      title: "Order Created",
+      description: `New order #${newOrder.orderNumber} has been successfully created.`,
+    });
+    
+    // Close the dialog after order creation
+    setCreateOrderOpen(false);
   };
 
   return (
