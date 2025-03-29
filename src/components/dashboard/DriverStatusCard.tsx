@@ -2,12 +2,17 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { mockDrivers } from "@/data/mock-data";
+import { cn } from "@/lib/utils";
 
-const DriverStatusCard = () => {
+interface DriverStatusCardProps {
+  className?: string;
+}
+
+const DriverStatusCard = ({ className }: DriverStatusCardProps) => {
   const activeDrivers = mockDrivers.filter(driver => driver.status !== 'offline');
   
   return (
-    <Card>
+    <Card className={cn("md:col-span-3", className)}>
       <CardHeader className="pb-2">
         <CardTitle>Active Drivers</CardTitle>
         <CardDescription>Drivers currently available or on duty</CardDescription>

@@ -5,8 +5,8 @@ import StatisticCard from "@/components/dashboard/StatisticCard";
 import DriverStatusCard from "@/components/dashboard/DriverStatusCard";
 import TransactionsList from "@/components/dashboard/TransactionsList";
 import RecentOrdersTable from "@/components/dashboard/RecentOrdersTable";
-import Overview from "@/components/dashboard/Overview";
-import FAQ from "@/components/dashboard/FAQ";
+import { Overview } from "@/components/dashboard/Overview";
+import { FAQ } from "@/components/dashboard/FAQ";
 
 const Dashboard = () => {
   return (
@@ -52,11 +52,11 @@ const Dashboard = () => {
             <Overview />
           </CardContent>
         </Card>
-        <DriverStatusCard className="md:col-span-3" />
+        <DriverStatusCard />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <RecentOrdersTable className="md:col-span-4" />
+        <RecentOrdersTable />
         <Card className="md:col-span-3">
           <CardHeader>
             <CardTitle>Recent Transactions</CardTitle>
