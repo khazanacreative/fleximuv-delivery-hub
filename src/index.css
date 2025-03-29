@@ -105,6 +105,23 @@
   .glass-card {
     @apply bg-white/90 dark:bg-black/80 backdrop-blur-sm border border-white/20 dark:border-gray-800/30 shadow-sm;
   }
+  
+  /* Form styling */
+  .form-container {
+    @apply space-y-6 max-w-3xl;
+  }
+  
+  .form-group {
+    @apply flex flex-col gap-2 text-left;
+  }
+  
+  .form-label {
+    @apply text-sm font-medium text-foreground;
+  }
+  
+  .form-input {
+    @apply w-full rounded-xl border border-input/50 bg-background/50 px-4 py-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring;
+  }
 }
 
 @layer components {
@@ -113,15 +130,15 @@
   }
   
   .dashboard-card {
-    @apply rounded-xl border bg-card p-6 fleximov-shadow;
+    @apply rounded-xl border border-border/50 bg-card/50 p-6 fleximov-shadow backdrop-blur-sm hover:bg-card/70 transition-colors;
   }
   
   .nav-link {
-    @apply flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground;
+    @apply flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors hover:bg-accent/70 hover:text-accent-foreground;
   }
   
   .nav-link.active {
-    @apply bg-accent text-accent-foreground;
+    @apply bg-accent/70 text-accent-foreground border border-border/30 shadow-sm;
   }
 
   .statistic-card {
@@ -134,5 +151,18 @@
   
   .statistic-label {
     @apply text-sm text-muted-foreground;
+  }
+  
+  /* Morph UI styles */
+  .morph-card {
+    @apply rounded-xl bg-gradient-to-br from-white/90 to-white/70 dark:from-black/60 dark:to-black/40 backdrop-blur-md shadow-sm border border-white/20 dark:border-black/20;
+  }
+  
+  .morph-input {
+    @apply bg-white/70 dark:bg-black/30 border border-white/30 dark:border-white/10 rounded-xl backdrop-blur-sm focus-visible:bg-white/90 dark:focus-visible:bg-black/50;
+  }
+  
+  .morph-button {
+    @apply bg-gradient-to-br from-primary/90 to-primary/80 hover:from-primary hover:to-primary/90 text-primary-foreground rounded-xl backdrop-blur-sm shadow-sm border border-primary/20;
   }
 }

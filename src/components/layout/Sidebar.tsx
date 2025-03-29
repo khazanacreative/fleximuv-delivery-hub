@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -78,44 +79,24 @@ const Sidebar = () => {
         isMobile && !collapsed && "absolute z-50 inset-y-0 left-0 shadow-lg"
       )}
     >
-      {/* Logo Area */}
-      <div className="p-4">
-        <Link to="/dashboard" className="flex items-center justify-center">
-          {collapsed ? (
-            <div className="w-8 h-8 bg-fleximov-500 rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-sm">FM</span>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center w-full">
-              <div className="w-12 h-12 bg-fleximov-500 rounded-md flex items-center justify-center mb-1">
-                <span className="text-white font-bold text-lg">FM</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="font-semibold text-lg">Fleximov</span>
-                <span className="text-xs text-muted-foreground -mt-1">Delivery Hub</span>
-              </div>
-            </div>
-          )}
-        </Link>
-      </div>
-      <Separator />
-
+      {/* Remove the logo section altogether */}
+      
       {/* Navigation Links - with ScrollArea */}
       <ScrollArea className="flex-1 overflow-x-hidden">
-        <div className="p-2">
+        <div className="p-2 mt-4">
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors rounded-md",
+                  "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors rounded-xl backdrop-blur-sm",
                   location.pathname === link.path
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground"
+                    ? "bg-sidebar-accent/70 text-sidebar-accent-foreground shadow-sm border border-sidebar-border/40"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground hover:border hover:border-sidebar-border/20"
                 )}
               >
-                <link.icon size={18} />
+                <link.icon size={18} className="flex-shrink-0" />
                 {!collapsed && <span>{link.name}</span>}
               </Link>
             ))}
@@ -125,17 +106,17 @@ const Sidebar = () => {
 
       {/* Logout Button - Fixed at bottom */}
       <div className={cn(
-        "border-t border-sidebar-border p-3 mt-auto bg-sidebar",
+        "border-t border-sidebar-border p-3 mt-auto bg-sidebar flex justify-center",
       )}>
         <Button 
           variant="ghost" 
           className={cn(
-            "w-full flex items-center gap-3 justify-start text-muted-foreground hover:text-destructive",
+            "w-full flex items-center gap-3 justify-start text-muted-foreground rounded-xl px-4 py-3 hover:bg-destructive/10 hover:text-destructive",
             collapsed && "justify-center p-2"
           )}
           onClick={logout}
         >
-          <LogOut size={18} />
+          <LogOut size={18} className="flex-shrink-0" />
           {!collapsed && <span>Logout</span>}
         </Button>
       </div>

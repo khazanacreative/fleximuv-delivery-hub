@@ -20,26 +20,26 @@ const Header = () => {
     <header className="h-16 border-b bg-background/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-30">
       <div className="flex items-center justify-between h-full px-4">
         {/* Logo Area */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-8">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-fleximov-500 rounded-md flex items-center justify-center mr-2">
+            <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-sm">FM</span>
             </div>
-            <span className="font-semibold text-lg hidden md:inline-block">Fleximov</span>
+            <span className="font-semibold text-lg ml-2 hidden md:inline-block">Fleximov</span>
           </div>
           
-          {/* Search bar */}
-          <div className="relative max-w-md">
+          {/* Search bar - moved further right */}
+          <div className="relative ml-8 md:ml-16">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
             <Input 
               placeholder="Search..." 
-              className="pl-10 bg-muted/50 w-[200px] md:w-[300px] h-9"
+              className="pl-10 bg-muted/30 border-muted/50 w-[200px] md:w-[300px] h-9 rounded-xl"
             />
           </div>
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-muted-foreground">
+          <Button variant="ghost" size="icon" className="text-muted-foreground rounded-full hover:bg-accent/50">
             <Bell size={20} />
           </Button>
           
@@ -48,7 +48,7 @@ const Header = () => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="rounded-full h-8 w-8 ml-1"
+                className="rounded-full h-8 w-8 ml-1 hover:bg-accent/50"
               >
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-fleximov-100 text-fleximov-700">
@@ -57,7 +57,7 @@ const Header = () => {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56 rounded-xl backdrop-blur-sm bg-background/95 border border-border/50">
               <DropdownMenuLabel>
                 <div className="flex flex-col">
                   <span>{user?.name}</span>
@@ -65,10 +65,10 @@ const Header = () => {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem className="cursor-pointer rounded-lg hover:bg-accent/50">
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onClick={logout}>
+              <DropdownMenuItem className="cursor-pointer rounded-lg hover:bg-destructive/10 hover:text-destructive" onClick={logout}>
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
