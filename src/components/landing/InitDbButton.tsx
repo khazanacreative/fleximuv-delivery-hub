@@ -1,44 +1,40 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { migrateData } from '@/utils/migrate-data';
+import { Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from "sonner";
 
 const InitDbButton = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
 
-  const handleMigrateData = async () => {
+  const initializeDatabase = async () => {
     setIsLoading(true);
     
     try {
-      const result = await migrateData();
+      // Call the edge function to initialize demo users
+      const { data, error } = await supabase.functions.invoke('initialize-demo-users');
       
-      if (result.success) {
-        toast({
-          title: "Success",
-          description: "Test data has been migrated successfully. You can now log in with the test accounts.",
+      if (error) {
+        throw new Error(error.message);
+      }
+      
+      console.log('Initialize database response:', data);
+      
+      if (data.success) {
+        toast.success('Demo accounts initialized', {
+          description: 'Test accounts are now ready to use. You can now login with them.',
+          duration: 5000,
         });
       } else {
-        if (result.message?.includes("already performed")) {
-          toast({
-            title: "Info",
-            description: "Test data was already migrated. You can log in with the test accounts.",
-          });
-        } else {
-          toast({
-            title: "Error",
-            description: result.message || "Failed to migrate data",
-            variant: "destructive"
-          });
-        }
+        toast.error('Failed to initialize demo accounts', {
+          description: data.message || 'An unknown error occurred',
+        });
       }
     } catch (error) {
-      console.error("Error migrating data:", error);
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again later.",
-        variant: "destructive"
+      console.error('Error initializing database:', error);
+      toast.error('Failed to initialize demo accounts', {
+        description: error.message || 'An unknown error occurred',
       });
     } finally {
       setIsLoading(false);
@@ -46,12 +42,20 @@ const InitDbButton = () => {
   };
 
   return (
-    <Button 
-      className="text-white bg-green-600 hover:bg-green-700"
-      onClick={handleMigrateData}
+    <Button
+      onClick={initializeDatabase}
       disabled={isLoading}
+      className="mt-8"
+      variant="outline"
     >
-      {isLoading ? "Initializing..." : "Initialize Test Data"}
+      {isLoading ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Initializing...
+        </>
+      ) : (
+        'Initialize Demo Accounts'
+      )}
     </Button>
   );
 };

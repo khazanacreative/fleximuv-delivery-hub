@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff } from 'lucide-react';
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -14,17 +15,24 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
+      console.log('Submitting login form with:', { email, password });
       await login(email, password);
       // The navigation will be handled by the auth state change
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login form error:', error);
       // Error is handled in the auth hook
     } finally {
       setIsLoading(false);
@@ -39,6 +47,9 @@ const LoginForm = () => {
   const handleDemoAccountClick = (demoEmail: string) => {
     setEmail(demoEmail);
     setPassword('password123'); // Set password directly when demo account is selected
+    toast.info(`Demo account selected`, {
+      description: `Email: ${demoEmail}, Password: password123`
+    });
   };
 
   // Define the demo accounts

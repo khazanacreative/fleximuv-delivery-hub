@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from './use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { User as AppUser } from '@/types';
+import { toast as sonnerToast } from "sonner";
 
 interface AuthContextType {
   user: AppUser | null;
@@ -78,6 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
+        console.log('Auth state changed:', event, currentSession);
         setSession(currentSession);
 
         if (currentSession?.user) {
@@ -86,6 +88,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const userData = await fetchUserProfile(currentSession.user.id);
             setUser(userData);
             setIsLoading(false);
+            if (event === 'SIGNED_IN') {
+              navigate('/dashboard');
+            }
           }, 0);
         } else {
           setUser(null);
@@ -96,6 +101,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // THEN check for existing session
     supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
+      console.log('Initial session check:', currentSession);
       setSession(currentSession);
 
       if (currentSession?.user) {
@@ -109,31 +115,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [navigate]);
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     
     try {
+      console.log('Attempting login with:', email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) {
+        console.error('Login error details:', error);
         toast({
           title: "Login Failed",
           description: error.message,
           variant: "destructive",
         });
+        sonnerToast.error("Login Failed", {
+          description: error.message,
+        });
         throw error;
       }
       
       if (data.user) {
+        console.log('Login successful:', data.user);
         toast({
           title: "Login Successful",
           description: `Welcome back!`,
         });
+        sonnerToast.success("Login Successful", {
+          description: "Welcome back!",
+        });
+        navigate('/dashboard');
       }
       
     } catch (error: any) {
