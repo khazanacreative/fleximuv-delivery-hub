@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -129,7 +128,6 @@ const Drivers = () => {
     }
   };
 
-  // Determine if the user can add drivers - now including isIndependentCourier
   const canAddDriver = isAdmin || isFleetPartner || isIndependentCourier;
 
   return (
@@ -154,12 +152,13 @@ const Drivers = () => {
           />
           
           {canAddDriver && (
-            <AddDriverDialog
-              isOpen={addDriverOpen}
-              onOpenChange={setAddDriverOpen}
-              onAddDriver={handleAddDriver}
-              currentUser={user}
-            />
+            <Button
+              onClick={() => setAddDriverOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Driver
+            </Button>
           )}
         </div>
       </div>
@@ -181,6 +180,15 @@ const Drivers = () => {
         onContactWhatsApp={openWhatsApp}
         onShareLocation={shareLocationViaWhatsApp}
       />
+      
+      {canAddDriver && (
+        <AddDriverDialog
+          isOpen={addDriverOpen}
+          onOpenChange={setAddDriverOpen}
+          onAddDriver={handleAddDriver}
+          currentUser={user}
+        />
+      )}
     </div>
   );
 };

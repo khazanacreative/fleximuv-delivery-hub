@@ -1,9 +1,10 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { Package } from "lucide-react";
+import { Package, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import RoleGate from "@/components/permissions/RoleGate";
 import { mockOrders } from "@/data/mock-data";
 import { Order, OrderStatus } from "@/types";
@@ -24,6 +25,7 @@ const Orders = () => {
   const [viewOrderDetails, setViewOrderDetails] = useState(null);
   const [mapOpen, setMapOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [createOrderOpen, setCreateOrderOpen] = useState(false);
   const [statusFilters, setStatusFilters] = useState({
     pending: false,
     accepted: false,
@@ -141,7 +143,13 @@ const Orders = () => {
           />
           
           <RoleGate permissions={['create_orders']}>
-            <OrderForm addOrder={handleAddOrder} />
+            <Button
+              onClick={() => setCreateOrderOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Create Order
+            </Button>
           </RoleGate>
         </div>
       </div>
@@ -166,6 +174,12 @@ const Orders = () => {
         setMapOpen={setMapOpen}
         selectedOrder={selectedOrder}
         handleShareLocation={handleShareLocation}
+      />
+      
+      <OrderForm 
+        isOpen={createOrderOpen}
+        onOpenChange={setCreateOrderOpen}
+        addOrder={handleAddOrder}
       />
     </div>
   );

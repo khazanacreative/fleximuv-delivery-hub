@@ -1,5 +1,11 @@
 
-import { useState } from "react";
+import { useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -7,132 +13,221 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
-import { useToast } from "@/hooks/use-toast";
-import { Order, OrderStatus } from "@/types";
+} from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Order } from '@/types';
 
 interface OrderFormProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
   addOrder: (order: Order) => void;
 }
 
-const OrderForm = ({ addOrder }: OrderFormProps) => {
-  const [open, setOpen] = useState(false);
-  const [partnerForOrder, setPartnerForOrder] = useState("");
+const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    customerName: '',
+    customerPhone: '',
+    pickupAddress: '',
+    deliveryAddress: '',
+    packageDetails: '',
+    deliveryNotes: '',
+    paymentMethod: 'cash',
+  });
 
-  const handleCreateOrder = () => {
-    const newOrder: Order = {
-      id: `order-${Date.now()}`,
-      customerName: "New Customer",
-      customerId: user?.id || "",
-      partnerId: partnerForOrder || "",
-      status: "pending" as OrderStatus,
-      createdAt: new Date(),
-      amount: Math.floor(Math.random() * 100) + 10,
-      serviceType: "Standard Delivery",
-      pickupAddress: "123 Pickup St",
-      deliveryAddress: "456 Delivery Ave",
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
     
-    addOrder(newOrder);
-    setOpen(false);
-    
-    toast({
-      title: "Order Created",
-      description: partnerForOrder 
-        ? "New order has been created and assigned to the selected partner" 
-        : "New order has been created and is available for all partners"
-    });
-    
-    setPartnerForOrder("");
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newOrder: Order = {
+        id: `order-${Date.now()}`,
+        orderNumber: `FLX-${Math.floor(Math.random() * 90000) + 10000}`,
+        customerId: user?.id || '',
+        customerName: formData.customerName,
+        customerPhone: formData.customerPhone,
+        partnerId: user?.role === 'partner' ? user?.id : '',
+        driverId: '',
+        status: 'pending',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        pickupAddress: formData.pickupAddress,
+        deliveryAddress: formData.deliveryAddress,
+        packageDetails: formData.packageDetails,
+        deliveryNotes: formData.deliveryNotes,
+        paymentMethod: formData.paymentMethod,
+        paymentStatus: 'pending',
+        amount: Math.floor(Math.random() * 50) + 10,
+      };
+      
+      addOrder(newOrder);
+      
+      toast({
+        title: "Order Created",
+        description: `Order ${newOrder.orderNumber} has been created successfully.`,
+      });
+
+      // Reset form
+      setFormData({
+        customerName: '',
+        customerPhone: '',
+        pickupAddress: '',
+        deliveryAddress: '',
+        packageDetails: '',
+        deliveryNotes: '',
+        paymentMethod: 'cash',
+      });
+      
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error creating order:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create order. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm">
-          <Plus className="h-4 w-4 mr-2" />
-          Create Order
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Create New Order</DialogTitle>
           <DialogDescription>
-            Enter the details for the new delivery order
+            Fill out the form below to create a new delivery order
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="customer" className="text-left">
-              Customer
-            </Label>
-            <Input id="customer" className="col-span-3" defaultValue="New Customer" />
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="customerName">Customer Name</Label>
+              <Input
+                id="customerName"
+                name="customerName"
+                value={formData.customerName}
+                onChange={handleChange}
+                placeholder="Customer name"
+                required
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="customerPhone">Customer Phone</Label>
+              <Input
+                id="customerPhone"
+                name="customerPhone"
+                value={formData.customerPhone}
+                onChange={handleChange}
+                placeholder="Customer phone number"
+                required
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="pickupAddress">Pickup Address</Label>
+              <Textarea
+                id="pickupAddress"
+                name="pickupAddress"
+                value={formData.pickupAddress}
+                onChange={handleChange}
+                placeholder="Pickup address"
+                required
+                rows={2}
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="deliveryAddress">Delivery Address</Label>
+              <Textarea
+                id="deliveryAddress"
+                name="deliveryAddress"
+                value={formData.deliveryAddress}
+                onChange={handleChange}
+                placeholder="Delivery address"
+                required
+                rows={2}
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="packageDetails">Package Details</Label>
+              <Input
+                id="packageDetails"
+                name="packageDetails"
+                value={formData.packageDetails}
+                onChange={handleChange}
+                placeholder="Package details"
+                required
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="deliveryNotes">Delivery Notes</Label>
+              <Textarea
+                id="deliveryNotes"
+                name="deliveryNotes"
+                value={formData.deliveryNotes}
+                onChange={handleChange}
+                placeholder="Delivery notes"
+                rows={2}
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="paymentMethod">Payment Method</Label>
+              <Select
+                value={formData.paymentMethod}
+                onValueChange={(value) => handleSelectChange('paymentMethod', value)}
+              >
+                <SelectTrigger id="paymentMethod">
+                  <SelectValue placeholder="Select payment method" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cash">Cash on Delivery</SelectItem>
+                  <SelectItem value="online">Online Payment</SelectItem>
+                  <SelectItem value="wallet">Wallet Balance</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="pickup" className="text-left">
-              Pickup
-            </Label>
-            <Input id="pickup" className="col-span-3" defaultValue="123 Pickup St" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="destination" className="text-left">
-              Destination
-            </Label>
-            <Input id="destination" className="col-span-3" defaultValue="456 Delivery Ave" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="items" className="text-left">
-              Items
-            </Label>
-            <Input id="items" className="col-span-3" defaultValue="Standard Delivery" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="pickupTime" className="text-left">
-              Pickup Time
-            </Label>
-            <Input id="pickupTime" type="datetime-local" className="col-span-3" />
-          </div>
-          
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="partner" className="text-left">
-              Assign to Partner
-            </Label>
-            <Select value={partnerForOrder} onValueChange={setPartnerForOrder}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Leave unassigned for all partners" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">Leave unassigned (all partners can see)</SelectItem>
-                <SelectItem value="partner1">AgungCargo Express</SelectItem>
-                <SelectItem value="partner2">FastWheels Delivery</SelectItem>
-                <SelectItem value="partner3">Wira Logistics</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleCreateOrder}>
-            Create
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Creating..." : "Create Order"}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
