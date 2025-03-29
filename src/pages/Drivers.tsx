@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus, User, Phone, MapPin, Star, MoreHorizontal, Edit, UserX, UserCheck, Filter, Trash } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -59,7 +58,6 @@ const Drivers = () => {
   const [addDriverOpen, setAddDriverOpen] = useState(false);
   const [viewProfileOpen, setViewProfileOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
-  // New driver form state
   const [newDriver, setNewDriver] = useState({
     name: "",
     phone: "",
@@ -68,22 +66,18 @@ const Drivers = () => {
     vehicleType: "motorcycle",
     licensePlate: "",
   });
-  // Filter states
   const [statusFilters, setStatusFilters] = useState({
     available: false,
     busy: false,
     offline: false,
   });
 
-  // Apply filters
   const applyFilters = useCallback(() => {
-    // Show only drivers belonging to the current partner if not admin
     let filteredByPermission = drivers;
     if (!isAdmin) {
       filteredByPermission = drivers.filter(driver => driver.partnerId === user?.id);
     }
     
-    // Then filter by status if any status filters are active
     if (Object.values(statusFilters).every(v => v === false)) {
       setFilteredDrivers(filteredByPermission);
     } else {
@@ -92,7 +86,6 @@ const Drivers = () => {
     }
   }, [drivers, statusFilters, user, isAdmin]);
 
-  // Filter change handler
   const handleFilterChange = (status: string, checked: boolean) => {
     setStatusFilters(prev => ({
       ...prev,
@@ -100,7 +93,6 @@ const Drivers = () => {
     }));
   };
 
-  // Apply filters when status filters change or user changes
   useEffect(() => {
     applyFilters();
   }, [applyFilters, user]);
@@ -123,7 +115,6 @@ const Drivers = () => {
     setViewProfileOpen(true);
   };
 
-  // Handle new driver form changes
   const handleNewDriverChange = (field: string, value: string) => {
     setNewDriver(prev => ({
       ...prev,
@@ -131,9 +122,7 @@ const Drivers = () => {
     }));
   };
 
-  // Add new driver
   const handleAddDriver = () => {
-    // Validate form
     if (!newDriver.name || !newDriver.phone || !newDriver.vehicleType) {
       toast({
         title: "Missing Information",
@@ -142,7 +131,6 @@ const Drivers = () => {
       return;
     }
 
-    // Create new driver
     const newDriverData: Driver = {
       id: `d-${Date.now()}`,
       name: newDriver.name,
@@ -160,10 +148,8 @@ const Drivers = () => {
       licensePlate: newDriver.licensePlate,
     };
 
-    // Add to drivers list
     setDrivers(prev => [newDriverData, ...prev]);
     
-    // Reset form
     setNewDriver({
       name: "",
       phone: "",
@@ -173,7 +159,6 @@ const Drivers = () => {
       licensePlate: "",
     });
 
-    // Close dialog and show success message
     setAddDriverOpen(false);
     toast({
       title: "Driver Added",
@@ -181,7 +166,6 @@ const Drivers = () => {
     });
   };
 
-  // Delete driver
   const handleDeleteDriver = (driverId: string) => {
     setDrivers(prev => prev.filter(driver => driver.id !== driverId));
     
@@ -191,17 +175,23 @@ const Drivers = () => {
     });
   };
 
-  // Function to open WhatsApp with the driver's phone number
+  const handleDriverStatusChange = (driver: Driver, newStatus: 'available' | 'busy' | 'offline') => {
+    const updatedDriver = { ...driver, status: newStatus };
+    setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
+    
+    toast({
+      title: newStatus === 'offline' ? "Driver Deactivated" : "Driver Activated",
+      description: `Driver status has been set to ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
+    });
+  };
+
   const openWhatsApp = (phone: string) => {
-    // Remove any non-numeric characters from the phone number
     const formattedPhone = phone.replace(/\D/g, '');
     window.open(`https://wa.me/${formattedPhone}`, '_blank');
   };
 
-  // Function to share driver's location via WhatsApp
   const shareLocationViaWhatsApp = (driver: Driver) => {
     if (driver.currentLocation) {
-      // This is a mock function - in a real app, you would use actual coordinates
       const mockLatitude = -7.2575;
       const mockLongitude = 112.7521;
       const locationUrl = `https://maps.google.com/maps?q=${mockLatitude},${mockLongitude}`;
@@ -274,7 +264,6 @@ const Drivers = () => {
             </PopoverContent>
           </Popover>
           
-          {/* Show Add Driver button to both fleet partners and independent couriers */}
           {(isAdmin || isFleetPartner || isIndependentCourier) && (
             <Dialog open={addDriverOpen} onOpenChange={setAddDriverOpen}>
               <DialogTrigger asChild>
@@ -447,28 +436,12 @@ const Drivers = () => {
                   </DropdownMenuItem>
                   
                   {driver.status === 'offline' ? (
-                    <DropdownMenuItem onClick={() => {
-                      const updatedDriver = { ...driver, status: 'available' as 'available' | 'busy' | 'offline' };
-                      setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
-                      
-                      toast({
-                        title: "Driver Activated",
-                        description: "Driver status has been set to Available",
-                      });
-                    }}>
+                    <DropdownMenuItem onClick={() => handleDriverStatusChange(driver, 'available')}>
                       <UserCheck className="h-4 w-4 mr-2" />
                       Activate Driver
                     </DropdownMenuItem>
                   ) : (
-                    <DropdownMenuItem onClick={() => {
-                      const updatedDriver = { ...driver, status: 'offline' as 'available' | 'busy' | 'offline' };
-                      setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
-                      
-                      toast({
-                        title: "Driver Deactivated",
-                        description: "Driver status has been set to Offline",
-                      });
-                    }}>
+                    <DropdownMenuItem onClick={() => handleDriverStatusChange(driver, 'offline')}>
                       <UserX className="h-4 w-4 mr-2" />
                       Deactivate Driver
                     </DropdownMenuItem>
@@ -489,12 +462,10 @@ const Drivers = () => {
         ))}
       </div>
 
-      {/* View Profile Dialog */}
       <Dialog 
         open={viewProfileOpen} 
         onOpenChange={(open) => {
           setViewProfileOpen(open);
-          // Clear selected driver if the dialog is closed
           if (!open) setSelectedDriver(null);
         }}
       >

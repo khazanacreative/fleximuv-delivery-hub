@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { Package, Plus, MapPin, Filter, ArrowUpDown, MoreHorizontal, Trash, Edit, Eye, Share2, Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -195,7 +194,6 @@ const Orders = () => {
   };
 
   const handleCreateOrder = () => {
-    // Create new order
     const newOrder: Order = {
       id: `order-${Date.now()}`,
       customerName: "New Customer",
@@ -306,25 +304,25 @@ const Orders = () => {
                     <Label htmlFor="customer" className="text-left">
                       Customer
                     </Label>
-                    <Input id="customer" className="col-span-3" />
+                    <Input id="customer" className="col-span-3" defaultValue="New Customer" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="pickup" className="text-left">
                       Pickup
                     </Label>
-                    <Input id="pickup" className="col-span-3" />
+                    <Input id="pickup" className="col-span-3" defaultValue="123 Pickup St" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="destination" className="text-left">
                       Destination
                     </Label>
-                    <Input id="destination" className="col-span-3" />
+                    <Input id="destination" className="col-span-3" defaultValue="456 Delivery Ave" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="items" className="text-left">
                       Items
                     </Label>
-                    <Input id="items" className="col-span-3" />
+                    <Input id="items" className="col-span-3" defaultValue="Standard Delivery" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="pickupTime" className="text-left">

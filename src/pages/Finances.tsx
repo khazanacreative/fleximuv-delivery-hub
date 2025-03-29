@@ -45,7 +45,7 @@ const initialTransactions = [
     description: "Order #12345 Payment",
     amount: 150000,
     type: "income",
-    partner: "Rumah Makan Padang Sederhana",
+    partner: "Padang Simple Restaurant",
   },
   {
     id: "trx-2",
@@ -61,7 +61,7 @@ const initialTransactions = [
     description: "Order #12342 Payment",
     amount: 85000,
     type: "income",
-    partner: "Ayam Geprek Bu Tini",
+    partner: "Spicy Chicken Mrs. Tini",
   },
   {
     id: "trx-4",
@@ -77,7 +77,7 @@ const initialTransactions = [
     description: "Order #12337 Payment",
     amount: 120000,
     type: "income",
-    partner: "Seafood Pak Karyo",
+    partner: "Mr. Karyo Seafood",
   },
 ];
 
@@ -329,3 +329,4 @@ const Finances = () => {
 };
 
 export default Finances;
+
