@@ -29,7 +29,7 @@ const Header = () => {
           </div>
           
           {/* Search bar - moved further right */}
-          <div className="relative ml-8 md:ml-16">
+          <div className="relative ml-12 md:ml-24">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
             <Input 
               placeholder="Search..." 

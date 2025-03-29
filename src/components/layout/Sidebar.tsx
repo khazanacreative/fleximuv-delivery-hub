@@ -50,6 +50,7 @@ const Sidebar = () => {
     { name: 'Drivers', path: '/drivers', icon: Truck },
     { name: 'Orders', path: '/orders', icon: Package },
     { name: 'Finances', path: '/finances', icon: CreditCard },
+    { name: 'Reports', path: '/reports', icon: BarChart },
     { name: 'Settings', path: '/settings', icon: Settings },
   ];
 
@@ -79,8 +80,6 @@ const Sidebar = () => {
         isMobile && !collapsed && "absolute z-50 inset-y-0 left-0 shadow-lg"
       )}
     >
-      {/* Remove the logo section altogether */}
-      
       {/* Navigation Links - with ScrollArea */}
       <ScrollArea className="flex-1 overflow-x-hidden">
         <div className="p-2 mt-4">
@@ -90,7 +89,7 @@ const Sidebar = () => {
                 key={link.path}
                 to={link.path}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors rounded-xl backdrop-blur-sm",
+                  "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors rounded-xl backdrop-blur-sm morph-card",
                   location.pathname === link.path
                     ? "bg-sidebar-accent/70 text-sidebar-accent-foreground shadow-sm border border-sidebar-border/40"
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground hover:border hover:border-sidebar-border/20"
@@ -106,12 +105,12 @@ const Sidebar = () => {
 
       {/* Logout Button - Fixed at bottom */}
       <div className={cn(
-        "border-t border-sidebar-border p-3 mt-auto bg-sidebar flex justify-center",
+        "border-t border-sidebar-border p-3 mt-auto bg-sidebar",
       )}>
         <Button 
           variant="ghost" 
           className={cn(
-            "w-full flex items-center gap-3 justify-start text-muted-foreground rounded-xl px-4 py-3 hover:bg-destructive/10 hover:text-destructive",
+            "w-full flex items-center gap-3 justify-start text-muted-foreground rounded-xl px-4 py-3 hover:bg-destructive/10 hover:text-destructive morph-card",
             collapsed && "justify-center p-2"
           )}
           onClick={logout}

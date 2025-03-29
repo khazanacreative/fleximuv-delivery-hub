@@ -51,9 +51,13 @@ const Landing = () => {
           </div>
           <div className="relative hidden md:block">
             <div className="absolute inset-0 bg-fleximov-500/10 rounded-lg transform rotate-3"></div>
-            <div className="relative bg-white border rounded-lg shadow-lg p-8">
-              <div className="aspect-[4/3] bg-muted rounded-md flex items-center justify-center">
-                <Package size={80} className="text-fleximov-500/30" />
+            <div className="relative bg-white border rounded-lg shadow-lg p-4">
+              <div className="aspect-[4/3] rounded-md flex items-center justify-center overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1526367790999-0150d0a71472?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" 
+                  alt="Delivery driver in Surabaya" 
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
@@ -64,7 +68,7 @@ const Landing = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">Why SMEs Choose Fleximov</h2>
+            <h2 className="text-3xl font-bold">Why UMKM Choose Fleximov</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -84,7 +88,7 @@ const Landing = () => {
                 icon: <Truck className="h-10 w-10 text-fleximov-500" />
               }
             ].map((feature, i) => (
-              <div key={i} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
+              <div key={i} className="border rounded-lg p-6 hover:shadow-md transition-shadow text-left">
                 <div className="mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
@@ -94,8 +98,78 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* UMKM Benefits Section */}
+      {/* User Roles Section */}
       <section className="py-16 bg-fleximov-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold">For Every User's Needs</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Fleximov is designed for every participant in the delivery ecosystem.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                role: "UMKM Owner",
+                description: "Manage your orders and deliveries in one place while keeping your existing WhatsApp workflow.",
+                benefits: [
+                  "Track all orders in real-time",
+                  "Access delivery driver network",
+                  "Simple financial reporting",
+                  "No technical expertise required"
+                ]
+              },
+              {
+                role: "Admin Staff",
+                description: "Organize and track orders efficiently without juggling multiple platforms.",
+                benefits: [
+                  "Bulk order management",
+                  "Easy driver assignments",
+                  "Customer communication logs",
+                  "Delivery status updates"
+                ]
+              },
+              {
+                role: "Delivery Driver",
+                description: "Get clear delivery instructions and optimize your routes for maximum efficiency.",
+                benefits: [
+                  "Clear delivery instructions",
+                  "Route optimization",
+                  "Delivery history tracking",
+                  "Seamless payment processing"
+                ]
+              },
+              {
+                role: "Customer",
+                description: "Track your orders in real-time and communicate easily with both merchant and driver.",
+                benefits: [
+                  "Real-time order tracking",
+                  "Delivery notifications",
+                  "Easy communication channels",
+                  "Order history and receipts"
+                ]
+              }
+            ].map((userRole, i) => (
+              <div key={i} className="bg-white rounded-lg p-6 shadow-sm border text-left">
+                <h3 className="text-xl font-semibold mb-3">{userRole.role}</h3>
+                <p className="text-muted-foreground mb-4">{userRole.description}</p>
+                <h4 className="font-medium mb-2">Key Benefits:</h4>
+                <ul className="space-y-1">
+                  {userRole.benefits.map((benefit, j) => (
+                    <li key={j} className="text-sm flex items-start gap-2">
+                      <span className="text-fleximov-500 text-lg leading-none">•</span>
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* UMKM Benefits Section */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold">Made for UMKM Business Needs</h2>
@@ -130,7 +204,7 @@ const Landing = () => {
                 description: "Request additional drivers during peak times without maintaining a large permanent team."
               }
             ].map((benefit, i) => (
-              <div key={i} className="bg-white rounded-lg p-6 shadow-sm border">
+              <div key={i} className="bg-white rounded-lg p-6 shadow-sm border text-left">
                 <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
                 <p className="text-muted-foreground text-sm">{benefit.description}</p>
               </div>
@@ -140,7 +214,7 @@ const Landing = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-fleximov-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold">What UMKM Owners Say</h2>
@@ -158,7 +232,7 @@ const Landing = () => {
                 testimonial: "The ability to request additional drivers during busy periods has helped us scale our business without the overhead of hiring full-time staff."
               }
             ].map((testimonial, i) => (
-              <div key={i} className="bg-fleximov-50 border rounded-lg p-6 shadow-sm">
+              <div key={i} className="bg-white border rounded-lg p-6 shadow-sm text-left">
                 <p className="italic mb-4">"{testimonial.testimonial}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-fleximov-200 flex items-center justify-center">
@@ -196,7 +270,7 @@ const Landing = () => {
       <footer className="py-12 bg-gray-900 text-gray-400">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between gap-8">
-            <div className="md:w-1/3">
+            <div className="md:w-1/3 text-left">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 bg-fleximov-500 rounded-md flex items-center justify-center">
                   <span className="text-white font-bold text-xs">FM</span>
@@ -207,7 +281,7 @@ const Landing = () => {
                 The complete delivery management platform designed for UMKM business needs, integrating with your existing workflows.
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-left">
               <div>
                 <h3 className="text-white font-medium mb-3">Product</h3>
                 <ul className="space-y-2 text-sm">
