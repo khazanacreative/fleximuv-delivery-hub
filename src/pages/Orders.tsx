@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { Package, Plus, MapPin, Filter, ArrowUpDown, MoreHorizontal, Trash, Edit, Eye, Share2, Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -127,7 +128,7 @@ const Orders = () => {
   const formatDate = (date) => {
     if (!date) return '';
     const d = new Date(date);
-    return d.toLocaleString('id-ID', {
+    return d.toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -194,6 +195,7 @@ const Orders = () => {
   };
 
   const handleCreateOrder = () => {
+    // Create new order
     const newOrder: Order = {
       id: `order-${Date.now()}`,
       customerName: "New Customer",

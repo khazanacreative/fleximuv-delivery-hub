@@ -181,6 +181,16 @@ const Drivers = () => {
     });
   };
 
+  // Delete driver
+  const handleDeleteDriver = (driverId: string) => {
+    setDrivers(prev => prev.filter(driver => driver.id !== driverId));
+    
+    toast({
+      title: "Driver Removed",
+      description: "The driver has been successfully removed from your fleet",
+    });
+  };
+
   // Function to open WhatsApp with the driver's phone number
   const openWhatsApp = (phone: string) => {
     // Remove any non-numeric characters from the phone number
@@ -428,22 +438,50 @@ const Drivers = () => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast({
+                    title: "Edit Driver",
+                    description: "Edit driver functionality would be implemented here",
+                  })}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit Details
                   </DropdownMenuItem>
                   
                   {driver.status === 'offline' ? (
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      const updatedDriver = { ...driver, status: 'available' };
+                      setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
+                      
+                      toast({
+                        title: "Driver Activated",
+                        description: "Driver status has been set to Available",
+                      });
+                    }}>
                       <UserCheck className="h-4 w-4 mr-2" />
                       Activate Driver
                     </DropdownMenuItem>
                   ) : (
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      const updatedDriver = { ...driver, status: 'offline' };
+                      setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
+                      
+                      toast({
+                        title: "Driver Deactivated",
+                        description: "Driver status has been set to Offline",
+                      });
+                    }}>
                       <UserX className="h-4 w-4 mr-2" />
                       Deactivate Driver
                     </DropdownMenuItem>
                   )}
+                  
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    className="text-destructive"
+                    onClick={() => handleDeleteDriver(driver.id)}
+                  >
+                    <Trash className="h-4 w-4 mr-2" />
+                    Delete Driver
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </CardFooter>
