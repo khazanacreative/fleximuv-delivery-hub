@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -29,6 +30,9 @@ const Drivers = () => {
     busy: false,
     offline: false,
   });
+
+  // Define canManageDrivers here, before it's used in useEffect
+  const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
 
   useEffect(() => {
     const savedDrivers = localStorage.getItem('fleximov_drivers');
@@ -184,8 +188,6 @@ const Drivers = () => {
       userPartnerType: user?.partnerType
     });
   }, [isAdmin, isFleetPartner, isIndependentCourier, canManageDrivers, user]);
-
-  const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
 
   return (
     <div className="space-y-6">
