@@ -20,6 +20,7 @@ const Drivers = lazy(() => import("@/pages/Drivers"));
 const Orders = lazy(() => import("@/pages/Orders"));
 const Finances = lazy(() => import("@/pages/Finances"));
 const Settings = lazy(() => import("@/pages/Settings"));
+const Reports = lazy(() => import("@/pages/Reports"));
 
 // Create placeholders for lazy-loaded pages
 const PartnersPage = () => (
@@ -52,6 +53,12 @@ const SettingsPage = () => (
   </Suspense>
 );
 
+const ReportsPage = () => (
+  <Suspense fallback={<PageLoader />}>
+    <Reports />
+  </Suspense>
+);
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -73,6 +80,7 @@ const App = () => (
               <Route path="orders" element={<OrdersPage />} />
               <Route path="finances" element={<FinancesPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="reports" element={<ReportsPage />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />
