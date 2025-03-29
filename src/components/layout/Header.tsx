@@ -19,8 +19,24 @@ const Header = () => {
   return (
     <header className="h-16 border-b bg-background/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-30">
       <div className="flex items-center justify-between h-full px-4">
-        {/* Search bar moved to main content area */}
-        <div className="md:flex-1"></div>
+        {/* Logo Area */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center">
+            <div className="w-8 h-8 bg-fleximov-500 rounded-md flex items-center justify-center mr-2">
+              <span className="text-white font-bold text-sm">FM</span>
+            </div>
+            <span className="font-semibold text-lg hidden md:inline-block">Fleximov</span>
+          </div>
+          
+          {/* Search bar */}
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
+            <Input 
+              placeholder="Search..." 
+              className="pl-10 bg-muted/50 w-[200px] md:w-[300px] h-9"
+            />
+          </div>
+        </div>
         
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="text-muted-foreground">

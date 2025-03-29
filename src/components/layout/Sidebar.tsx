@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -101,7 +100,7 @@ const Sidebar = () => {
       </div>
       <Separator />
 
-      {/* Navigation Links */}
+      {/* Navigation Links - with ScrollArea */}
       <ScrollArea className="flex-1 overflow-x-hidden">
         <div className="p-2">
           <nav className="flex flex-col gap-1">
@@ -126,8 +125,7 @@ const Sidebar = () => {
 
       {/* Logout Button - Fixed at bottom */}
       <div className={cn(
-        "border-t border-sidebar-border p-3",
-        "absolute bottom-0 left-0 right-0 bg-sidebar" // Make fixed at bottom
+        "border-t border-sidebar-border p-3 mt-auto bg-sidebar",
       )}>
         <Button 
           variant="ghost" 
