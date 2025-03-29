@@ -1,19 +1,10 @@
-
 import { Suspense, lazy } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@/hooks/use-auth";
-import Layout from "@/components/layout/Layout";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import Index from "@/pages/Index";
-import Landing from "@/pages/Landing";
-import NotFound from "@/pages/NotFound";
-import Dashboard from "@/pages/Dashboard";
-import PageLoader from "@/components/shared/PageLoader";
 
 // Lazy-loaded pages for future implementation
 const Partners = lazy(() => import("@/pages/Partners"));
@@ -69,36 +60,40 @@ const TrackingPage = () => (
 
 const queryClient = new QueryClient();
 
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
+    <Route path="/landing" element={<Landing />} />
+    <Route path="/track/:trackingCode" element={<TrackingPage />} />
+    
+    <Route path="/" element={<Layout />}>
+      <Route path="dashboard" element={<Dashboard />} />
+      <Route path="partners" element={<PartnersPage />} />
+      <Route path="drivers" element={<DriversPage />} />
+      <Route path="orders" element={<OrdersPage />} />
+      <Route path="finances" element={<FinancesPage />} />
+      <Route path="settings" element={<SettingsPage />} />
+      <Route path="reports" element={<ReportsPage />} />
+    </Route>
+    
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
+
 const App = () => (
-  <BrowserRouter>
-    <TooltipProvider>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <AuthProvider>
+        <TooltipProvider>
           <Toaster />
           <Sonner />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/track/:trackingCode" element={<TrackingPage />} />
-            
-            <Route path="/" element={<Layout />}>
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="partners" element={<PartnersPage />} />
-              <Route path="drivers" element={<DriversPage />} />
-              <Route path="orders" element={<OrdersPage />} />
-              <Route path="finances" element={<FinancesPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="reports" element={<ReportsPage />} />
-            </Route>
-            
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </QueryClientProvider>
-    </TooltipProvider>
-  </BrowserRouter>
+          <AppRoutes />
+        </TooltipProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </QueryClientProvider>
 );
 
 export default App;
