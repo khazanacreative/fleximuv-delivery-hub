@@ -35,7 +35,13 @@ const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
-  // Define the demo accounts with English translations
+  // Update password to match the correct one
+  const handleDemoAccountClick = (demoEmail: string) => {
+    setEmail(demoEmail);
+    setPassword('password123'); // Set password directly when demo account is selected
+  };
+
+  // Define the demo accounts
   const demoAccounts = [
     { name: "Bambang Supratman (Admin)", email: "admin@fleximov.com" },
     { name: "Joko Widodo (Fleet Partner)", email: "fleet@partner.com" },
@@ -93,14 +99,14 @@ const LoginForm = () => {
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <p>Test Accounts (use password: 'password123'):</p>
+            <p>Test Accounts (password: password123):</p>
             <ul className="mt-2 space-y-1">
               {demoAccounts.map((account, index) => (
                 <li key={index} className="text-xs">
                   <button
                     type="button"
                     className="text-fleximov-500 hover:underline"
-                    onClick={() => setEmail(account.email)}
+                    onClick={() => handleDemoAccountClick(account.email)}
                   >
                     {account.name}
                   </button>
