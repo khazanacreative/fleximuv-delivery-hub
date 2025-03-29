@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart, Calendar, Download, Filter, PieChart, TrendingUp } from 'lucide-react';
+import { BarChart, Calendar, Download, Filter, PieChart, TrendingUp, Package, CreditCard } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
