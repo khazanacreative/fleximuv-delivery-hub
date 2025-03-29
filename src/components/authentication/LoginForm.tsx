@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
@@ -33,8 +34,10 @@ const LoginForm = () => {
         throw new Error('Email and password are required');
       }
       
-      // Try to login
+      // Try to login - with explicit debugging
+      console.log('About to call login function with email:', email);
       await login(email, password);
+      console.log('Login function completed successfully');
       
       // The navigation will be handled by the auth state change in useEffect
     } catch (error: any) {

@@ -104,13 +104,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
     
     try {
+      // Extra logging for debugging
+      console.log('About to call supabase.auth.signInWithPassword');
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) {
-        console.error('Login error:', error.message);
+        console.error('Login error from Supabase:', error.message);
         toast({
           title: "Login Failed",
           description: error.message,
@@ -122,7 +125,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         throw error;
       }
       
-      console.log('Login successful:', data.user?.email);
+      // Display the data object to check its structure
+      console.log('Login successful response:', data);
+      console.log('Login successful - user:', data.user?.email);
+      
       // Return void instead of data to match the expected return type
     } catch (error: any) {
       console.error('Login error details:', error);

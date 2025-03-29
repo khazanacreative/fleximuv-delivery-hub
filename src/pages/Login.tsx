@@ -14,6 +14,33 @@ const Login = () => {
     console.log('Login page: Authentication status -', isAuthenticated ? 'Authenticated' : 'Not authenticated');
   }, [isAuthenticated]);
 
+  // Add more logging to debug
+  useEffect(() => {
+    console.log('Login page rendered. Loading:', isLoading, 'Authenticated:', isAuthenticated);
+    // Let's check if our demo credentials are valid manually from here
+    const checkCredentials = async () => {
+      try {
+        const { data, error } = await fetch('https://pljmgprvrejcxityylar.supabase.co/auth/v1/token?grant_type=password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsam1ncHJ2cmVqY3hpdHl5bGFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMyODY5NjEsImV4cCI6MjA1ODg2Mjk2MX0.99hNwMtHUPwPDOsCrH7iuTQkRnDEpQKqqXZkIE7DHpE'
+          },
+          body: JSON.stringify({
+            email: 'admin@fleximov.com',
+            password: 'password123'
+          })
+        }).then(res => res.json());
+        
+        console.log('Credential check result:', { data, error });
+      } catch (error) {
+        console.error('Error checking credentials:', error);
+      }
+    };
+    
+    checkCredentials();
+  }, [isLoading, isAuthenticated]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
