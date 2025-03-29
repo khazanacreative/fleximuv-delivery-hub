@@ -196,7 +196,7 @@ const Drivers = () => {
             onClearFilters={clearFilters}
           />
           
-          {(isAdmin || isFleetPartner || isIndependentCourier) && (
+          {canManageDrivers && (
             <Button
               onClick={() => setAddDriverOpen(true)}
               className="flex items-center gap-2"
