@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Bell, Search, MapPin, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,17 +22,43 @@ import { Badge } from '@/components/ui/badge';
 
 const Header = () => {
   const { user, logout } = useAuth();
-  // Mock notifications
+  
+  // Mock notifications with more realistic order data
   const [notifications, setNotifications] = useState([
     { id: 1, type: 'order', title: 'Order #12345 updated', message: 'Status changed to In Progress', time: '5 min ago', read: false },
-    { id: 2, type: 'driver', title: 'Driver assigned', message: 'Budi S. has been assigned to order #12346', time: '15 min ago', read: false },
+    { id: 2, type: 'driver', title: 'Driver assigned', message: 'Sarah J. has been assigned to order #12346', time: '15 min ago', read: false },
     { id: 3, type: 'system', title: 'System update', message: 'New features available', time: '1 hour ago', read: true },
   ]);
   
   const unreadCount = notifications.filter(n => !n.read).length;
   
+  // Simulate a new notification arriving periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomOrderId = Math.floor(10000 + Math.random() * 90000);
+      const newNotification = {
+        id: Date.now(),
+        type: Math.random() > 0.5 ? 'order' : 'driver',
+        title: `Order #${randomOrderId} ${Math.random() > 0.5 ? 'updated' : 'created'}`,
+        message: `New order from ${Math.random() > 0.5 ? 'John Smith' : 'Sarah Johnson'}`,
+        time: 'Just now',
+        read: false
+      };
+      
+      setNotifications(prev => [newNotification, ...prev.slice(0, 4)]);
+    }, 60000); // Add new notification every minute
+    
+    return () => clearInterval(interval);
+  }, []);
+  
   const markAllAsRead = () => {
     setNotifications(notifications.map(n => ({ ...n, read: true })));
+  };
+
+  const markAsRead = (id) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, read: true } : n
+    ));
   };
 
   const getNotificationIcon = (type) => {
@@ -47,16 +73,14 @@ const Header = () => {
     <header className="h-16 border-b bg-background/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-30">
       <div className="flex items-center justify-between h-full px-4">
         {/* Logo Area */}
-        <div className="flex items-center gap-8">
-          <div className="flex items-center">
-            <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-sm">FM</span>
-            </div>
-            <span className="font-semibold text-lg ml-2 hidden md:inline-block">Fleximov</span>
+        <div className="flex items-center">
+          <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
+            <span className="text-white font-bold text-sm">FM</span>
           </div>
+          <span className="font-semibold text-lg ml-2 hidden md:inline-block">Fleximov</span>
           
-          {/* Search bar - moved further right */}
-          <div className="relative ml-4">
+          {/* Search bar - moved to 20px from sidebar */}
+          <div className="relative ml-5">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
             <Input 
               placeholder="Search..." 
@@ -98,6 +122,7 @@ const Header = () => {
                     <div 
                       key={notification.id} 
                       className={`p-3 border-b hover:bg-muted/50 transition-colors cursor-pointer ${notification.read ? 'opacity-70' : 'bg-muted/20'}`}
+                      onClick={() => markAsRead(notification.id)}
                     >
                       <div className="flex gap-3">
                         <div className={`rounded-full p-2 ${notification.read ? 'bg-muted' : 'bg-primary/10 text-primary'}`}>

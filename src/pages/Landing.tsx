@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, Package, Shield, Truck, Users, MessageCircle, SmartphoneNfc } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,24 +22,16 @@ const Landing = () => {
             </div>
           </div>
           <Link to="/login">
-            <Button variant="outline" size="sm">
+            <Button className="bg-fleximov-600 text-white hover:bg-fleximov-700" size="sm">
               Login
             </Button>
           </Link>
         </div>
       </header>
 
-      {/* Hero Section with new image */}
-      <section className="py-16 md:py-24 relative">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://cdn.pixabay.com/photo/2022/02/25/04/11/traffic-7033509_1280.jpg" 
-            alt="Urban traffic" 
-            className="w-full h-full object-cover opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-fleximov-500/30 to-transparent"></div>
-        </div>
-        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center relative z-10">
+      {/* Hero Section with solid background instead of image */}
+      <section className="py-16 md:py-24 bg-fleximov-50 relative">
+        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Simplified <span className="text-fleximov-500">UMKM</span> Delivery Management
@@ -74,8 +67,78 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* User Roles Section with Terms and Conditions */}
-      <section className="py-16 bg-fleximov-50">
+      {/* For Every User's Needs (Moved above Terms and Conditions) */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold">For Every User's Needs</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Fleximov is designed for every participant in the delivery ecosystem.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                role: "UMKM Owner",
+                description: "Manage your orders and deliveries in one place while still monitoring through WhatsApp notifications.",
+                benefits: [
+                  "Track all orders in real-time",
+                  "Access delivery driver network",
+                  "Simple financial reporting",
+                  "No technical expertise required"
+                ]
+              },
+              {
+                role: "Admin Staff",
+                description: "Organize and track orders efficiently without juggling multiple platforms.",
+                benefits: [
+                  "Bulk order management",
+                  "Easy driver assignments",
+                  "Customer communication logs",
+                  "Delivery status updates"
+                ]
+              },
+              {
+                role: "Delivery Driver",
+                description: "Get clear delivery instructions and optimize your routes for maximum efficiency.",
+                benefits: [
+                  "Clear delivery instructions",
+                  "Route optimization",
+                  "Delivery history tracking",
+                  "Seamless payment processing"
+                ]
+              },
+              {
+                role: "Customer",
+                description: "Track your orders in real-time and communicate easily with both merchant and driver.",
+                benefits: [
+                  "Real-time order tracking",
+                  "Delivery notifications",
+                  "Easy communication channels",
+                  "Order history and receipts"
+                ]
+              }
+            ].map((userRole, i) => (
+              <div key={i} className="morph-card p-6 text-left">
+                <h3 className="text-xl font-semibold mb-3">{userRole.role}</h3>
+                <p className="text-muted-foreground mb-4">{userRole.description}</p>
+                <h4 className="font-medium mb-2">Key Benefits:</h4>
+                <ul className="space-y-1">
+                  {userRole.benefits.map((benefit, j) => (
+                    <li key={j} className="text-sm flex items-start gap-2">
+                      <span className="text-fleximov-500 text-lg leading-none">•</span>
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* User Roles Section with Terms and Conditions (Redesigned with morph UI) */}
+      <section className="py-16 bg-gradient-to-r from-fleximov-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold">Multi-User Platform</h2>
@@ -85,45 +148,65 @@ const Landing = () => {
           </div>
           
           <Tabs defaultValue="admin" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8">
-              <TabsTrigger value="admin">Admin</TabsTrigger>
-              <TabsTrigger value="fleet">Mitra Armada</TabsTrigger>
-              <TabsTrigger value="business">Mitra Bisnis</TabsTrigger>
-              <TabsTrigger value="courier">Kurir Mandiri</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-4 mb-8 bg-fleximov-100/50 p-1 rounded-xl backdrop-blur-sm">
+              <TabsTrigger 
+                value="admin" 
+                className="data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg transition-all duration-200"
+              >
+                Admin
+              </TabsTrigger>
+              <TabsTrigger 
+                value="fleet" 
+                className="data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg transition-all duration-200"
+              >
+                Fleet Partner
+              </TabsTrigger>
+              <TabsTrigger 
+                value="business" 
+                className="data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg transition-all duration-200"
+              >
+                Business Partner
+              </TabsTrigger>
+              <TabsTrigger 
+                value="courier" 
+                className="data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg transition-all duration-200"
+              >
+                Independent Courier
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="admin" className="space-y-4">
-              <Card>
-                <CardHeader>
+              <Card className="morph-card overflow-hidden border-none">
+                <CardHeader className="bg-gradient-to-r from-fleximov-100 to-fleximov-50 border-b">
                   <CardTitle>Administrator (Admin)</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>Administrator memiliki akses penuh ke platform untuk mengelola seluruh operasi.</p>
+                <CardContent className="space-y-4 p-6">
+                  <p>Administrator has full access to the platform to manage all operations.</p>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <h4 className="font-semibold">Rights and Access:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Mengelola semua mitra dan kurir</li>
-                      <li>Melihat semua pesanan dan transaksi</li>
-                      <li>Mengakses laporan keuangan dan analitik</li>
-                      <li>Melihat peta lokasi semua kurir secara real-time</li>
-                      <li>Mengelola pengaturan sistem</li>
-                      <li>Menentukan tarif dan komisi</li>
+                      <li>Manage all partners and couriers</li>
+                      <li>View all orders and transactions</li>
+                      <li>Access financial reports and analytics</li>
+                      <li>See real-time map location of all couriers</li>
+                      <li>Manage system settings</li>
+                      <li>Set rates and commissions</li>
                     </ul>
                   </div>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <h4 className="font-semibold">Terms and Conditions:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Wajib menjaga kerahasiaan data pengguna</li>
-                      <li>Memastikan layanan tersedia 24/7</li>
-                      <li>Bertanggung jawab atas keamanan platform</li>
-                      <li>Tidak menyalahgunakan data untuk kepentingan pribadi</li>
+                      <li>Must maintain user data confidentiality</li>
+                      <li>Ensure 24/7 service availability</li>
+                      <li>Responsible for platform security</li>
+                      <li>No misuse of data for personal interests</li>
                     </ul>
                   </div>
                   
                   <div className="p-3 bg-blue-50 rounded-md text-blue-800 text-sm">
-                    <p className="font-medium">Contoh Akun Admin:</p>
+                    <p className="font-medium">Example Admin Account:</p>
                     <p>Email: admin@fleximov.com | Password: password</p>
                   </div>
                 </CardContent>
@@ -131,37 +214,37 @@ const Landing = () => {
             </TabsContent>
             
             <TabsContent value="fleet" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Mitra Armada (Fleet Partner)</CardTitle>
+              <Card className="morph-card overflow-hidden border-none">
+                <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50 border-b">
+                  <CardTitle>Fleet Partner</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>Mitra Armada adalah bisnis yang memiliki layanan kurir/armada sendiri dan menggunakan platform ini untuk mengelolanya.</p>
+                <CardContent className="space-y-4 p-6">
+                  <p>Fleet Partners are businesses with their own courier/fleet service who use this platform to manage them.</p>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <h4 className="font-semibold">Rights and Access:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Mengelola armada kurir sendiri</li>
-                      <li>Melihat pesanan dan statusnya</li>
-                      <li>Memantau lokasi kurir secara real-time</li>
-                      <li>Mengakses laporan keuangan dan pendapatan</li>
-                      <li>Mengelola tarif pengiriman</li>
+                      <li>Manage own courier fleet</li>
+                      <li>View orders and their status</li>
+                      <li>Monitor courier locations in real-time</li>
+                      <li>Access financial reports and earnings</li>
+                      <li>Manage delivery rates</li>
                     </ul>
                   </div>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <h4 className="font-semibold">Terms and Conditions:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Membayar komisi 10% per transaksi ke platform</li>
-                      <li>Menjamin kualitas layanan kurir</li>
-                      <li>Memberikan pelatihan kepada kurir</li>
-                      <li>Bertanggung jawab atas kehilangan/kerusakan barang</li>
-                      <li>Wajib memiliki izin usaha yang sah</li>
+                      <li>Pay 10% commission per transaction to the platform</li>
+                      <li>Guarantee courier service quality</li>
+                      <li>Provide training to couriers</li>
+                      <li>Responsible for lost/damaged goods</li>
+                      <li>Must have valid business permits</li>
                     </ul>
                   </div>
                   
                   <div className="p-3 bg-green-50 rounded-md text-green-800 text-sm">
-                    <p className="font-medium">Contoh Akun Mitra Armada:</p>
+                    <p className="font-medium">Example Fleet Partner Account:</p>
                     <p>Email: fleet@partner.com | Password: password</p>
                   </div>
                 </CardContent>
@@ -169,37 +252,37 @@ const Landing = () => {
             </TabsContent>
             
             <TabsContent value="business" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Mitra Bisnis (Business Partner)</CardTitle>
+              <Card className="morph-card overflow-hidden border-none">
+                <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50 border-b">
+                  <CardTitle>Business Partner</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>Mitra Bisnis adalah UMKM atau bisnis yang tidak memiliki layanan kurir sendiri dan menggunakan platform untuk mengelola pengiriman.</p>
+                <CardContent className="space-y-4 p-6">
+                  <p>Business Partners are SMEs or businesses without their own courier service who use the platform to manage shipments.</p>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <h4 className="font-semibold">Rights and Access:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Membuat pesanan pengiriman</li>
-                      <li>Melihat status pesanan</li>
-                      <li>Memantau lokasi kurir secara real-time</li>
-                      <li>Mengakses laporan keuangan dasar</li>
-                      <li>Menggunakan link pelacakan untuk pelanggan</li>
+                      <li>Create shipping orders</li>
+                      <li>View order status</li>
+                      <li>Monitor courier location in real-time</li>
+                      <li>Access basic financial reports</li>
+                      <li>Use tracking links for customers</li>
                     </ul>
                   </div>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <h4 className="font-semibold">Terms and Conditions:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Membayar biaya pengiriman sesuai tarif</li>
-                      <li>Memberikan informasi pengiriman yang akurat</li>
-                      <li>Menyiapkan barang dengan pengemasan yang baik</li>
-                      <li>Mematuhi regulasi barang yang dilarang</li>
-                      <li>Biaya transaksi 5% per pesanan</li>
+                      <li>Pay shipping fees according to rates</li>
+                      <li>Provide accurate shipping information</li>
+                      <li>Prepare goods with proper packaging</li>
+                      <li>Comply with prohibited goods regulations</li>
+                      <li>5% transaction fee per order</li>
                     </ul>
                   </div>
                   
                   <div className="p-3 bg-purple-50 rounded-md text-purple-800 text-sm">
-                    <p className="font-medium">Contoh Akun Mitra Bisnis:</p>
+                    <p className="font-medium">Example Business Partner Account:</p>
                     <p>Email: business@partner.com | Password: password</p>
                   </div>
                 </CardContent>
@@ -207,38 +290,38 @@ const Landing = () => {
             </TabsContent>
             
             <TabsContent value="courier" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Kurir Mandiri (Independent Courier)</CardTitle>
+              <Card className="morph-card overflow-hidden border-none">
+                <CardHeader className="bg-gradient-to-r from-amber-50 to-yellow-50 border-b">
+                  <CardTitle>Independent Courier</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>Kurir Mandiri adalah individu yang menawarkan jasa pengiriman melalui platform tanpa terikat dengan mitra armada tertentu.</p>
+                <CardContent className="space-y-4 p-6">
+                  <p>Independent Couriers are individuals offering delivery services through the platform without being tied to a specific fleet partner.</p>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <h4 className="font-semibold">Rights and Access:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Menerima atau menolak pesanan pengiriman</li>
-                      <li>Melihat detail pesanan</li>
-                      <li>Memperbarui status pengiriman</li>
-                      <li>Mengakses riwayat penghasilan</li>
-                      <li>Melihat rute pengiriman</li>
+                      <li>Accept or reject delivery orders</li>
+                      <li>View order details</li>
+                      <li>Update delivery status</li>
+                      <li>Access earnings history</li>
+                      <li>View delivery routes</li>
                     </ul>
                   </div>
                   
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <h4 className="font-semibold">Terms and Conditions:</h4>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Membayar komisi 15% ke platform</li>
-                      <li>Menyediakan kendaraan sendiri</li>
-                      <li>Wajib memiliki SIM dan STNK yang valid</li>
-                      <li>Menjaga kualitas layanan</li>
-                      <li>Bertanggung jawab atas barang kiriman</li>
-                      <li>Mengaktifkan GPS selama bertugas</li>
+                      <li>Pay 15% commission to the platform</li>
+                      <li>Provide own vehicle</li>
+                      <li>Must have valid driver's license and vehicle registration</li>
+                      <li>Maintain service quality</li>
+                      <li>Responsible for shipped goods</li>
+                      <li>Enable GPS while on duty</li>
                     </ul>
                   </div>
                   
                   <div className="p-3 bg-amber-50 rounded-md text-amber-800 text-sm">
-                    <p className="font-medium">Contoh Akun Kurir Mandiri:</p>
+                    <p className="font-medium">Example Independent Courier Account:</p>
                     <p>Email: courier@fleximov.com | Password: password</p>
                   </div>
                 </CardContent>
@@ -246,16 +329,16 @@ const Landing = () => {
             </TabsContent>
           </Tabs>
           
-          <div className="mt-8 p-4 bg-blue-50 rounded-md">
-            <h3 className="font-bold text-lg mb-2">Pelanggan Tamu (Guest)</h3>
-            <p className="mb-4">Pelanggan dari mitra bisnis dapat melacak pesanan tanpa perlu login menggunakan link pelacakan khusus yang dibagikan oleh mitra.</p>
+          <div className="mt-8 p-4 bg-blue-50 rounded-xl backdrop-blur-sm">
+            <h3 className="font-bold text-lg mb-2">Guest Customer</h3>
+            <p className="mb-4">Customers from business partners can track orders without logging in using a special tracking link shared by the partner.</p>
             <div className="space-y-2">
-              <h4 className="font-semibold">Akses Tamu:</h4>
+              <h4 className="font-semibold">Guest Access:</h4>
               <ul className="list-disc pl-6 space-y-1">
-                <li>Melihat status pesanan tertentu</li>
-                <li>Memantau lokasi kurir secara real-time</li>
-                <li>Melihat estimasi waktu pengiriman</li>
-                <li>Tidak memerlukan registrasi atau login</li>
+                <li>View specific order status</li>
+                <li>Monitor courier location in real-time</li>
+                <li>See estimated delivery time</li>
+                <li>No registration or login required</li>
               </ul>
             </div>
           </div>
@@ -322,7 +405,7 @@ const Landing = () => {
       </section>
 
       {/* Features */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-fleximov-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold">Why UMKM Choose Fleximov</h2>
@@ -345,80 +428,10 @@ const Landing = () => {
                 icon: <Truck className="h-10 w-10 text-fleximov-500" />
               }
             ].map((feature, i) => (
-              <div key={i} className="border rounded-lg p-6 hover:shadow-md transition-shadow text-left">
+              <div key={i} className="morph-card p-6 hover:shadow-md transition-shadow text-left">
                 <div className="mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* User Roles Section */}
-      <section className="py-16 bg-fleximov-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">For Every User's Needs</h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Fleximov is designed for every participant in the delivery ecosystem.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                role: "UMKM Owner",
-                description: "Manage your orders and deliveries in one place while keeping your existing WhatsApp workflow.",
-                benefits: [
-                  "Track all orders in real-time",
-                  "Access delivery driver network",
-                  "Simple financial reporting",
-                  "No technical expertise required"
-                ]
-              },
-              {
-                role: "Admin Staff",
-                description: "Organize and track orders efficiently without juggling multiple platforms.",
-                benefits: [
-                  "Bulk order management",
-                  "Easy driver assignments",
-                  "Customer communication logs",
-                  "Delivery status updates"
-                ]
-              },
-              {
-                role: "Delivery Driver",
-                description: "Get clear delivery instructions and optimize your routes for maximum efficiency.",
-                benefits: [
-                  "Clear delivery instructions",
-                  "Route optimization",
-                  "Delivery history tracking",
-                  "Seamless payment processing"
-                ]
-              },
-              {
-                role: "Customer",
-                description: "Track your orders in real-time and communicate easily with both merchant and driver.",
-                benefits: [
-                  "Real-time order tracking",
-                  "Delivery notifications",
-                  "Easy communication channels",
-                  "Order history and receipts"
-                ]
-              }
-            ].map((userRole, i) => (
-              <div key={i} className="bg-white rounded-lg p-6 shadow-sm border text-left">
-                <h3 className="text-xl font-semibold mb-3">{userRole.role}</h3>
-                <p className="text-muted-foreground mb-4">{userRole.description}</p>
-                <h4 className="font-medium mb-2">Key Benefits:</h4>
-                <ul className="space-y-1">
-                  {userRole.benefits.map((benefit, j) => (
-                    <li key={j} className="text-sm flex items-start gap-2">
-                      <span className="text-fleximov-500 text-lg leading-none">•</span>
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>
@@ -461,7 +474,7 @@ const Landing = () => {
                 description: "Request additional drivers during peak times without maintaining a large permanent team."
               }
             ].map((benefit, i) => (
-              <div key={i} className="bg-white rounded-lg p-6 shadow-sm border text-left">
+              <div key={i} className="morph-card p-6 shadow-sm text-left">
                 <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
                 <p className="text-muted-foreground text-sm">{benefit.description}</p>
               </div>
@@ -479,17 +492,17 @@ const Landing = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                name: "Bambang Suprapto",
-                role: "Owner, Apotek Sehat Jaya",
+                name: "John Smith",
+                role: "Owner, Health Pharmacy",
                 testimonial: "With Fleximov, we still use WhatsApp to talk to customers, but now we have a system to track orders and deliveries. It's simple but powerful."
               },
               {
-                name: "Dewi Kartika",
-                role: "Manager, Pasar Turi Delivery",
+                name: "Sarah Johnson",
+                role: "Manager, Market Delivery Service",
                 testimonial: "The ability to request additional drivers during busy periods has helped us scale our business without the overhead of hiring full-time staff."
               }
             ].map((testimonial, i) => (
-              <div key={i} className="bg-white border rounded-lg p-6 shadow-sm text-left">
+              <div key={i} className="morph-card p-6 shadow-sm text-left">
                 <p className="italic mb-4">"{testimonial.testimonial}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-fleximov-200 flex items-center justify-center">
