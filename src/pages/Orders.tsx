@@ -48,6 +48,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { mockOrders } from "@/data/mock-data";
 import LiveMap from "@/components/maps/LiveMap";
 import RoleGate from "@/components/permissions/RoleGate";
+import { Order, OrderStatus } from "@/types";
 
 const Orders = () => {
   const { user } = useAuth();
@@ -193,12 +194,12 @@ const Orders = () => {
   };
 
   const handleCreateOrder = () => {
-    const newOrder = {
+    const newOrder: Order = {
       id: `order-${Date.now()}`,
       customerName: "New Customer",
       customerId: user?.id || "",
       partnerId: partnerForOrder || "",
-      status: "pending",
+      status: "pending" as OrderStatus,
       createdAt: new Date(),
       amount: Math.floor(Math.random() * 100) + 10,
       serviceType: "Standard Delivery",
