@@ -17,7 +17,7 @@ export interface User {
   balance: number;
   partnerType?: PartnerType;
   status: 'active' | 'inactive' | 'suspended';
-  hasDrivers?: boolean; // Added this property
+  hasDrivers?: boolean;
 }
 
 // Order Status
