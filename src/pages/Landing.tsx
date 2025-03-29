@@ -22,7 +22,7 @@ const Landing = () => {
             <Link to="/login" className="text-fleximov-500 hover:text-fleximov-600 font-medium">
               Login
             </Link>
-            <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-4 py-2 rounded-md transition-colors">
+            <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-4 py-2 rounded-md transition-colors text-sm">
               Sign Up
             </Link>
           </div>
@@ -40,10 +40,10 @@ const Landing = () => {
               Streamline your delivery operations with our comprehensive platform designed for businesses, delivery partners, and drivers.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                 Get Started
               </Link>
-              <Link to="/login" className="border border-fleximov-500 text-fleximov-500 hover:bg-fleximov-50 px-6 py-3 rounded-lg font-medium transition-colors">
+              <Link to="/login" className="border border-fleximov-500 text-fleximov-500 hover:bg-fleximov-50 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                 Login
               </Link>
               <InitDbButton />
@@ -521,7 +521,7 @@ const Landing = () => {
             Join small and medium businesses who are using Fleximov Delivery Hub to manage orders and deliveries while maintaining their familiar workflows.
           </p>
           <Link to="/login">
-            <Button size="lg" variant="outline" className="bg-white text-fleximov-600 hover:bg-fleximov-50">
+            <Button size="lg" variant="outline" className="bg-white text-fleximov-600 hover:bg-fleximov-50 text-sm px-4 py-2">
               Get Started Today
             </Button>
           </Link>
