@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
@@ -28,7 +27,7 @@ const LoginForm = () => {
     setIsLoading(true);
     
     try {
-      console.log('Submitting login form with:', { email, password });
+      console.log('Submitting login form with:', { email });
       await login(email, password);
       // The navigation will be handled by the auth state change
     } catch (error) {

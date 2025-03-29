@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         sonnerToast.error("Login Failed", {
           description: error.message,
         });
-        throw error;
+        return;
       }
       
       if (data.user) {
