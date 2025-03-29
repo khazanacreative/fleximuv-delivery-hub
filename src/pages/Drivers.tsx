@@ -76,7 +76,7 @@ const Drivers = () => {
     }
   }, [drivers, statusFilters]);
 
-  // Add back the handleFilterChange function that was missing
+  // Filter change handler
   const handleFilterChange = (status: string, checked: boolean) => {
     setStatusFilters(prev => ({
       ...prev,
@@ -84,10 +84,10 @@ const Drivers = () => {
     }));
   };
 
-  // Fix: Replace the incorrect useState usage with useEffect
+  // Apply filters when status filters change
   useEffect(() => {
     applyFilters();
-  }, [applyFilters, statusFilters]);
+  }, [applyFilters]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -105,6 +105,29 @@ const Drivers = () => {
   const handleViewProfile = (driver: Driver) => {
     setSelectedDriver(driver);
     setViewProfileOpen(true);
+  };
+
+  // Function to open WhatsApp with the driver's phone number
+  const openWhatsApp = (phone: string) => {
+    // Remove any non-numeric characters from the phone number
+    const formattedPhone = phone.replace(/\D/g, '');
+    window.open(`https://wa.me/${formattedPhone}`, '_blank');
+  };
+
+  // Function to share driver's location via WhatsApp
+  const shareLocationViaWhatsApp = (driver: Driver) => {
+    if (driver.currentLocation) {
+      // This is a mock function - in a real app, you would use actual coordinates
+      const mockLatitude = -7.2575;
+      const mockLongitude = 112.7521;
+      const locationUrl = `https://maps.google.com/maps?q=${mockLatitude},${mockLongitude}`;
+      window.open(`https://wa.me/?text=Driver's Location: ${locationUrl}`, '_blank');
+    } else {
+      toast({
+        title: "Location not available",
+        description: "This driver's location is not currently available",
+      });
+    }
   };
 
   return (
@@ -167,6 +190,7 @@ const Drivers = () => {
             </PopoverContent>
           </Popover>
           
+          {/* Add Driver Dialog */}
           <Dialog open={addDriverOpen} onOpenChange={setAddDriverOpen}>
             <DialogTrigger asChild>
               <Button size="sm">
@@ -328,7 +352,14 @@ const Drivers = () => {
       </div>
 
       {/* View Profile Dialog */}
-      <Dialog open={viewProfileOpen} onOpenChange={setViewProfileOpen}>
+      <Dialog 
+        open={viewProfileOpen} 
+        onOpenChange={(open) => {
+          setViewProfileOpen(open);
+          // Clear selected driver if the dialog is closed
+          if (!open) setSelectedDriver(null);
+        }}
+      >
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>Driver Profile</DialogTitle>
@@ -422,13 +453,21 @@ const Drivers = () => {
               Close
             </Button>
             <Button onClick={() => {
-              toast({
-                title: "WhatsApp Opened",
-                description: `Ready to message ${selectedDriver?.name}`,
-              });
-              setViewProfileOpen(false);
+              if (selectedDriver) {
+                openWhatsApp(selectedDriver.phone);
+              }
             }}>
               Contact via WhatsApp
+            </Button>
+            <Button 
+              variant="secondary"
+              onClick={() => {
+                if (selectedDriver) {
+                  shareLocationViaWhatsApp(selectedDriver);
+                }
+              }}
+            >
+              Share Location
             </Button>
           </DialogFooter>
         </DialogContent>

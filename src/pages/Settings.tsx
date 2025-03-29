@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { 
   Bell, Building, CreditCard, Globe, Lock, Mail, Phone, 
-  Save, Shield, User, Webhook
+  Save, Shield, User, Webhook, Truck, Calculator, Percent
 } from 'lucide-react';
 import { 
   Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle 
@@ -15,11 +15,20 @@ import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/hooks/use-auth';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Settings = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
+  const isAdmin = user?.role === 'admin';
+  const isPartnerWithDrivers = user?.role === 'partner' && user?.hasDrivers;
 
   const handleSave = () => {
     setSaving(true);
@@ -42,13 +51,16 @@ const Settings = () => {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-4">
-        <TabsList className="grid grid-cols-4 md:grid-cols-6 lg:w-[900px]">
+        <TabsList className="grid grid-cols-4 md:grid-cols-7 lg:w-[900px]">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          {(isAdmin || isPartnerWithDrivers) && (
+            <TabsTrigger value="pricing">Pricing</TabsTrigger>
+          )}
         </TabsList>
 
         {/* Profile Tab */}
@@ -371,6 +383,182 @@ const Settings = () => {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* New Pricing Tab for Admin and Partners with Drivers */}
+        {(isAdmin || isPartnerWithDrivers) && (
+          <TabsContent value="pricing" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-left">Delivery Pricing Settings</CardTitle>
+                <CardDescription className="text-left">
+                  Configure pricing for delivery services
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Small Vehicle & SME Pricing</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Flat rate pricing for motorcycles, cars, and SME businesses
+                  </p>
+                  
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2 text-left">
+                      <Label htmlFor="token-price">Token Price (per delivery)</Label>
+                      <div className="flex">
+                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                          IDR
+                        </span>
+                        <Input id="token-price" type="number" placeholder="15000" className="rounded-l-none" />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2 text-left">
+                      <Label htmlFor="distance-limit">Distance Limit (km)</Label>
+                      <div className="flex">
+                        <Input id="distance-limit" type="number" placeholder="100" />
+                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md">
+                          km
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2 text-left">
+                    <Label htmlFor="extra-distance-fee">Extra Distance Fee (per km)</Label>
+                    <div className="flex">
+                      <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                        IDR
+                      </span>
+                      <Input id="extra-distance-fee" type="number" placeholder="1500" className="rounded-l-none" />
+                    </div>
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Large Vehicle & Enterprise Pricing</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Percentage-based pricing for trucks, pickups, and enterprise businesses
+                  </p>
+                  
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2 text-left">
+                      <Label htmlFor="base-percentage">Base Percentage</Label>
+                      <div className="flex">
+                        <Input id="base-percentage" type="number" placeholder="5" />
+                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md">
+                          %
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2 text-left">
+                      <Label htmlFor="minimum-fee">Minimum Fee</Label>
+                      <div className="flex">
+                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                          IDR
+                        </span>
+                        <Input id="minimum-fee" type="number" placeholder="25000" className="rounded-l-none" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2 text-left">
+                    <Label htmlFor="vehicle-type">Vehicle Type Adjustment</Label>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Pickup</span>
+                        <div className="flex">
+                          <Input id="pickup-adjustment" type="number" placeholder="0" className="w-20" />
+                          <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md">
+                            %
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Small Truck</span>
+                        <div className="flex">
+                          <Input id="small-truck-adjustment" type="number" placeholder="2" className="w-20" />
+                          <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md">
+                            %
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Large Truck</span>
+                        <div className="flex">
+                          <Input id="large-truck-adjustment" type="number" placeholder="3" className="w-20" />
+                          <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md">
+                            %
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {isPartnerWithDrivers && (
+                  <>
+                    <Separator />
+                    <div>
+                      <h3 className="text-lg font-medium mb-4">Your Delivery Service Pricing</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Configure pricing for your own delivery services
+                      </p>
+                      
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2 text-left">
+                          <Label htmlFor="partner-base-price">Base Price</Label>
+                          <div className="flex">
+                            <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                              IDR
+                            </span>
+                            <Input id="partner-base-price" type="number" placeholder="20000" className="rounded-l-none" />
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2 text-left">
+                          <Label htmlFor="partner-distance-pricing">Per Kilometer Price</Label>
+                          <div className="flex">
+                            <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                              IDR
+                            </span>
+                            <Input id="partner-distance-pricing" type="number" placeholder="2000" className="rounded-l-none" />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-4 space-y-2 text-left">
+                        <Label htmlFor="partner-special-areas">Special Area Surcharges</Label>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Input placeholder="Area name" className="w-1/2 mr-2" />
+                            <div className="flex w-1/2">
+                              <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                                IDR
+                              </span>
+                              <Input type="number" placeholder="5000" className="rounded-l-none" />
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" className="w-full mt-2">
+                            + Add Another Area
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </CardContent>
+              <CardFooter>
+                <Button onClick={handleSave} disabled={saving} className="gap-2">
+                  {saving ? "Saving..." : "Save Pricing Settings"}
+                  <Save size={16} />
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );
