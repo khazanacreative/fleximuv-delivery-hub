@@ -67,6 +67,7 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
       case 'manage_own_drivers':
       case 'view_own_drivers':
       case 'accept_orders':
+      case 'create_orders':
         return true;
       default:
         return false;

@@ -180,7 +180,7 @@ const Orders = () => {
   const handleAcceptOrder = (order) => {
     const updatedOrder = {
       ...order,
-      status: 'accepted',
+      status: 'accepted' as OrderStatus,
       partnerId: user?.id || order.partnerId
     };
     

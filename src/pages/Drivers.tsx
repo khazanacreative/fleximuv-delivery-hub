@@ -151,7 +151,7 @@ const Drivers = () => {
       partnerId: user?.id || "",
       vehicleType: newDriver.vehicleType,
       vehicleNumber: newDriver.licensePlate,
-      status: 'available',
+      status: 'available' as 'available' | 'busy' | 'offline',
       completedOrders: 0,
       rating: 5.0,
       balance: 0,
@@ -274,8 +274,8 @@ const Drivers = () => {
             </PopoverContent>
           </Popover>
           
-          <RoleGate allowedRoles={['admin', 'partner']} permissions={['manage_own_drivers']}>
-            {/* Add Driver Dialog */}
+          {/* Show Add Driver button to both fleet partners and independent couriers */}
+          {(isAdmin || isFleetPartner || isIndependentCourier) && (
             <Dialog open={addDriverOpen} onOpenChange={setAddDriverOpen}>
               <DialogTrigger asChild>
                 <Button size="sm">
@@ -378,7 +378,7 @@ const Drivers = () => {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-          </RoleGate>
+          )}
         </div>
       </div>
 

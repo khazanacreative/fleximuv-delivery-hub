@@ -2,6 +2,7 @@
 import { ReactNode } from 'react';
 import { UserRole } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
+import { usePermissions } from '@/hooks/use-permissions';
 import { Permission, hasPermission, hasAnyPermission, hasAllPermissions } from '@/utils/permissions';
 
 interface RoleGateProps {
@@ -23,6 +24,7 @@ const RoleGate = ({
   fallback 
 }: RoleGateProps) => {
   const { user } = useAuth();
+  const { isAdmin, isFleetPartner, isIndependentCourier } = usePermissions();
   
   if (!user) return fallback || null;
   
