@@ -1,4 +1,3 @@
-
 import { User, Driver, Order, Transaction, ServiceType } from '../types';
 
 // Mock data for users
@@ -21,6 +20,7 @@ export const mockUsers: User[] = [
     phone: '+6281234567891',
     role: 'partner',
     partnerType: 'general',
+    hasDrivers: true,  // Explicitly mark as fleet partner
     avatar: '/avatars/joko.jpg',
     createdAt: new Date('2023-02-10'),
     balance: 5000000,
@@ -31,8 +31,8 @@ export const mockUsers: User[] = [
     name: 'Siti Rahayu',
     email: 'siti@eastjavacourier.com',
     phone: '+6281234567892',
-    role: 'partner',
-    partnerType: 'courier',
+    role: 'driver',
+    partnerType: 'courier',  // Changed to 'courier' to make her an independent courier
     avatar: '/avatars/siti.jpg',
     createdAt: new Date('2023-03-05'),
     balance: 3500000,
@@ -45,9 +45,35 @@ export const mockUsers: User[] = [
     phone: '+6281234567893',
     role: 'partner',
     partnerType: 'business',
+    hasDrivers: false,  // Explicitly mark as not fleet partner
     avatar: '/avatars/agus.jpg',
     createdAt: new Date('2023-04-12'),
     balance: 1200000,
+    status: 'active'
+  },
+  {
+    id: '7',
+    name: 'Ratna Dewi',
+    email: 'ratna@surabaya-fleet.com',
+    phone: '+6281234567899',
+    role: 'partner',
+    partnerType: 'general',
+    hasDrivers: true,  // Fleet partner
+    avatar: '/avatars/ratna.jpg',
+    createdAt: new Date('2023-05-10'),
+    balance: 4500000,
+    status: 'active'
+  },
+  {
+    id: '8',
+    name: 'Dimas Prasetya',
+    email: 'dimas@courier.com',
+    phone: '+6281234567800',
+    role: 'driver',
+    partnerType: 'courier',  // Independent courier
+    avatar: '/avatars/dimas.jpg',
+    createdAt: new Date('2023-06-15'),
+    balance: 2800000,
     status: 'active'
   },
   {

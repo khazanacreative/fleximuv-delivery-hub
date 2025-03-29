@@ -17,6 +17,14 @@ const Drivers = () => {
   // Determine if the user can manage drivers
   const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
   
+  console.log("User role checks:", {
+    user,
+    isAdmin,
+    isFleetPartner,
+    isIndependentCourier,
+    canManageDrivers
+  });
+  
   const {
     filteredDrivers,
     statusFilters,
