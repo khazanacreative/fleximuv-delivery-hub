@@ -75,9 +75,9 @@ const Sidebar = () => {
   return (
     <div 
       className={cn(
-        "flex flex-col h-full bg-sidebar border-r border-sidebar-border transition-all duration-300",
+        "flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 fixed",
         collapsed ? "w-16" : "w-64",
-        isMobile && !collapsed && "absolute z-50 inset-y-0 left-0 shadow-lg"
+        isMobile && !collapsed && "z-50 shadow-lg"
       )}
     >
       {/* Navigation Links - with ScrollArea */}
@@ -105,7 +105,7 @@ const Sidebar = () => {
 
       {/* Logout Button - Fixed at bottom */}
       <div className={cn(
-        "border-t border-sidebar-border p-3 mt-auto bg-sidebar",
+        "border-t border-sidebar-border p-3 bg-sidebar sticky bottom-0 mt-auto",
       )}>
         <Button 
           variant="ghost" 
