@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -9,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { 
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
@@ -337,23 +335,21 @@ const LivePositionMap = ({
                 
                 {selectedDriver && shareable && (
                   <div className="absolute bottom-4 right-4 z-[1000]">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button 
-                            size="sm" 
-                            variant="default" 
-                            className="rounded-full w-10 h-10 p-0 shadow-md"
-                            onClick={copyTrackingLink}
-                          >
-                            <Share2 size={16} />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Copy tracking link</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          size="sm" 
+                          variant="default" 
+                          className="rounded-full w-10 h-10 p-0 shadow-md"
+                          onClick={copyTrackingLink}
+                        >
+                          <Share2 size={16} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Copy tracking link</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 )}
               </div>

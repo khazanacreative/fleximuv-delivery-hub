@@ -62,9 +62,9 @@ const ReportsPage = () => (
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <BrowserRouter>
     <TooltipProvider>
-      <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <Toaster />
           <Sonner />
@@ -86,9 +86,9 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
-      </BrowserRouter>
+      </QueryClientProvider>
     </TooltipProvider>
-  </QueryClientProvider>
+  </BrowserRouter>
 );
 
 export default App;
