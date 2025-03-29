@@ -129,6 +129,9 @@ const Drivers = () => {
     }
   };
 
+  // Determine if the user can add drivers - now including isIndependentCourier
+  const canAddDriver = isAdmin || isFleetPartner || isIndependentCourier;
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -150,7 +153,7 @@ const Drivers = () => {
             onClearFilters={clearFilters}
           />
           
-          {(isAdmin || isFleetPartner || isIndependentCourier) && (
+          {canAddDriver && (
             <AddDriverDialog
               isOpen={addDriverOpen}
               onOpenChange={setAddDriverOpen}

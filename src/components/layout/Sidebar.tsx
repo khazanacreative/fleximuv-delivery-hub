@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -55,7 +54,7 @@ const Sidebar = () => {
       name: 'Dashboard', 
       path: '/dashboard', 
       icon: Home,
-      description: 'Pantau statistik dan aktivitas terbaru di satu tempat. Lihat ringkasan pesanan, driver, dan transaksi.'
+      description: 'Monitor statistics and recent activities in one place. View summaries of orders, drivers, and transactions.'
     },
   ];
 
@@ -64,37 +63,37 @@ const Sidebar = () => {
       name: 'Partners', 
       path: '/partners', 
       icon: Users,
-      description: 'Kelola semua partner bisnis Anda. Tambah, edit, atau nonaktifkan akun partner dengan mudah.'
+      description: 'Manage all business partners. Add, edit, or deactivate partner accounts easily.'
     },
     { 
       name: 'Drivers', 
       path: '/drivers', 
       icon: Truck,
-      description: 'Kelola semua driver aktif. Pantau status, performa, dan ketersediaan driver secara real-time.'
+      description: 'Manage all active drivers. Monitor status, performance, and driver availability in real-time.'
     },
     { 
       name: 'Orders', 
       path: '/orders', 
       icon: Package,
-      description: 'Kelola semua pesanan pengiriman dan tetap bisa komunikasi dan memantau melalui notifikasi WhatsApp.'
+      description: 'Manage all delivery orders and stay connected through WhatsApp notifications.'
     },
     { 
       name: 'Finances', 
       path: '/finances', 
       icon: CreditCard,
-      description: 'Kelola semua transaksi keuangan. Pantau pendapatan, biaya, dan laporan keuangan bulanan.'
+      description: 'Manage all financial transactions. Monitor revenue, expenses, and monthly financial reports.'
     },
     { 
       name: 'Reports', 
       path: '/reports', 
       icon: BarChart,
-      description: 'Lihat laporan dan analisis lengkap tentang bisnis Anda. Unduh laporan dalam berbagai format.'
+      description: 'View comprehensive reports and analysis about your business. Download reports in various formats.'
     },
     { 
       name: 'Settings', 
       path: '/settings', 
       icon: Settings,
-      description: 'Sesuaikan pengaturan aplikasi, profil pengguna, notifikasi, dan preferensi lainnya.'
+      description: 'Customize application settings, user profiles, notifications, and other preferences.'
     },
   ];
 
@@ -103,31 +102,31 @@ const Sidebar = () => {
       name: 'Drivers', 
       path: '/drivers', 
       icon: Truck,
-      description: 'Kelola driver Anda. Tambahkan driver baru, pantau kinerja, dan atur jadwal pengiriman.'
+      description: 'Manage your drivers. Add new drivers, monitor performance, and arrange delivery schedules.'
     },
     { 
       name: 'Orders', 
       path: '/orders', 
       icon: Package,
-      description: 'Kelola semua pesanan pengiriman dan tetap bisa komunikasi dan memantau melalui notifikasi WhatsApp.'
+      description: 'Manage all delivery orders and stay connected through WhatsApp notifications.'
     },
     { 
       name: 'Finances', 
       path: '/finances', 
       icon: CreditCard,
-      description: 'Pantau pendapatan, biaya, dan saldo. Lihat riwayat transaksi dan penarikan dana.'
+      description: 'Monitor income, expenses, and balance. View transaction history and withdrawals.'
     },
     { 
       name: 'Reports', 
       path: '/reports', 
       icon: BarChart,
-      description: 'Lihat laporan performa bisnis dan analisis pengiriman Anda dalam periode tertentu.'
+      description: 'View business performance reports and delivery analysis for specific periods.'
     },
     { 
       name: 'Settings', 
       path: '/settings', 
       icon: Settings,
-      description: 'Sesuaikan pengaturan profil, notifikasi, dan preferensi layanan Anda.'
+      description: 'Customize your profile settings, notifications, and service preferences.'
     },
   ];
 
@@ -136,19 +135,19 @@ const Sidebar = () => {
       name: 'My Orders', 
       path: '/orders', 
       icon: Package,
-      description: 'Lihat semua pesanan yang ditugaskan kepada Anda. Update status pengiriman dengan mudah.'
+      description: 'View all assigned orders. Update delivery status easily.'
     },
     { 
       name: 'Earnings', 
       path: '/earnings', 
       icon: CreditCard,
-      description: 'Pantau pendapatan Anda. Lihat riwayat pembayaran dan bonus yang telah diterima.'
+      description: 'Monitor your earnings. View payment history and bonuses received.'
     },
     { 
       name: 'Settings', 
       path: '/settings', 
       icon: Settings,
-      description: 'Atur profil, notifikasi, dan preferensi akun Anda sebagai driver.'
+      description: 'Set up your profile, notifications, and account preferences as a driver.'
     },
   ];
 
@@ -157,19 +156,19 @@ const Sidebar = () => {
       name: 'Orders', 
       path: '/orders', 
       icon: Package,
-      description: 'Pantau status pesanan Anda. Lihat riwayat pesanan dan buat pesanan baru dengan mudah.'
+      description: 'Track your order status. View order history and create new orders easily.'
     },
     { 
       name: 'Wallet', 
       path: '/wallet', 
       icon: CreditCard,
-      description: 'Kelola saldo dan metode pembayaran Anda. Lihat riwayat transaksi dan isi ulang saldo.'
+      description: 'Manage your balance and payment methods. View transaction history and top up your balance.'
     },
     { 
       name: 'Settings', 
       path: '/settings', 
       icon: Settings,
-      description: 'Sesuaikan pengaturan profil, alamat, dan preferensi notifikasi Anda.'
+      description: 'Customize your profile, address, and notification preferences.'
     },
   ];
 
