@@ -9,6 +9,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import Layout from "@/components/layout/Layout";
 import Login from "@/pages/Login";
 import Index from "@/pages/Index";
+import Landing from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
 import Dashboard from "@/pages/Dashboard";
 import PageLoader from "@/components/shared/PageLoader";
@@ -63,6 +64,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/landing" element={<Landing />} />
             
             <Route path="/" element={<Layout />}>
               <Route path="dashboard" element={<Dashboard />} />

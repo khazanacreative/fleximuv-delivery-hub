@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Users, Truck, Package, CreditCard, 
-  Settings, BarChart, LogOut, Menu, ChevronLeft 
+  Settings, BarChart, LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -79,27 +79,30 @@ const Sidebar = () => {
         isMobile && !collapsed && "absolute z-50 inset-y-0 left-0 shadow-lg"
       )}
     >
-      <div className="p-4 flex items-center justify-between">
-        {!collapsed && (
-          <Link to="/dashboard" className="flex items-center gap-2">
+      {/* Logo Area */}
+      <div className="p-4">
+        <Link to="/dashboard" className="flex items-center justify-center">
+          {collapsed ? (
             <div className="w-8 h-8 bg-fleximov-500 rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-sm">FM</span>
             </div>
-            <span className="font-semibold text-lg">Fleximov</span>
-          </Link>
-        )}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="ml-auto" 
-          onClick={toggleSidebar}
-        >
-          {collapsed ? <Menu size={18} /> : <ChevronLeft size={18} />}
-        </Button>
+          ) : (
+            <div className="flex flex-col items-center w-full">
+              <div className="w-12 h-12 bg-fleximov-500 rounded-md flex items-center justify-center mb-1">
+                <span className="text-white font-bold text-lg">FM</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="font-semibold text-lg">Fleximov</span>
+                <span className="text-xs text-muted-foreground -mt-1">Delivery Hub</span>
+              </div>
+            </div>
+          )}
+        </Link>
       </div>
       <Separator />
 
-      <ScrollArea className="flex-1">
+      {/* Navigation Links */}
+      <ScrollArea className="flex-1 overflow-x-hidden">
         <div className="p-2">
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
@@ -121,24 +124,14 @@ const Sidebar = () => {
         </div>
       </ScrollArea>
 
-      <div className="p-3 mt-auto">
-        {!collapsed && (
-          <div className="mb-2 px-3 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-fleximov-200 flex items-center justify-center">
-              <span className="text-fleximov-700 font-medium text-sm">
-                {user.name?.charAt(0)}
-              </span>
-            </div>
-            <div className="overflow-hidden">
-              <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
-            </div>
-          </div>
-        )}
+      {/* User Info - Hidden from sidebar as it's moved to header */}
+      
+      {/* Logout Button - Fixed at bottom */}
+      <div className="p-3 border-t border-sidebar-border mt-auto">
         <Button 
           variant="ghost" 
           className={cn(
-            "w-full flex items-center gap-3 justify-start text-muted-foreground hover:text-foreground",
+            "w-full flex items-center gap-3 justify-start text-muted-foreground hover:text-destructive",
             collapsed && "justify-center p-2"
           )}
           onClick={logout}

@@ -1,9 +1,8 @@
 
-import { Bell, Menu, Search, User } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useSidebar } from '@/contexts/SidebarContext';
 import { useAuth } from '@/hooks/use-auth';
 import { 
   DropdownMenu, 
@@ -15,29 +14,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const Header = () => {
-  const { toggleSidebar } = useSidebar();
   const { user, logout } = useAuth();
 
   return (
     <header className="h-16 border-b bg-background/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-30">
       <div className="flex items-center justify-between h-full px-4">
-        <div className="flex items-center gap-3">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="md:hidden" 
-            onClick={toggleSidebar}
-          >
-            <Menu size={20} />
-          </Button>
-          <div className="relative hidden md:flex items-center w-64">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
-            <Input 
-              placeholder="Search..." 
-              className="pl-10 bg-muted/50"
-            />
-          </div>
-        </div>
+        {/* Search bar moved to main content area */}
+        <div className="md:flex-1"></div>
         
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="text-muted-foreground">
@@ -59,11 +42,15 @@ const Header = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <div className="flex flex-col">
+                  <span>{user?.name}</span>
+                  <span className="text-xs text-muted-foreground capitalize">{user?.role}</span>
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                Profile
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onClick={logout}>
                 Logout

@@ -9,7 +9,7 @@ const Index = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  return <Navigate to="/login" replace />;
+  return <Navigate to="/landing" replace />;
 };
 
 export default Index;
