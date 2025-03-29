@@ -1,4 +1,3 @@
-
 // User Roles
 export type UserRole = 'admin' | 'partner' | 'driver' | 'customer' | 'guest';
 
@@ -18,6 +17,7 @@ export interface User {
   partnerType?: PartnerType;
   status: 'active' | 'inactive' | 'suspended';
   hasDrivers?: boolean;
+  canEditOrders?: boolean;
 }
 
 // Order Status
