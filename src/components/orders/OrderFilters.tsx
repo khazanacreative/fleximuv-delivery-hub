@@ -8,10 +8,25 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Filter } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
 interface OrderFiltersProps {
-  statusFilters: Record<string, boolean>;
-  setStatusFilters: (filters: Record<string, boolean>) => void;
+  statusFilters: {
+    pending: boolean;
+    accepted: boolean;
+    assigned: boolean;
+    in_progress: boolean;
+    completed: boolean;
+    cancelled: boolean;
+  };
+  setStatusFilters: Dispatch<SetStateAction<{
+    pending: boolean;
+    accepted: boolean;
+    assigned: boolean;
+    in_progress: boolean;
+    completed: boolean;
+    cancelled: boolean;
+  }>>;
 }
 
 const OrderFilters = ({ statusFilters, setStatusFilters }: OrderFiltersProps) => {
@@ -37,10 +52,10 @@ const OrderFilters = ({ statusFilters, setStatusFilters }: OrderFiltersProps) =>
                   id={status} 
                   checked={statusFilters[status]} 
                   onCheckedChange={(checked) => {
-                    setStatusFilters({
-                      ...statusFilters,
+                    setStatusFilters(prev => ({
+                      ...prev,
                       [status]: checked === true
-                    });
+                    }));
                   }}
                 />
                 <Label htmlFor={status} className="text-sm capitalize">

@@ -109,11 +109,11 @@ const OrderDetails = ({
           <div className="grid grid-cols-2 gap-2">
             <div>
               <p className="text-sm text-muted-foreground">Pickup Location</p>
-              <p className="font-medium">{viewOrderDetails.pickup || viewOrderDetails.pickupAddress || "Jakarta"}</p>
+              <p className="font-medium">{viewOrderDetails.pickupAddress}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Delivery Location</p>
-              <p className="font-medium">{viewOrderDetails.destination || viewOrderDetails.deliveryAddress || "Bandung"}</p>
+              <p className="font-medium">{viewOrderDetails.deliveryAddress}</p>
             </div>
           </div>
           
