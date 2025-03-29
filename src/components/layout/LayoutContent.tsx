@@ -16,21 +16,23 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
   
   return (
     <div className="min-h-screen flex w-full bg-background/98">
-      <div className="mt-16 z-10"> {/* Added mt-16 to push sidebar below header */}
-        <Sidebar />
-      </div>
-      <div className={cn(
-        "flex-1 flex flex-col min-h-screen transition-[margin] duration-300",
-        collapsed ? "ml-16" : "ml-64"
-      )}>
-        <Header />
-        <main className="flex-1 mt-16 overflow-auto">
-          <div className="container mx-auto px-6 py-6 max-w-7xl">
-            <Suspense fallback={<PageLoader />}>
-              {children || <Outlet />}
-            </Suspense>
-          </div>
-        </main>
+      <Header />
+      <div className="flex flex-1 pt-16"> {/* Added pt-16 to account for header height */}
+        <div className="z-10"> 
+          <Sidebar />
+        </div>
+        <div className={cn(
+          "flex-1 flex flex-col min-h-screen transition-[margin] duration-300",
+          collapsed ? "ml-16" : "ml-64"
+        )}>
+          <main className="flex-1 overflow-auto">
+            <div className="container mx-auto px-6 py-6 max-w-7xl">
+              <Suspense fallback={<PageLoader />}>
+                {children || <Outlet />}
+              </Suspense>
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

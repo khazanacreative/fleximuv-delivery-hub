@@ -307,7 +307,10 @@ const LivePositionMap = ({
                             {driver.vehicleType} • ID: {driver.id}
                           </div>
                         </div>
-                        <Badge variant={driver.status === 'available' ? 'success' : 'warning'}>
+                        <Badge variant={driver.status === 'available' ? 'default' : 'secondary'} 
+                               className={driver.status === 'available' 
+                                        ? 'bg-green-100 text-green-800 hover:bg-green-200' 
+                                        : 'bg-orange-100 text-orange-800 hover:bg-orange-200'}>
                           {driver.status === 'available' ? 'Tersedia' : 'Sibuk'}
                         </Badge>
                       </div>
