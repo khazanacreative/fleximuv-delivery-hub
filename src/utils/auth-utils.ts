@@ -5,6 +5,8 @@ import { Session } from '@supabase/supabase-js';
 
 export const fetchUserProfile = async (userId: string, session: Session | null): Promise<AppUser | null> => {
   try {
+    console.log('Fetching user profile for ID:', userId);
+    
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -16,33 +18,36 @@ export const fetchUserProfile = async (userId: string, session: Session | null):
       return null;
     }
 
-    if (data) {
-      // Validate role is a valid UserRole
-      const role = validateUserRole(data.role);
-      
-      // Validate partnerType is a valid PartnerType (if provided)
-      const partnerType = data.partner_type ? validatePartnerType(data.partner_type) : undefined;
-      
-      // Validate status is a valid status
-      const status = validateUserStatus(data.status);
-      
-      return {
-        id: data.id,
-        name: data.full_name || '',
-        email: session?.user?.email || '',
-        phone: data.phone || '',
-        role,
-        avatar: data.avatar_url,
-        createdAt: new Date(data.created_at),
-        balance: data.balance || 0,
-        partnerType,
-        status,
-        hasDrivers: data.has_drivers,
-        canEditOrders: data.can_edit_orders,
-      };
+    if (!data) {
+      console.error('No profile found for user:', userId);
+      return null;
     }
+
+    console.log('Profile data received:', data);
     
-    return null;
+    // Validate role is a valid UserRole
+    const role = validateUserRole(data.role);
+    
+    // Validate partnerType is a valid PartnerType (if provided)
+    const partnerType = data.partner_type ? validatePartnerType(data.partner_type) : undefined;
+    
+    // Validate status is a valid status
+    const status = validateUserStatus(data.status);
+    
+    return {
+      id: data.id,
+      name: data.full_name || '',
+      email: session?.user?.email || '',
+      phone: data.phone || '',
+      role,
+      avatar: data.avatar_url,
+      createdAt: new Date(data.created_at),
+      balance: data.balance || 0,
+      partnerType,
+      status,
+      hasDrivers: !!data.has_drivers,
+      canEditOrders: !!data.can_edit_orders,
+    };
   } catch (error) {
     console.error('Error in fetchUserProfile:', error);
     return null;

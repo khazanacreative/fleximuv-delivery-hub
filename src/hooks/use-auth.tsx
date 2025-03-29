@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
@@ -21,45 +20,74 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Function to refresh user data
   const refreshUser = async () => {
     if (session?.user?.id) {
-      const userData = await fetchUserProfile(session.user.id, session);
-      if (userData) {
-        setUser(userData);
+      try {
+        const userData = await fetchUserProfile(session.user.id, session);
+        if (userData) {
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Error refreshing user:', error);
       }
     }
   };
 
   useEffect(() => {
+    console.log('Setting up auth state listener');
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
-        console.log('Auth state changed:', event, currentSession);
+        console.log('Auth state changed:', event, currentSession?.user?.email || 'No user');
+        
+        // Update session state immediately
         setSession(currentSession);
 
         if (currentSession?.user) {
-          // Use setTimeout to prevent potential deadlocks
+          // Defer profile fetching to prevent deadlocks
           setTimeout(async () => {
-            const userData = await fetchUserProfile(currentSession.user.id, currentSession);
-            setUser(userData);
-            setIsLoading(false);
-            if (event === 'SIGNED_IN') {
-              navigate('/dashboard');
+            try {
+              const userData = await fetchUserProfile(currentSession.user.id, currentSession);
+              console.log('User profile fetched:', userData);
+              setUser(userData);
+              
+              if (event === 'SIGNED_IN') {
+                console.log('User signed in, navigating to dashboard');
+                navigate('/dashboard');
+                sonnerToast.success("Login Successful", {
+                  description: "Welcome back!",
+                });
+              }
+            } catch (error) {
+              console.error('Error fetching user profile:', error);
+            } finally {
+              setIsLoading(false);
             }
           }, 0);
         } else {
           setUser(null);
           setIsLoading(false);
+          if (event === 'SIGNED_OUT') {
+            console.log('User signed out');
+          }
         }
       }
     );
 
     // THEN check for existing session
     supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
-      console.log('Initial session check:', currentSession);
+      console.log('Initial session check:', currentSession?.user?.email || 'No session');
+      
+      // Update session state
       setSession(currentSession);
 
       if (currentSession?.user) {
-        const userData = await fetchUserProfile(currentSession.user.id, currentSession);
-        setUser(userData);
+        try {
+          const userData = await fetchUserProfile(currentSession.user.id, currentSession);
+          console.log('Initial user profile:', userData);
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching initial user profile:', error);
+        }
       }
       
       setIsLoading(false);
@@ -71,17 +99,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [navigate]);
 
   const login = async (email: string, password: string) => {
+    console.log('Login attempt with email:', email);
     setIsLoading(true);
     
     try {
-      console.log('Attempting login with:', email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) {
-        console.error('Login error details:', error);
+        console.error('Login error:', error.message);
         toast({
           title: "Login Failed",
           description: error.message,
@@ -90,28 +118,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         sonnerToast.error("Login Failed", {
           description: error.message,
         });
-        return;
+        throw error;
       }
       
-      if (data.user) {
-        console.log('Login successful:', data.user);
-        toast({
-          title: "Login Successful",
-          description: `Welcome back!`,
-        });
-        sonnerToast.success("Login Successful", {
-          description: "Welcome back!",
-        });
-        navigate('/dashboard');
-      }
+      console.log('Login successful:', data.user?.email);
+      return data;
       
     } catch (error: any) {
-      console.error('Login error:', error);
-      toast({
-        title: "Login Failed",
-        description: error.message || "An error occurred during login",
-        variant: "destructive",
-      });
+      console.error('Login error details:', error);
+      throw error;
     } finally {
       setIsLoading(false);
     }

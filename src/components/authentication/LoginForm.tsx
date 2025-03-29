@@ -19,6 +19,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
+      console.log('User authenticated, navigating to dashboard');
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
@@ -28,12 +29,20 @@ const LoginForm = () => {
     setIsLoading(true);
     
     try {
-      console.log('Submitting login form with:', { email, password: 'REDACTED' });
+      console.log('Submitting login form with:', { email, password: password.length > 0 ? 'PROVIDED' : 'EMPTY' });
+      if (!email || !password) {
+        throw new Error('Email and password are required');
+      }
+      
+      // Try to login
       await login(email, password);
-      // The navigation will be handled by the auth state change
-    } catch (error) {
+      
+      // The navigation will be handled by the auth state change in useEffect
+    } catch (error: any) {
       console.error('Login form error:', error);
-      // Error is handled in the auth hook
+      toast.error('Login failed', {
+        description: error.message || 'Please check your credentials and try again'
+      });
     } finally {
       setIsLoading(false);
     }
