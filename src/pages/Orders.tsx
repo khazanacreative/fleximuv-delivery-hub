@@ -1,8 +1,9 @@
 
-import { useState, useEffect } from "react";
-import { Package, Plus, MapPin, Filter, ArrowUpDown, MoreHorizontal, Trash, Edit, Eye } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Package, Plus, MapPin, Filter, ArrowUpDown, MoreHorizontal, Trash, Edit, Eye, Share2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import {
   Table,
   TableBody,
@@ -45,10 +46,11 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { mockOrders } from "@/data/mock-data";
-import { Map } from "@/components/maps/LivePositionMap"; // Import the map component
+import LiveMap from "@/components/maps/LiveMap"; // Use the actual map component
 
 const Orders = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [orders, setOrders] = useState(mockOrders);
   const [filteredOrders, setFilteredOrders] = useState(mockOrders);
   const [open, setOpen] = useState(false);
@@ -68,7 +70,8 @@ const Orders = () => {
   const isPartner = user?.role === 'partner';
   const isDriver = user?.role === 'driver';
 
-  useEffect(() => {
+  // Fix bug: Use useCallback to memoize the filter function
+  const applyFilters = useCallback(() => {
     if (Object.values(statusFilters).every(v => v === false)) {
       setFilteredOrders(orders);
     } else {
@@ -76,6 +79,11 @@ const Orders = () => {
       setFilteredOrders(orders.filter(order => activeFilters.includes(order.status)));
     }
   }, [statusFilters, orders]);
+
+  // Apply filters when they change
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -100,13 +108,42 @@ const Orders = () => {
     return status.replace('_', ' ').replace(/\b\w/g, char => char.toUpperCase());
   };
 
+  const formatDate = (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleString('id-ID', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   const handleViewDetails = (order) => {
-    setViewOrderDetails(order);
+    // Fix bug: Make a separate copy of the order
+    setViewOrderDetails({...order});
   };
 
   const handleShowLocation = (order) => {
-    setSelectedOrder(order);
+    setSelectedOrder({...order});
     setMapOpen(true);
+  };
+
+  const handleShareLocation = (order) => {
+    // Simulating sharing location via WhatsApp
+    toast({
+      title: "Link Generated",
+      description: "Live tracking link has been copied. Ready to share via WhatsApp.",
+    });
+    
+    // In a real implementation, this would generate a link to a live tracking page
+    // and open WhatsApp Web with the link pre-populated
+  };
+
+  const canEditOrder = (status) => {
+    // Only allow editing if status is pending
+    return status === 'pending';
   };
 
   return (
@@ -213,6 +250,12 @@ const Orders = () => {
                   <Input id="items" className="col-span-3" />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="pickupTime" className="text-left">
+                    Pickup Time
+                  </Label>
+                  <Input id="pickupTime" type="datetime-local" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="driver" className="text-left">
                     Driver
                   </Label>
@@ -233,7 +276,10 @@ const Orders = () => {
                   Cancel
                 </Button>
                 <Button onClick={() => {
-                  // Add new order logic here
+                  toast({
+                    title: "Order Created",
+                    description: "New order has been created successfully"
+                  });
                   setOpen(false);
                 }}>
                   Create
@@ -266,7 +312,7 @@ const Orders = () => {
               <TableRow key={order.id}>
                 <TableCell className="font-medium">#{order.id.substring(0, 6)}</TableCell>
                 <TableCell>{order.customer || order.customerName}</TableCell>
-                <TableCell>{new Date(order.date || order.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{formatDate(order.date || order.createdAt)}</TableCell>
                 <TableCell>{order.items ? order.items.join(", ") : order.serviceType}</TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(order.status)}>
@@ -290,7 +336,13 @@ const Orders = () => {
                       <DropdownMenuItem onClick={() => handleShowLocation(order)}>
                         <MapPin className="mr-2 h-4 w-4" /> View Location
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleShareLocation(order)}>
+                        <Share2 className="mr-2 h-4 w-4" /> Share to WhatsApp
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        disabled={!canEditOrder(order.status)}
+                        className={!canEditOrder(order.status) ? "opacity-50 cursor-not-allowed" : ""}
+                      >
                         <Edit className="mr-2 h-4 w-4" /> Edit Order
                       </DropdownMenuItem>
                       {(isAdmin || isPartner) && (
@@ -339,11 +391,11 @@ const Orders = () => {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <p className="text-sm text-muted-foreground">Created Date</p>
-                  <p className="font-medium">{new Date(viewOrderDetails.date || viewOrderDetails.createdAt).toLocaleDateString()}</p>
+                  <p className="font-medium">{formatDate(viewOrderDetails.date || viewOrderDetails.createdAt)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Estimated Delivery</p>
-                  <p className="font-medium">{new Date(viewOrderDetails.date || viewOrderDetails.createdAt).toLocaleDateString()}</p>
+                  <p className="font-medium">{formatDate(viewOrderDetails.scheduledFor || new Date(new Date(viewOrderDetails.date || viewOrderDetails.createdAt).getTime() + 3600000))}</p>
                 </div>
               </div>
               
@@ -355,17 +407,22 @@ const Orders = () => {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <p className="text-sm text-muted-foreground">Pickup Location</p>
-                  <p className="font-medium">{viewOrderDetails.pickup || "Jakarta"}</p>
+                  <p className="font-medium">{viewOrderDetails.pickup || viewOrderDetails.pickupAddress || "Jakarta"}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Delivery Location</p>
-                  <p className="font-medium">{viewOrderDetails.destination || "Bandung"}</p>
+                  <p className="font-medium">{viewOrderDetails.destination || viewOrderDetails.deliveryAddress || "Bandung"}</p>
                 </div>
               </div>
               
               <div>
                 <p className="text-sm text-muted-foreground">Driver</p>
                 <p className="font-medium">{viewOrderDetails.driver || (viewOrderDetails.driverId ? `Driver #${viewOrderDetails.driverId}` : "Unassigned")}</p>
+              </div>
+
+              <div>
+                <p className="text-sm text-muted-foreground">Notes</p>
+                <p className="font-medium">{viewOrderDetails.notes || "No special instructions"}</p>
               </div>
             </div>
           )}
@@ -374,10 +431,10 @@ const Orders = () => {
               Close
             </Button>
             <Button onClick={() => {
-              // Handle further actions
+              handleShareLocation(viewOrderDetails);
               setViewOrderDetails(null);
             }}>
-              Update Status
+              Share Tracking Link
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -385,7 +442,7 @@ const Orders = () => {
 
       {/* Map Dialog */}
       <Dialog open={mapOpen} onOpenChange={setMapOpen}>
-        <DialogContent className="sm:max-w-[700px] h-[600px]">
+        <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-auto">
           <DialogHeader>
             <DialogTitle>Order Location</DialogTitle>
             <DialogDescription>
@@ -394,31 +451,18 @@ const Orders = () => {
           </DialogHeader>
           <div className="h-[450px] w-full">
             {selectedOrder && (
-              <div className="h-full border rounded-md">
-                <div className="p-6 text-center">
-                  <p className="text-muted-foreground">Map view would appear here with location markers</p>
-                  <p className="mt-2">
-                    <Badge className={getStatusColor(selectedOrder.status)}>
-                      {formatStatus(selectedOrder.status)}
-                    </Badge>
-                  </p>
-                  <div className="mt-4 flex justify-between px-8">
-                    <div className="text-left">
-                      <p className="text-sm text-muted-foreground">Pickup</p>
-                      <p className="font-medium">{selectedOrder.pickup || "Jakarta"}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-muted-foreground">Destination</p>
-                      <p className="font-medium">{selectedOrder.destination || "Bandung"}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <LiveMap title={`Order #${selectedOrder.id.substring(0, 6)} Tracking`} height="450px" />
             )}
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex justify-between items-center">
             <Button variant="outline" onClick={() => setMapOpen(false)}>
               Close
+            </Button>
+            <Button onClick={() => {
+              handleShareLocation(selectedOrder);
+            }}>
+              <Share2 className="mr-2 h-4 w-4" />
+              Share to WhatsApp
             </Button>
           </DialogFooter>
         </DialogContent>

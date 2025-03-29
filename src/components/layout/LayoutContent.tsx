@@ -19,9 +19,12 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
       <Header />
       <div className="flex flex-1 pt-16"> {/* Header height space */}
         <Sidebar />
-        <div className="flex-1 flex flex-col min-h-screen">
+        <div className={cn(
+          "flex-1 flex flex-col min-h-screen",
+          collapsed ? "ml-16" : "ml-64"  /* Account for fixed sidebar width */
+        )}>
           <main className="flex-1 overflow-auto">
-            <div className="px-5 pt-1 max-w-7xl"> {/* Reduced top margin to 5px (pt-1), left padding to 20px (px-5) */}
+            <div className="px-5 pt-1 max-w-7xl"> {/* Top margin 5px (pt-1) */}
               <Suspense fallback={<PageLoader />}>
                 {children || <Outlet />}
               </Suspense>

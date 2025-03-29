@@ -45,10 +45,10 @@ const Sidebar = () => {
 
   if (!user) return null;
 
-  const isAdmin = user.role === 'admin';
-  const isPartner = user.role === 'partner';
-  const isDriver = user.role === 'driver';
-  const isCustomer = user.role === 'customer';
+  const isAdmin = user?.role === 'admin';
+  const isPartner = user?.role === 'partner';
+  const isDriver = user?.role === 'driver';
+  const isCustomer = user?.role === 'customer';
 
   const commonLinks = [
     { 
@@ -191,13 +191,13 @@ const Sidebar = () => {
     <div 
       ref={sidebarRef}
       className={cn(
-        "flex flex-col h-[calc(100vh-4rem)] bg-sidebar border-r border-sidebar-border transition-all duration-300",
+        "flex flex-col h-[calc(100vh-4rem)] bg-sidebar border-r border-sidebar-border fixed top-16 left-0 transition-all duration-300",
         collapsed ? "w-16" : "w-64",
         isMobile && !collapsed && "z-50 shadow-lg"
       )}
     >
-      <div className="pt-5"> {/* Reduced to 20px spacing from navbar */}
-        {/* Removed the toggle button */}
+      <div className="pt-1">
+        {/* Removed the toggle button, using double-click instead */}
       </div>
       
       <div className="flex flex-col h-full">
