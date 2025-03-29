@@ -16,7 +16,9 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
   
   return (
     <div className="min-h-screen flex w-full bg-background/98">
-      <Sidebar />
+      <div className="mt-16 z-10"> {/* Added mt-16 to push sidebar below header */}
+        <Sidebar />
+      </div>
       <div className={cn(
         "flex-1 flex flex-col min-h-screen transition-[margin] duration-300",
         collapsed ? "ml-16" : "ml-64"

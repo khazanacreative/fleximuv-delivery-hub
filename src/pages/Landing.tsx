@@ -1,7 +1,9 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight, Package, Shield, Truck, Users, MessageCircle, SmartphoneNfc } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { MapPin, Share2 } from 'lucide-react';
 
 const Landing = () => {
   return (
@@ -26,9 +28,17 @@ const Landing = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-fleximov-50 to-white">
-        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
+      {/* Hero Section with new image */}
+      <section className="py-16 md:py-24 relative">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://cdn.pixabay.com/photo/2022/02/25/04/11/traffic-7033509_1280.jpg" 
+            alt="Urban traffic" 
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-fleximov-500/30 to-transparent"></div>
+        </div>
+        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center relative z-10">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Simplified <span className="text-fleximov-500">UMKM</span> Delivery Management
@@ -54,11 +64,258 @@ const Landing = () => {
             <div className="relative bg-white border rounded-lg shadow-lg p-4">
               <div className="aspect-[4/3] rounded-md flex items-center justify-center overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1526367790999-0150d0a71472?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" 
-                  alt="Delivery driver in Surabaya" 
+                  src="https://cdn.pixabay.com/photo/2022/02/25/04/11/traffic-7033509_1280.jpg" 
+                  alt="Urban traffic scene" 
                   className="w-full h-full object-cover"
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* User Roles Section with Terms and Conditions */}
+      <section className="py-16 bg-fleximov-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold">Multi-User Platform</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our platform serves different user roles with specific permissions and capabilities
+            </p>
+          </div>
+          
+          <Tabs defaultValue="admin" className="w-full">
+            <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsTrigger value="admin">Admin</TabsTrigger>
+              <TabsTrigger value="fleet">Mitra Armada</TabsTrigger>
+              <TabsTrigger value="business">Mitra Bisnis</TabsTrigger>
+              <TabsTrigger value="courier">Kurir Mandiri</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="admin" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Administrator (Admin)</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>Administrator memiliki akses penuh ke platform untuk mengelola seluruh operasi.</p>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Mengelola semua mitra dan kurir</li>
+                      <li>Melihat semua pesanan dan transaksi</li>
+                      <li>Mengakses laporan keuangan dan analitik</li>
+                      <li>Melihat peta lokasi semua kurir secara real-time</li>
+                      <li>Mengelola pengaturan sistem</li>
+                      <li>Menentukan tarif dan komisi</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Wajib menjaga kerahasiaan data pengguna</li>
+                      <li>Memastikan layanan tersedia 24/7</li>
+                      <li>Bertanggung jawab atas keamanan platform</li>
+                      <li>Tidak menyalahgunakan data untuk kepentingan pribadi</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="p-3 bg-blue-50 rounded-md text-blue-800 text-sm">
+                    <p className="font-medium">Contoh Akun Admin:</p>
+                    <p>Email: admin@fleximov.com | Password: password</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="fleet" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Mitra Armada (Fleet Partner)</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>Mitra Armada adalah bisnis yang memiliki layanan kurir/armada sendiri dan menggunakan platform ini untuk mengelolanya.</p>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Mengelola armada kurir sendiri</li>
+                      <li>Melihat pesanan dan statusnya</li>
+                      <li>Memantau lokasi kurir secara real-time</li>
+                      <li>Mengakses laporan keuangan dan pendapatan</li>
+                      <li>Mengelola tarif pengiriman</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Membayar komisi 10% per transaksi ke platform</li>
+                      <li>Menjamin kualitas layanan kurir</li>
+                      <li>Memberikan pelatihan kepada kurir</li>
+                      <li>Bertanggung jawab atas kehilangan/kerusakan barang</li>
+                      <li>Wajib memiliki izin usaha yang sah</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="p-3 bg-green-50 rounded-md text-green-800 text-sm">
+                    <p className="font-medium">Contoh Akun Mitra Armada:</p>
+                    <p>Email: fleet@partner.com | Password: password</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="business" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Mitra Bisnis (Business Partner)</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>Mitra Bisnis adalah UMKM atau bisnis yang tidak memiliki layanan kurir sendiri dan menggunakan platform untuk mengelola pengiriman.</p>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Membuat pesanan pengiriman</li>
+                      <li>Melihat status pesanan</li>
+                      <li>Memantau lokasi kurir secara real-time</li>
+                      <li>Mengakses laporan keuangan dasar</li>
+                      <li>Menggunakan link pelacakan untuk pelanggan</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Membayar biaya pengiriman sesuai tarif</li>
+                      <li>Memberikan informasi pengiriman yang akurat</li>
+                      <li>Menyiapkan barang dengan pengemasan yang baik</li>
+                      <li>Mematuhi regulasi barang yang dilarang</li>
+                      <li>Biaya transaksi 5% per pesanan</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="p-3 bg-purple-50 rounded-md text-purple-800 text-sm">
+                    <p className="font-medium">Contoh Akun Mitra Bisnis:</p>
+                    <p>Email: business@partner.com | Password: password</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="courier" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Kurir Mandiri (Independent Courier)</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>Kurir Mandiri adalah individu yang menawarkan jasa pengiriman melalui platform tanpa terikat dengan mitra armada tertentu.</p>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Hak dan Akses:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Menerima atau menolak pesanan pengiriman</li>
+                      <li>Melihat detail pesanan</li>
+                      <li>Memperbarui status pengiriman</li>
+                      <li>Mengakses riwayat penghasilan</li>
+                      <li>Melihat rute pengiriman</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Syarat dan Ketentuan:</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Membayar komisi 15% ke platform</li>
+                      <li>Menyediakan kendaraan sendiri</li>
+                      <li>Wajib memiliki SIM dan STNK yang valid</li>
+                      <li>Menjaga kualitas layanan</li>
+                      <li>Bertanggung jawab atas barang kiriman</li>
+                      <li>Mengaktifkan GPS selama bertugas</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="p-3 bg-amber-50 rounded-md text-amber-800 text-sm">
+                    <p className="font-medium">Contoh Akun Kurir Mandiri:</p>
+                    <p>Email: courier@fleximov.com | Password: password</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+          
+          <div className="mt-8 p-4 bg-blue-50 rounded-md">
+            <h3 className="font-bold text-lg mb-2">Pelanggan Tamu (Guest)</h3>
+            <p className="mb-4">Pelanggan dari mitra bisnis dapat melacak pesanan tanpa perlu login menggunakan link pelacakan khusus yang dibagikan oleh mitra.</p>
+            <div className="space-y-2">
+              <h4 className="font-semibold">Akses Tamu:</h4>
+              <ul className="list-disc pl-6 space-y-1">
+                <li>Melihat status pesanan tertentu</li>
+                <li>Memantau lokasi kurir secara real-time</li>
+                <li>Melihat estimasi waktu pengiriman</li>
+                <li>Tidak memerlukan registrasi atau login</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Live Map section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold">Live Tracking For All Users</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our platform provides real-time tracking of all deliveries with an easy-to-use interface
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold">Stay Updated With Live Tracking</h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="bg-fleximov-100 p-2 rounded-md text-fleximov-700">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">Real-time Location Updates</h4>
+                    <p className="text-muted-foreground">Track couriers in real-time on an interactive map</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="bg-fleximov-100 p-2 rounded-md text-fleximov-700">
+                    <Truck className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">Courier Status Monitoring</h4>
+                    <p className="text-muted-foreground">See courier availability and current delivery status</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="bg-fleximov-100 p-2 rounded-md text-fleximov-700">
+                    <Share2 className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">Shareable Tracking Links</h4>
+                    <p className="text-muted-foreground">Easily share tracking information with customers</p>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4">
+                <Link to="/login">
+                  <Button>Try Live Tracking Now</Button>
+                </Link>
+              </div>
+            </div>
+            <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
+              <img 
+                src="https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" 
+                alt="Live tracking map interface" 
+                className="w-full h-auto"
+              />
             </div>
           </div>
         </div>

@@ -75,14 +75,14 @@ const Sidebar = () => {
   return (
     <div 
       className={cn(
-        "flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 fixed",
+        "flex flex-col h-[calc(100vh-4rem)] bg-sidebar border-r border-sidebar-border transition-all duration-300",
         collapsed ? "w-16" : "w-64",
         isMobile && !collapsed && "z-50 shadow-lg"
       )}
     >
       {/* Navigation Links - with ScrollArea */}
       <ScrollArea className="flex-1 overflow-x-hidden">
-        <div className="p-2 mt-4">
+        <div className="p-2 mt-2">
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
               <Link
