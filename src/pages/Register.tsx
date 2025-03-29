@@ -1,13 +1,10 @@
 
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
-import LoginForm from '@/components/authentication/LoginForm';
-import { useState } from 'react';
-import RegisterDialog from '@/components/authentication/RegisterDialog';
+import RegisterForm from '@/components/authentication/RegisterForm';
 
-const Login = () => {
+const Register = () => {
   const { isAuthenticated } = useAuth();
-  const [registerOpen, setRegisterOpen] = useState(false);
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
@@ -27,24 +24,9 @@ const Login = () => {
         </p>
       </div>
       
-      <LoginForm />
-      
-      <p className="mt-8 text-center text-sm text-muted-foreground">
-        Need a business account?{' '}
-        <button 
-          onClick={() => setRegisterOpen(true)}
-          className="font-medium text-fleximov-500 hover:text-fleximov-600"
-        >
-          Contact us to get started
-        </button>
-      </p>
-
-      <RegisterDialog 
-        isOpen={registerOpen} 
-        onOpenChange={setRegisterOpen} 
-      />
+      <RegisterForm />
     </div>
   );
 };
 
-export default Login;
+export default Register;

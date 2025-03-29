@@ -1,73 +1,65 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight, Package, Shield, Truck, Users, MessageCircle, SmartphoneNfc } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MapPin, Share2 } from 'lucide-react';
+import InitDbButton from '@/components/landing/InitDbButton';
 
 const Landing = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="border-b bg-white z-10">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="bg-white shadow-sm py-4">
+        <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
               <span className="text-white font-bold">FM</span>
             </div>
-            <div className="flex flex-col">
-              <span className="font-semibold text-lg">Fleximov</span>
-              <span className="text-xs text-muted-foreground -mt-1">Delivery Hub</span>
-            </div>
+            <h1 className="text-xl font-bold">Fleximov</h1>
           </div>
-          <Link to="/login">
-            <Button className="bg-fleximov-600 text-white hover:bg-fleximov-700" size="sm">
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="text-fleximov-500 hover:text-fleximov-600 font-medium">
               Login
-            </Button>
-          </Link>
+            </Link>
+            <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-4 py-2 rounded-md transition-colors">
+              Sign Up
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* Hero Section with solid background instead of image */}
-      <section className="py-16 md:py-24 bg-fleximov-50 relative">
-        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Simplified <span className="text-fleximov-500">UMKM</span> Delivery Management
+      {/* Hero Section */}
+      <section className="flex-grow flex items-center bg-gradient-to-b from-gray-50 to-gray-100 py-16">
+        <div className="container mx-auto px-4 flex flex-col-reverse md:flex-row items-center justify-between gap-8">
+          <div className="md:w-1/2 space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+              Simplified Delivery Management Solution
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Helping small and medium enterprises manage orders and deliveries without changing your existing workflow.
+            <p className="text-lg text-gray-600 max-w-lg">
+              Streamline your delivery operations with our comprehensive platform designed for businesses, delivery partners, and drivers.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/login">
-                <Button size="lg" className="gap-2">
-                  Get Started <ArrowRight size={16} />
-                </Button>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                Get Started
               </Link>
-              <Link to="/login">
-                <Button size="lg" variant="outline">
-                  Partner With Us
-                </Button>
+              <Link to="/login" className="border border-fleximov-500 text-fleximov-500 hover:bg-fleximov-50 px-6 py-3 rounded-lg font-medium transition-colors">
+                Login
               </Link>
+              <InitDbButton />
             </div>
           </div>
-          <div className="relative hidden md:block">
-            <div className="absolute inset-0 bg-fleximov-500/10 rounded-lg transform rotate-3"></div>
-            <div className="relative bg-white border rounded-lg shadow-lg p-4">
-              <div className="aspect-[4/3] rounded-md flex items-center justify-center overflow-hidden">
-                <img 
-                  src="https://cdn.pixabay.com/photo/2022/02/25/04/11/traffic-7033509_1280.jpg" 
-                  alt="Urban traffic scene" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+          <div className="md:w-1/2">
+            <img 
+              src="/placeholder.svg" 
+              alt="Delivery Management" 
+              className="w-full max-w-lg mx-auto rounded-lg shadow-xl"
+            />
           </div>
         </div>
       </section>
 
-      {/* For Every User's Needs (Moved above Terms and Conditions) */}
+      {/* For Every User's Needs */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -137,7 +129,7 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* User Roles Section with Terms and Conditions (Redesigned with morph UI) */}
+      {/* User Roles Section */}
       <section className="py-16 bg-gradient-to-r from-fleximov-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
