@@ -1,10 +1,19 @@
+
 import { Suspense, lazy } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/use-auth";
+import Layout from "@/components/layout/Layout";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import Index from "@/pages/Index";
+import Landing from "@/pages/Landing";
+import NotFound from "@/pages/NotFound";
+import Dashboard from "@/pages/Dashboard";
+import PageLoader from "@/components/shared/PageLoader";
 
 // Lazy-loaded pages for future implementation
 const Partners = lazy(() => import("@/pages/Partners"));
