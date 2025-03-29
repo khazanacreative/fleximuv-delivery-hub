@@ -173,6 +173,18 @@ const Drivers = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("User role checks:", { 
+      isAdmin, 
+      isFleetPartner, 
+      isIndependentCourier,
+      canManageDrivers,
+      userRole: user?.role,
+      userHasDrivers: user?.hasDrivers,
+      userPartnerType: user?.partnerType
+    });
+  }, [isAdmin, isFleetPartner, isIndependentCourier, canManageDrivers, user]);
+
   const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
 
   return (
@@ -196,7 +208,7 @@ const Drivers = () => {
             onClearFilters={clearFilters}
           />
           
-          {canManageDrivers && (
+          {(isAdmin || isFleetPartner || isIndependentCourier) && (
             <Button
               onClick={() => setAddDriverOpen(true)}
               className="flex items-center gap-2"

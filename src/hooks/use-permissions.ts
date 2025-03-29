@@ -5,6 +5,9 @@ import { Permission, hasPermission, hasAnyPermission, hasAllPermissions, getUser
 export const usePermissions = () => {
   const { user } = useAuth();
 
+  // Debug the user object to understand what's coming in
+  console.log("User in permissions hook:", user);
+
   return {
     // Check if user has a specific permission
     can: (permission: Permission) => hasPermission(user, permission),
@@ -18,13 +21,13 @@ export const usePermissions = () => {
     // Get user role description
     roleDescription: getUserRoleDescription(user),
     
-    // Flag for easier role checks
+    // Flag for easier role checks - making these explicit and clearer
     isAdmin: user?.role === 'admin',
     isPartner: user?.role === 'partner',
-    isFleetPartner: user?.role === 'partner' && user.hasDrivers === true,
-    isBusinessPartner: user?.role === 'partner' && user.hasDrivers !== true,
+    isFleetPartner: user?.role === 'partner' && user?.hasDrivers === true,
+    isBusinessPartner: user?.role === 'partner' && user?.hasDrivers !== true,
     isDriver: user?.role === 'driver',
-    isIndependentCourier: user?.role === 'driver' && user.partnerType === 'courier',
+    isIndependentCourier: user?.role === 'driver' && user?.partnerType === 'courier',
     isCustomer: user?.role === 'customer',
   };
 };
