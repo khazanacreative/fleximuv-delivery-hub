@@ -1,71 +1,82 @@
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RecentOrdersTable } from "@/components/tables/RecentOrdersTable";
-import { Overview } from "@/components/dashboard/Overview";
-import { FAQ } from "@/components/dashboard/FAQ";
-import LivePositionMap from '@/components/maps/LivePositionMap';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import StatisticCard from "@/components/dashboard/StatisticCard";
+import DriverStatusCard from "@/components/dashboard/DriverStatusCard";
+import TransactionsList from "@/components/dashboard/TransactionsList";
+import RecentOrdersTable from "@/components/dashboard/RecentOrdersTable";
+import Overview from "@/components/dashboard/Overview";
+import FAQ from "@/components/dashboard/FAQ";
 
 const Dashboard = () => {
   return (
-    <div>
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
-        <Card>
+    <div className="space-y-6">
+      <DashboardHeader />
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <StatisticCard
+          title="Total Revenue"
+          value="$45,231.89"
+          description="+20.1% from last month"
+          trend="up"
+        />
+        <StatisticCard
+          title="Active Orders"
+          value="12"
+          description="+2 from yesterday"
+          trend="up"
+        />
+        <StatisticCard
+          title="Active Drivers"
+          value="7"
+          description="-1 from yesterday"
+          trend="down"
+        />
+        <StatisticCard
+          title="Completed Today"
+          value="9"
+          description="+3 from yesterday"
+          trend="up"
+        />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="md:col-span-4">
           <CardHeader>
-            <CardTitle>Total Orders</CardTitle>
+            <CardTitle>Revenue Overview</CardTitle>
+            <CardDescription>
+              Your revenue and orders data from the last 30 days
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">4,520</div>
-            <p className="text-sm text-muted-foreground">
-              +20% from last month
-            </p>
+          <CardContent className="pl-2">
+            <Overview />
           </CardContent>
         </Card>
+        <DriverStatusCard className="md:col-span-3" />
+      </div>
 
-        <Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <RecentOrdersTable className="md:col-span-4" />
+        <Card className="md:col-span-3">
           <CardHeader>
-            <CardTitle>Revenue</CardTitle>
+            <CardTitle>Recent Transactions</CardTitle>
+            <CardDescription>Recent financial activity</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$58,200</div>
-            <p className="text-sm text-muted-foreground">
-              +15% from last month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>New Customers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">245</div>
-            <p className="text-sm text-muted-foreground">
-              +10% from last month
-            </p>
+            <TransactionsList />
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 mt-8">
-        <Overview />
-        <FAQ />
-      </div>
-
-      <div className="mt-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <RecentOrdersTable />
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="mt-8">
-        <LivePositionMap height="500px" />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Frequently Asked Questions</CardTitle>
+          <CardDescription>Answers to common questions about our services</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FAQ />
+        </CardContent>
+      </Card>
     </div>
   );
 };

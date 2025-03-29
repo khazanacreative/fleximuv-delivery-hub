@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Users, Truck, Package, CreditCard, 
@@ -18,6 +18,7 @@ const Sidebar = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
   const isMobile = useIsMobile();
+  const [activeDescription, setActiveDescription] = useState('');
 
   // Close sidebar on mobile when navigating
   useEffect(() => {
@@ -34,36 +35,126 @@ const Sidebar = () => {
   const isCustomer = user.role === 'customer';
 
   const commonLinks = [
-    { name: 'Dashboard', path: '/dashboard', icon: Home },
+    { 
+      name: 'Dashboard', 
+      path: '/dashboard', 
+      icon: Home,
+      description: 'Pantau statistik dan aktivitas terbaru di satu tempat. Lihat ringkasan pesanan, driver, dan transaksi.'
+    },
   ];
 
   const adminLinks = [
-    { name: 'Partners', path: '/partners', icon: Users },
-    { name: 'Drivers', path: '/drivers', icon: Truck },
-    { name: 'Orders', path: '/orders', icon: Package },
-    { name: 'Finances', path: '/finances', icon: CreditCard },
-    { name: 'Reports', path: '/reports', icon: BarChart },
-    { name: 'Settings', path: '/settings', icon: Settings },
+    { 
+      name: 'Partners', 
+      path: '/partners', 
+      icon: Users,
+      description: 'Kelola semua partner bisnis Anda. Tambah, edit, atau nonaktifkan akun partner dengan mudah.'
+    },
+    { 
+      name: 'Drivers', 
+      path: '/drivers', 
+      icon: Truck,
+      description: 'Kelola semua driver aktif. Pantau status, performa, dan ketersediaan driver secara real-time.'
+    },
+    { 
+      name: 'Orders', 
+      path: '/orders', 
+      icon: Package,
+      description: 'Kelola semua pesanan pengiriman dan tetap bisa komunikasi dan memantau melalui notifikasi WhatsApp.'
+    },
+    { 
+      name: 'Finances', 
+      path: '/finances', 
+      icon: CreditCard,
+      description: 'Kelola semua transaksi keuangan. Pantau pendapatan, biaya, dan laporan keuangan bulanan.'
+    },
+    { 
+      name: 'Reports', 
+      path: '/reports', 
+      icon: BarChart,
+      description: 'Lihat laporan dan analisis lengkap tentang bisnis Anda. Unduh laporan dalam berbagai format.'
+    },
+    { 
+      name: 'Settings', 
+      path: '/settings', 
+      icon: Settings,
+      description: 'Sesuaikan pengaturan aplikasi, profil pengguna, notifikasi, dan preferensi lainnya.'
+    },
   ];
 
   const partnerLinks = [
-    { name: 'Drivers', path: '/drivers', icon: Truck },
-    { name: 'Orders', path: '/orders', icon: Package },
-    { name: 'Finances', path: '/finances', icon: CreditCard },
-    { name: 'Reports', path: '/reports', icon: BarChart },
-    { name: 'Settings', path: '/settings', icon: Settings },
+    { 
+      name: 'Drivers', 
+      path: '/drivers', 
+      icon: Truck,
+      description: 'Kelola driver Anda. Tambahkan driver baru, pantau kinerja, dan atur jadwal pengiriman.'
+    },
+    { 
+      name: 'Orders', 
+      path: '/orders', 
+      icon: Package,
+      description: 'Kelola semua pesanan pengiriman dan tetap bisa komunikasi dan memantau melalui notifikasi WhatsApp.'
+    },
+    { 
+      name: 'Finances', 
+      path: '/finances', 
+      icon: CreditCard,
+      description: 'Pantau pendapatan, biaya, dan saldo. Lihat riwayat transaksi dan penarikan dana.'
+    },
+    { 
+      name: 'Reports', 
+      path: '/reports', 
+      icon: BarChart,
+      description: 'Lihat laporan performa bisnis dan analisis pengiriman Anda dalam periode tertentu.'
+    },
+    { 
+      name: 'Settings', 
+      path: '/settings', 
+      icon: Settings,
+      description: 'Sesuaikan pengaturan profil, notifikasi, dan preferensi layanan Anda.'
+    },
   ];
 
   const driverLinks = [
-    { name: 'My Orders', path: '/orders', icon: Package },
-    { name: 'Earnings', path: '/earnings', icon: CreditCard },
-    { name: 'Settings', path: '/settings', icon: Settings },
+    { 
+      name: 'My Orders', 
+      path: '/orders', 
+      icon: Package,
+      description: 'Lihat semua pesanan yang ditugaskan kepada Anda. Update status pengiriman dengan mudah.'
+    },
+    { 
+      name: 'Earnings', 
+      path: '/earnings', 
+      icon: CreditCard,
+      description: 'Pantau pendapatan Anda. Lihat riwayat pembayaran dan bonus yang telah diterima.'
+    },
+    { 
+      name: 'Settings', 
+      path: '/settings', 
+      icon: Settings,
+      description: 'Atur profil, notifikasi, dan preferensi akun Anda sebagai driver.'
+    },
   ];
 
   const customerLinks = [
-    { name: 'Orders', path: '/orders', icon: Package },
-    { name: 'Wallet', path: '/wallet', icon: CreditCard },
-    { name: 'Settings', path: '/settings', icon: Settings },
+    { 
+      name: 'Orders', 
+      path: '/orders', 
+      icon: Package,
+      description: 'Pantau status pesanan Anda. Lihat riwayat pesanan dan buat pesanan baru dengan mudah.'
+    },
+    { 
+      name: 'Wallet', 
+      path: '/wallet', 
+      icon: CreditCard,
+      description: 'Kelola saldo dan metode pembayaran Anda. Lihat riwayat transaksi dan isi ulang saldo.'
+    },
+    { 
+      name: 'Settings', 
+      path: '/settings', 
+      icon: Settings,
+      description: 'Sesuaikan pengaturan profil, alamat, dan preferensi notifikasi Anda.'
+    },
   ];
 
   let links = [...commonLinks];
@@ -80,44 +171,55 @@ const Sidebar = () => {
         isMobile && !collapsed && "z-50 shadow-lg"
       )}
     >
-      {/* Navigation Links - with ScrollArea */}
-      <ScrollArea className="flex-1 overflow-x-hidden">
-        <div className="p-2 mt-2">
-          <nav className="flex flex-col gap-1">
-            {links.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors rounded-xl backdrop-blur-sm morph-card",
-                  location.pathname === link.path
-                    ? "bg-sidebar-accent/70 text-sidebar-accent-foreground shadow-sm border border-sidebar-border/40"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground hover:border hover:border-sidebar-border/20"
-                )}
-              >
-                <link.icon size={18} className="flex-shrink-0" />
-                {!collapsed && <span>{link.name}</span>}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </ScrollArea>
-
-      {/* Logout Button - Fixed at bottom */}
-      <div className={cn(
-        "border-t border-sidebar-border p-3 bg-sidebar sticky bottom-0 mt-auto",
-      )}>
-        <Button 
-          variant="ghost" 
-          className={cn(
-            "w-full flex items-center gap-3 justify-start text-muted-foreground rounded-xl px-4 py-3 hover:bg-destructive/10 hover:text-destructive morph-card",
-            collapsed && "justify-center p-2"
+      <div className="flex flex-col h-full">
+        {/* Navigation Links - with ScrollArea */}
+        <ScrollArea className="flex-1 overflow-x-hidden">
+          <div className="p-2 mt-2">
+            <nav className="flex flex-col gap-1">
+              {links.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors rounded-xl backdrop-blur-sm morph-card",
+                    location.pathname === link.path
+                      ? "bg-sidebar-accent/70 text-sidebar-accent-foreground shadow-sm border border-sidebar-border/40"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground hover:border hover:border-sidebar-border/20"
+                  )}
+                  onMouseEnter={() => !collapsed && setActiveDescription(link.description)}
+                  onMouseLeave={() => setActiveDescription('')}
+                >
+                  <link.icon size={18} className="flex-shrink-0" />
+                  {!collapsed && <span>{link.name}</span>}
+                </Link>
+              ))}
+            </nav>
+          </div>
+          
+          {/* Description area */}
+          {!collapsed && activeDescription && (
+            <div className="px-4 py-3 mt-2 text-xs text-muted-foreground">
+              {activeDescription}
+            </div>
           )}
-          onClick={logout}
-        >
-          <LogOut size={18} className="flex-shrink-0" />
-          {!collapsed && <span>Logout</span>}
-        </Button>
+        </ScrollArea>
+
+        {/* Logout Button - Fixed at bottom */}
+        <div className={cn(
+          "border-t border-sidebar-border p-3 bg-sidebar sticky bottom-0 mt-auto",
+        )}>
+          <Button 
+            variant="ghost" 
+            className={cn(
+              "w-full flex items-center gap-3 justify-start text-muted-foreground rounded-xl px-4 py-3 hover:bg-destructive/10 hover:text-destructive morph-card",
+              collapsed && "justify-center p-2"
+            )}
+            onClick={logout}
+          >
+            <LogOut size={18} className="flex-shrink-0" />
+            {!collapsed && <span>Logout</span>}
+          </Button>
+        </div>
       </div>
     </div>
   );

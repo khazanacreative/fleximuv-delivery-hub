@@ -26,7 +26,8 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
           collapsed ? "ml-16" : "ml-64"
         )}>
           <main className="flex-1 overflow-auto">
-            <div className="container mx-auto px-6 py-6 max-w-7xl">
+            <div className="mx-auto px-4 py-6 max-w-7xl">
+              {/* Removed container and adjusted px-4 for better alignment with search bar */}
               <Suspense fallback={<PageLoader />}>
                 {children || <Outlet />}
               </Suspense>
