@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Bell, Search, MapPin, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -23,7 +22,6 @@ import { Badge } from '@/components/ui/badge';
 const Header = () => {
   const { user, logout } = useAuth();
   
-  // Mock notifications with more realistic order data
   const [notifications, setNotifications] = useState([
     { id: 1, type: 'order', title: 'Order #12345 updated', message: 'Status changed to In Progress', time: '5 min ago', read: false },
     { id: 2, type: 'driver', title: 'Driver assigned', message: 'Sarah J. has been assigned to order #12346', time: '15 min ago', read: false },
@@ -32,7 +30,6 @@ const Header = () => {
   
   const unreadCount = notifications.filter(n => !n.read).length;
   
-  // Simulate a new notification arriving periodically
   useEffect(() => {
     const interval = setInterval(() => {
       const randomOrderId = Math.floor(10000 + Math.random() * 90000);
@@ -46,7 +43,7 @@ const Header = () => {
       };
       
       setNotifications(prev => [newNotification, ...prev.slice(0, 4)]);
-    }, 60000); // Add new notification every minute
+    }, 60000);
     
     return () => clearInterval(interval);
   }, []);
@@ -72,24 +69,25 @@ const Header = () => {
   return (
     <header className="h-16 border-b bg-background/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-30">
       <div className="flex items-center justify-between h-full px-4">
-        {/* Logo Area */}
         <div className="flex items-center">
           <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
             <span className="text-white font-bold text-sm">FM</span>
           </div>
-          <span className="font-semibold text-lg ml-2 hidden md:inline-block">Fleximov</span>
-          
-          {/* Search bar - moved to 20px from sidebar */}
-          <div className="relative ml-5">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
-            <Input 
-              placeholder="Search..." 
-              className="pl-10 bg-muted/30 border-muted/50 w-[200px] md:w-[300px] h-9 rounded-xl"
-            />
+          <div className="ml-2">
+            <span className="font-semibold text-lg hidden md:inline-block">Fleximov</span>
+            <p className="text-xs text-muted-foreground hidden md:block">delivery hub</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
+            <Input 
+              placeholder="Search..." 
+              className="pl-10 bg-muted/30 border-muted/50 w-[180px] md:w-[240px] h-9 rounded-xl"
+            />
+          </div>
+          
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="icon" className="text-muted-foreground rounded-full hover:bg-accent/50 relative">

@@ -196,7 +196,7 @@ const Sidebar = () => {
         isMobile && !collapsed && "z-50 shadow-lg"
       )}
     >
-      <div className="pt-5"> {/* Reduced to 20px (pt-5) spacing from navbar */}
+      <div className="pt-5"> {/* Reduced to 20px spacing from navbar */}
         {/* Removed the toggle button */}
       </div>
       

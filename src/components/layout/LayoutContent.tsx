@@ -17,14 +17,11 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
   return (
     <div className="min-h-screen flex w-full bg-background/98">
       <Header />
-      <div className="flex flex-1 pt-16"> {/* Added pt-16 to account for header height */}
+      <div className="flex flex-1 pt-16"> {/* Header height space */}
         <Sidebar />
-        <div className={cn(
-          "flex-1 flex flex-col min-h-screen transition-[margin] duration-300",
-          collapsed ? "ml-16" : "ml-64"
-        )}>
+        <div className="flex-1 flex flex-col min-h-screen">
           <main className="flex-1 overflow-auto">
-            <div className="px-6 pt-5 max-w-7xl"> {/* Added pt-5 for 20px top margin */}
+            <div className="px-5 pt-1 max-w-7xl"> {/* Reduced top margin to 5px (pt-1), left padding to 20px (px-5) */}
               <Suspense fallback={<PageLoader />}>
                 {children || <Outlet />}
               </Suspense>
