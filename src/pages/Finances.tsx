@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +36,6 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowDownIcon, ArrowUpIcon, CreditCard, DollarSign, BadgePercent, Plus, ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-// Sample finance data
 const initialTransactions = [
   {
     id: "trx-1",
@@ -127,7 +125,6 @@ const Finances = () => {
     });
   };
 
-  // Calculate summary data
   const totalIncome = transactions
     .filter(t => t.type === 'income')
     .reduce((sum, t) => sum + t.amount, 0);
@@ -167,7 +164,7 @@ const Finances = () => {
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader>
+            <DialogHeader className="text-left">
               <DialogTitle>Add New Transaction</DialogTitle>
               <DialogDescription>
                 Enter the details for the new financial transaction
@@ -175,7 +172,7 @@ const Finances = () => {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
+                <Label htmlFor="description" className="text-left">
                   Description
                 </Label>
                 <Input 
@@ -186,7 +183,7 @@ const Finances = () => {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="amount" className="text-right">
+                <Label htmlFor="amount" className="text-left">
                   Amount
                 </Label>
                 <Input 
@@ -198,7 +195,7 @@ const Finances = () => {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="type" className="text-right">
+                <Label htmlFor="type" className="text-left">
                   Type
                 </Label>
                 <Select 
@@ -215,7 +212,7 @@ const Finances = () => {
                 </Select>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="partner" className="text-right">
+                <Label htmlFor="partner" className="text-left">
                   Partner
                 </Label>
                 <Input 
@@ -226,7 +223,7 @@ const Finances = () => {
                 />
               </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="flex justify-end">
               <Button variant="outline" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
@@ -238,7 +235,6 @@ const Finances = () => {
         </Dialog>
       </div>
 
-      {/* Financial Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
@@ -283,7 +279,6 @@ const Finances = () => {
         </Card>
       </div>
 
-      {/* Transactions Table */}
       <Card>
         <CardHeader>
           <CardTitle>Recent Transactions</CardTitle>
@@ -329,4 +324,3 @@ const Finances = () => {
 };
 
 export default Finances;
-
