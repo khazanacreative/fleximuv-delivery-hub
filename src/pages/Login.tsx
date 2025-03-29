@@ -2,14 +2,28 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import LoginForm from '@/components/authentication/LoginForm';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RegisterDialog from '@/components/authentication/RegisterDialog';
 
 const Login = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const [registerOpen, setRegisterOpen] = useState(false);
 
+  // Add additional debug logging
+  useEffect(() => {
+    console.log('Login page: Authentication status -', isAuthenticated ? 'Authenticated' : 'Not authenticated');
+  }, [isAuthenticated]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-fleximov-500 rounded-full border-t-transparent"></div>
+      </div>
+    );
+  }
+
   if (isAuthenticated) {
+    console.log('Redirecting to dashboard from login page');
     return <Navigate to="/dashboard" replace />;
   }
 

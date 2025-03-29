@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
@@ -10,7 +11,7 @@ import { toast } from "sonner";
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('password123'); // Default to demo password
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const LoginForm = () => {
     setIsLoading(true);
     
     try {
-      console.log('Submitting login form with:', { email });
+      console.log('Submitting login form with:', { email, password: 'REDACTED' });
       await login(email, password);
       // The navigation will be handled by the auth state change
     } catch (error) {
@@ -42,10 +43,10 @@ const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
-  // Update password to match the correct one
+  // Set both email and password when selecting a demo account
   const handleDemoAccountClick = (demoEmail: string) => {
     setEmail(demoEmail);
-    setPassword('password123'); // Set password directly when demo account is selected
+    setPassword('password123'); // Ensure password is set correctly
     toast.info(`Demo account selected`, {
       description: `Email: ${demoEmail}, Password: password123`
     });
