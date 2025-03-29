@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { Package, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -19,7 +18,7 @@ import DriverEarnings from "@/components/dashboard/DriverEarnings";
 
 const Orders = () => {
   const { user } = useAuth();
-  const { can, isAdmin, isPartner, isDriver, isFleetPartner, isIndependentCourier } = usePermissions();
+  const { can, isAdmin, isPartner, isDriver, isFleetPartner, isIndependentCourier, isBusinessPartner } = usePermissions();
   const { toast } = useToast();
   const [orders, setOrders] = useState(mockOrders);
   const [filteredOrders, setFilteredOrders] = useState(mockOrders);
@@ -38,7 +37,6 @@ const Orders = () => {
     cancelled: false,
   });
 
-  // Load orders from localStorage on component mount
   useEffect(() => {
     const savedOrders = localStorage.getItem('fleximov_orders');
     if (savedOrders) {
@@ -55,26 +53,21 @@ const Orders = () => {
   const applyFilters = useCallback(() => {
     let permissionFiltered = orders;
     
-    // Filter orders based on user role
     if (!isAdmin) {
       if (isFleetPartner) {
-        // Fleet partners see orders they can fulfill
         permissionFiltered = orders.filter(order => 
           !order.partnerId || order.partnerId === user?.id
         );
       } else if (isPartner && !user?.hasDrivers) {
-        // Business partners only see their own orders
         permissionFiltered = orders.filter(order => 
           order.customerId === user?.id
         );
       } else if (isDriver) {
         if (isIndependentCourier) {
-          // Independent couriers see available orders and their own
           permissionFiltered = orders.filter(order => 
             !order.partnerId || order.partnerId === user?.id || order.driverId === user?.id
           );
         } else {
-          // Regular drivers only see orders assigned to them
           permissionFiltered = orders.filter(order => 
             order.driverId === user?.id
           );
@@ -82,7 +75,6 @@ const Orders = () => {
       }
     }
     
-    // Apply status filters if any are selected
     if (Object.values(statusFilters).every(v => v === false)) {
       setFilteredOrders(permissionFiltered);
     } else {
@@ -138,7 +130,6 @@ const Orders = () => {
     const updatedOrders = orders.map(o => o.id === order.id ? updatedOrder : o);
     setOrders(updatedOrders);
     
-    // Save to localStorage for persistence
     localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
     
     toast({
@@ -157,7 +148,6 @@ const Orders = () => {
     const updatedOrders = orders.map(o => o.id === order.id ? updatedOrder : o);
     setOrders(updatedOrders);
     
-    // Save to localStorage for persistence
     localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
     
     toast({
@@ -170,7 +160,6 @@ const Orders = () => {
     const updatedOrders = [newOrderData, ...orders];
     setOrders(updatedOrders);
     
-    // Save to localStorage for persistence
     localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
     
     toast({
@@ -178,7 +167,6 @@ const Orders = () => {
       description: `New order #${newOrderData.orderNumber} has been successfully created.`,
     });
     
-    // Apply filters to update the displayed orders
     applyFilters();
   };
 
@@ -208,7 +196,6 @@ const Orders = () => {
       description: `Order #${updatedOrder.orderNumber || updatedOrder.id.substring(0, 6)} has been updated successfully.`,
     });
     
-    // Close dialog and reset state
     setEditOrderOpen(false);
     setOrderToEdit(null);
     applyFilters();
@@ -253,7 +240,7 @@ const Orders = () => {
                 setStatusFilters={setStatusFilters}
               />
               
-              <RoleGate permissions={['create_orders']}>
+              {(isAdmin || isPartner) && (
                 <Button
                   onClick={() => setCreateOrderOpen(true)}
                   className="flex items-center gap-2 px-5 py-2 h-11"
@@ -262,7 +249,7 @@ const Orders = () => {
                   <Plus className="h-5 w-5" />
                   Create Order
                 </Button>
-              </RoleGate>
+              )}
             </div>
           </div>
 

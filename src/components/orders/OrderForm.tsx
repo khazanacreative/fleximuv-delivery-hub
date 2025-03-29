@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { usePermissions } from '@/hooks/use-permissions';
@@ -61,7 +60,6 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
   
   const isEditMode = Boolean(orderToEdit && updateOrder);
 
-  // Initialize form with order data if in edit mode
   useEffect(() => {
     if (isEditMode && orderToEdit) {
       setFormData({
@@ -82,14 +80,12 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
     }
   }, [orderToEdit, isEditMode, isOpen]);
 
-  // Load drivers from localStorage
   useEffect(() => {
     if (isFleetPartner || isIndependentCourier) {
       const savedDrivers = localStorage.getItem('fleximov_drivers');
       if (savedDrivers) {
         try {
           const parsedDrivers = JSON.parse(savedDrivers);
-          // Filter drivers by partner ID and available status
           const filteredDrivers = parsedDrivers.filter(
             (driver: Driver) => 
               (driver.partnerId === user?.id || (isIndependentCourier && driver.id === user?.id)) && 
@@ -102,10 +98,8 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
       }
     }
     
-    // Load available partners (independent couriers) for business partners
     if (isBusinessPartner) {
       try {
-        // Filter mockUsers to only include independent couriers
         const independentCouriers = mockUsers.filter(
           u => u.role === 'partner' && u.partnerType === 'courier'
         );
@@ -132,18 +126,15 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
   };
 
   const generateOrderNumber = () => {
-    // Generate a unique order number format: FLX-YYYYMMDD-XXXX
     const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    const random = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
-    
+    const random = Math.floor(1000 + Math.random() * 9000);
     return `FLX-${year}${month}${day}-${random}`;
   };
 
   const generateTrackingCode = () => {
-    // Generate a random tracking code
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     for (let i = 0; i < 8; i++) {
@@ -157,16 +148,13 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
     setIsLoading(true);
     
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Use selected partner's ID if Business Partner has selected a partner
       const effectivePartnerId = isBusinessPartner && selectedPartnerId 
         ? selectedPartnerId 
         : (user?.role === 'partner' ? user?.id : '');
       
       if (isEditMode && orderToEdit && updateOrder) {
-        // Update existing order
         const updatedOrder: Order = {
           ...orderToEdit,
           customerName: formData.customerName,
@@ -193,7 +181,6 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
         resetForm();
         onOpenChange(false);
       } else {
-        // Create new order
         const orderNumber = generateOrderNumber();
         const trackingCode = generateTrackingCode();
         
@@ -223,7 +210,6 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
         
         addOrder(newOrder);
         
-        // Generate tracking link for guest orders
         if (isGuestOrder) {
           const baseUrl = window.location.origin;
           const link = `${baseUrl}/track/${trackingCode}`;
@@ -238,7 +224,6 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
           description: `Order ${newOrder.orderNumber} has been created successfully.`,
         });
 
-        // Reset form only if not showing tracking link
         if (!isGuestOrder) {
           resetForm();
         }
@@ -421,7 +406,6 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
                     </Select>
                   </div>
                   
-                  {/* Add Partner Selection for Business Partners */}
                   {isBusinessPartner && (
                     <div className="grid gap-2">
                       <Label htmlFor="partnerId">Select Courier Partner</Label>
@@ -444,7 +428,6 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }:
                     </div>
                   )}
                   
-                  {/* Driver assignment section for partners with fleet */}
                   {(isFleetPartner || isIndependentCourier) && availableDrivers.length > 0 && (
                     <div className="grid gap-2">
                       <Label htmlFor="driverId">Assign Driver (Optional)</Label>
