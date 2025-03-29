@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const migrateData = async () => {
   try {
     console.log('Calling database function to initialize demo users');
+    // Fix TypeScript error: add proper type annotation for the RPC function
     const { data, error } = await supabase.rpc('initialize_demo_users');
     
     if (error) {
