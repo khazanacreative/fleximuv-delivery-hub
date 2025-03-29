@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [navigate]);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<void> => {
     console.log('Login attempt with email:', email);
     setIsLoading(true);
     
@@ -122,8 +123,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
       
       console.log('Login successful:', data.user?.email);
-      return data;
-      
+      // Return void instead of data to match the expected return type
     } catch (error: any) {
       console.error('Login error details:', error);
       throw error;
