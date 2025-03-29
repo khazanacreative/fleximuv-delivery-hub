@@ -1,3 +1,4 @@
+
 // User Roles
 export type UserRole = 'admin' | 'partner' | 'driver' | 'customer';
 
@@ -49,6 +50,15 @@ export interface Order {
   date?: Date; // For backward compatibility
   items?: string[]; // For backward compatibility
   driver?: string; // For backward compatibility
+  
+  // Add properties used in OrderForm.tsx
+  orderNumber?: string;
+  customerPhone?: string;
+  packageDetails?: string;
+  deliveryNotes?: string;
+  paymentMethod?: string;
+  paymentStatus?: string;
+  updatedAt?: Date;
 }
 
 // Driver
