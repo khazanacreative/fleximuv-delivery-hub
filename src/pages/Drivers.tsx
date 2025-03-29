@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus, User, Phone, MapPin, Star, MoreHorizontal, Edit, UserX, UserCheck, Filter } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -74,6 +75,14 @@ const Drivers = () => {
       setFilteredDrivers(drivers.filter(driver => activeFilters.includes(driver.status)));
     }
   }, [drivers, statusFilters]);
+
+  // Add back the handleFilterChange function that was missing
+  const handleFilterChange = (status: string, checked: boolean) => {
+    setStatusFilters(prev => ({
+      ...prev,
+      [status]: checked
+    }));
+  };
 
   // Fix: Replace the incorrect useState usage with useEffect
   useEffect(() => {
