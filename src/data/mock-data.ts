@@ -29,7 +29,7 @@ export const mockUsers: User[] = [
   {
     id: '3',
     name: 'Siti Rahayu',
-    email: 'siti@eastjavacourier.com',
+    email: 'siti@surabayamart.com',  // Changed from eastjavacourier.com to surabayamart.com
     phone: '+6281234567892',
     role: 'partner',
     partnerType: 'business',  // Changed to 'business' for partner without fleet
@@ -42,7 +42,7 @@ export const mockUsers: User[] = [
   {
     id: '4',
     name: 'Agus Santoso',
-    email: 'agus@surabayamart.com',
+    email: 'agus@eastjavacourier.com',  // Changed from surabayamart.com to eastjavacourier.com
     phone: '+6281234567893',
     role: 'partner',
     partnerType: 'courier',  // Changed to 'courier' for independent courier

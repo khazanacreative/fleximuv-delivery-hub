@@ -256,9 +256,10 @@ const Orders = () => {
               <RoleGate permissions={['create_orders']}>
                 <Button
                   onClick={() => setCreateOrderOpen(true)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 px-5 py-2 h-11"
+                  size="lg"
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus className="h-5 w-5" />
                   Create Order
                 </Button>
               </RoleGate>

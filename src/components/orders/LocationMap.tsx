@@ -51,7 +51,7 @@ const LocationMap = ({
         <div className="h-[400px] w-full mb-8">
           <LiveMap title={`Order #${selectedOrder.id.substring(0, 6)} Tracking`} height="400px" />
         </div>
-        <DialogFooter className="flex justify-between items-center mt-4">
+        <DialogFooter className="flex justify-between items-center mt-8 mb-2">
           <Button variant="outline" onClick={() => setMapOpen(false)}>
             Close
           </Button>
