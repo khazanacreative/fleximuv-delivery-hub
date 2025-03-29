@@ -45,9 +45,9 @@ const EditDriverDialog = ({
     licensePlate: "",
   });
 
-  // Load driver data when the dialog opens
+  // Load driver data when the dialog opens or driver changes
   useEffect(() => {
-    if (driver) {
+    if (driver && isOpen) {
       setFormData({
         name: driver.name || "",
         phone: driver.phone || "",
@@ -57,7 +57,7 @@ const EditDriverDialog = ({
         licensePlate: driver.licensePlate || driver.vehicleNumber || "",
       });
     }
-  }, [driver]);
+  }, [driver, isOpen]);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({

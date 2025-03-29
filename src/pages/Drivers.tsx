@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -12,6 +11,7 @@ import DriverFilters from "@/components/drivers/DriverFilters";
 import AddDriverDialog from "@/components/drivers/AddDriverDialog";
 import EditDriverDialog from "@/components/drivers/EditDriverDialog";
 import DriverProfileDialog from "@/components/drivers/DriverProfileDialog";
+import RoleGate from "@/components/permissions/RoleGate";
 
 const Drivers = () => {
   const { user } = useAuth();
@@ -30,7 +30,6 @@ const Drivers = () => {
     offline: false,
   });
 
-  // Load drivers from localStorage on component mount
   useEffect(() => {
     const savedDrivers = localStorage.getItem('fleximov_drivers');
     if (savedDrivers) {
@@ -93,7 +92,6 @@ const Drivers = () => {
     );
     setDrivers(updatedDrivers);
     
-    // Save to localStorage for persistence
     localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
@@ -123,7 +121,6 @@ const Drivers = () => {
     const updatedDrivers = [newDriverObj, ...drivers];
     setDrivers(updatedDrivers);
     
-    // Save to localStorage for persistence
     localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
@@ -136,7 +133,6 @@ const Drivers = () => {
     const updatedDrivers = drivers.filter(driver => driver.id !== driverId);
     setDrivers(updatedDrivers);
     
-    // Save to localStorage for persistence
     localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
@@ -150,7 +146,6 @@ const Drivers = () => {
     const updatedDrivers = drivers.map(d => d.id === driver.id ? updatedDriver : d);
     setDrivers(updatedDrivers);
     
-    // Save to localStorage for persistence
     localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
@@ -178,7 +173,6 @@ const Drivers = () => {
     }
   };
 
-  // Check if the current user can add drivers
   const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
 
   return (
@@ -202,7 +196,7 @@ const Drivers = () => {
             onClearFilters={clearFilters}
           />
           
-          {canManageDrivers && (
+          {(isAdmin || isFleetPartner || isIndependentCourier) && (
             <Button
               onClick={() => setAddDriverOpen(true)}
               className="flex items-center gap-2"

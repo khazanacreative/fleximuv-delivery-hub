@@ -138,14 +138,14 @@ const Partners = () => {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Add New Partner</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-left">Add New Partner</DialogTitle>
+              <DialogDescription className="text-left">
                 Enter the details for the new business partner
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
+                <Label htmlFor="name" className="text-left">
                   Business Name
                 </Label>
                 <Input 
@@ -156,7 +156,7 @@ const Partners = () => {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="address" className="text-right">
+                <Label htmlFor="address" className="text-left">
                   Address
                 </Label>
                 <Input 
@@ -167,7 +167,7 @@ const Partners = () => {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="phone" className="text-right">
+                <Label htmlFor="phone" className="text-left">
                   Phone
                 </Label>
                 <Input 
@@ -179,7 +179,7 @@ const Partners = () => {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">
+                <Label htmlFor="email" className="text-left">
                   Email
                 </Label>
                 <Input 
