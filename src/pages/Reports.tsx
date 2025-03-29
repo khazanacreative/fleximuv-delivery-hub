@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { BarChart, Calendar, Download, Filter, PieChart, TrendingUp, Package, CreditCard, Clock, Users, MapPin, Truck, Share2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,7 +26,8 @@ import {
   Pie,
   Cell,
   LineChart,
-  Line
+  Line,
+  TooltipProps
 } from 'recharts';
 
 // Mock data for charts
@@ -127,6 +127,25 @@ const Reports = () => {
     });
   };
   
+  // Currency formatter helper function
+  const formatCurrency = (value: any): string => {
+    // Ensure value is a number before formatting
+    if (typeof value === 'string') {
+      value = parseFloat(value);
+    }
+    
+    // Check if value is a valid number after conversion
+    if (isNaN(value)) {
+      return 'Invalid amount';
+    }
+    
+    return new Intl.NumberFormat('id-ID', { 
+      style: 'currency', 
+      currency: 'IDR', 
+      maximumFractionDigits: 0 
+    }).format(value);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -259,7 +278,7 @@ const Reports = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-left">
-                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalRevenue)}
+                    {formatCurrency(totalRevenue)}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 text-left">
                     <span className="text-green-600">↑ 8%</span> from last period
@@ -295,7 +314,7 @@ const Reports = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-left">
-                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(averageOrderValue)}
+                    {formatCurrency(averageOrderValue)}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 text-left">
                     <span className="text-red-600">↓ 3%</span> from last period
@@ -563,7 +582,7 @@ const Reports = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-left">
-                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalRevenue)}
+                    {formatCurrency(totalRevenue)}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 text-left">
                     <span className="text-green-600">↑ 8%</span> from last period
@@ -581,7 +600,7 @@ const Reports = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-left">
-                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalRevenue * 0.65)}
+                    {formatCurrency(totalRevenue * 0.65)}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 text-left">
                     <span className="text-red-600">↑ 5%</span> from last period
@@ -599,7 +618,7 @@ const Reports = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-left">
-                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalRevenue * 0.35)}
+                    {formatCurrency(totalRevenue * 0.35)}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 text-left">
                     <span className="text-green-600">↑ 12%</span> from last period
@@ -664,7 +683,11 @@ const Reports = () => {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="month" />
                       <YAxis />
-                      <Tooltip formatter={(value) => [`${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value)}`, 'Revenue']} />
+                      <Tooltip 
+                        formatter={(value: any) => {
+                          return [formatCurrency(value), 'Revenue'];
+                        }}
+                      />
                       <Legend />
                       <Line type="monotone" dataKey="revenue" stroke="#8884d8" activeDot={{ r: 8 }} />
                     </LineChart>
