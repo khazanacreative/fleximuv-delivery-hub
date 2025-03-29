@@ -25,19 +25,23 @@ serve(async (req: Request) => {
   if (corsResponse) return corsResponse;
 
   try {
-    // Get the Supabase client
-    const authHeader = req.headers.get("Authorization") || "";
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") || "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "",
-      {
-        global: { headers: { Authorization: authHeader } },
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      }
-    );
+    // Get environment variables
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    
+    console.log("Initializing demo users with URL:", supabaseUrl);
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Missing Supabase URL or service role key");
+    }
+
+    // Get the Supabase client with service role key
+    const supabaseAdmin = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    });
 
     // Define our demo users
     const demoUsers = [
@@ -96,10 +100,10 @@ serve(async (req: Request) => {
 
     // Create demo users one by one
     for (const user of demoUsers) {
-      console.log(`Creating/updating user: ${user.email}`);
+      console.log(`Processing user: ${user.email}`);
       
       // First check if the email exists
-      const { data: existingUserData, error: existingUserError } = await supabaseClient.auth.admin.listUsers();
+      const { data: existingUsers, error: existingUserError } = await supabaseAdmin.auth.admin.listUsers();
       
       if (existingUserError) {
         console.error(`Error checking users:`, existingUserError);
@@ -112,18 +116,29 @@ serve(async (req: Request) => {
       }
       
       // Find matching user by email
-      const existingUser = existingUserData.users.find(u => u.email === user.email);
+      const existingUser = existingUsers.users.find(u => u.email === user.email);
       
       if (existingUser) {
         // User exists, update password
         console.log(`User ${user.email} exists, updating password`);
-        const { error: updateError } = await supabaseClient.auth.admin.updateUserById(
+        const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
           existingUser.id,
           { password: user.password, email_confirm: true }
         );
         
+        if (updateError) {
+          console.error(`Error updating user ${user.email}:`, updateError);
+          results.push({
+            email: user.email,
+            success: false,
+            error: updateError.message,
+            operation: "update_failed",
+          });
+          continue;
+        }
+        
         // Update profile data
-        const { error: profileError } = await supabaseClient
+        const { error: profileError } = await supabaseAdmin
           .from("profiles")
           .update({
             ...user.userData,
@@ -132,16 +147,20 @@ serve(async (req: Request) => {
           })
           .eq("id", existingUser.id);
         
+        if (profileError) {
+          console.error(`Error updating profile for ${user.email}:`, profileError);
+        }
+        
         results.push({
           email: user.email,
-          success: !updateError && !profileError,
-          error: updateError?.message || profileError?.message,
+          success: !profileError,
+          error: profileError?.message,
           operation: "updated",
         });
       } else {
         // Create the user in auth
         console.log(`Creating new user: ${user.email}`);
-        const { data: authData, error: authError } = await supabaseClient.auth.admin.createUser({
+        const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
           email: user.email,
           password: user.password,
           user_metadata: user.userData,
@@ -154,14 +173,16 @@ serve(async (req: Request) => {
             email: user.email,
             success: false,
             error: authError.message,
+            operation: "create_failed",
           });
           continue;
         }
 
         const userId = authData.user.id;
+        console.log(`Created user with ID: ${userId}`);
         
         // Update the profile with additional data
-        const { error: profileError } = await supabaseClient
+        const { error: profileError } = await supabaseAdmin
           .from("profiles")
           .update({
             ...user.userData,
@@ -170,11 +191,16 @@ serve(async (req: Request) => {
           })
           .eq("id", userId);
 
+        if (profileError) {
+          console.error(`Error updating profile for ${user.email}:`, profileError);
+        }
+
         results.push({
           email: user.email,
           success: !profileError,
           error: profileError?.message,
           operation: "created",
+          userId,
         });
       }
     }

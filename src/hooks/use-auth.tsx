@@ -104,8 +104,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
     
     try {
-      // Extra logging for debugging
-      console.log('About to call supabase.auth.signInWithPassword');
+      console.log('Sending login request to Supabase with credentials:', { email, passwordLength: password.length });
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -113,23 +112,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       
       if (error) {
-        console.error('Login error from Supabase:', error.message);
-        toast({
-          title: "Login Failed",
-          description: error.message,
-          variant: "destructive",
-        });
+        console.error('Login error from Supabase:', error);
         sonnerToast.error("Login Failed", {
           description: error.message,
         });
         throw error;
       }
       
-      // Display the data object to check its structure
       console.log('Login successful response:', data);
-      console.log('Login successful - user:', data.user?.email);
+      console.log('User authenticated:', data.user?.email);
       
-      // Return void instead of data to match the expected return type
+      // The session will be handled by the onAuthStateChange listener
     } catch (error: any) {
       console.error('Login error details:', error);
       throw error;

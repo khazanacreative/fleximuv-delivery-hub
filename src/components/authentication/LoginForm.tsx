@@ -1,6 +1,5 @@
 
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,35 +10,28 @@ import { toast } from "sonner";
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('password123'); // Default to demo password
+  const [password, setPassword] = useState('password123');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log('User authenticated, navigating to dashboard');
-      navigate('/dashboard');
-    }
-  }, [isAuthenticated, navigate]);
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      console.log('Submitting login form with:', { email, password: password.length > 0 ? 'PROVIDED' : 'EMPTY' });
+      console.log('Attempting to login with:', { email, passwordProvided: !!password });
+      
       if (!email || !password) {
         throw new Error('Email and password are required');
       }
       
-      // Try to login - with explicit debugging
-      console.log('About to call login function with email:', email);
+      // Attempt login with clear console logs
+      console.log(`Login form submitting with email: ${email}`);
       await login(email, password);
       console.log('Login function completed successfully');
       
-      // The navigation will be handled by the auth state change in useEffect
+      // Navigation happens in the auth provider after successful login
     } catch (error: any) {
       console.error('Login form error:', error);
       toast.error('Login failed', {
@@ -57,7 +49,7 @@ const LoginForm = () => {
   // Set both email and password when selecting a demo account
   const handleDemoAccountClick = (demoEmail: string) => {
     setEmail(demoEmail);
-    setPassword('password123'); // Ensure password is set correctly
+    setPassword('password123');
     toast.info(`Demo account selected`, {
       description: `Email: ${demoEmail}, Password: password123`
     });
@@ -152,7 +144,6 @@ const LoginForm = () => {
               variant="link" 
               className="p-0 h-auto text-fleximov-500"
               type="button"
-              onClick={() => navigate('/register')}
             >
               Sign up
             </Button>
