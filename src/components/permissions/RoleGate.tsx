@@ -2,24 +2,47 @@
 import { ReactNode } from 'react';
 import { UserRole } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
+import { Permission, hasPermission, hasAnyPermission, hasAllPermissions } from '@/utils/permissions';
 
 interface RoleGateProps {
   children: ReactNode;
-  allowedRoles: UserRole[];
+  allowedRoles?: UserRole[];
+  permissions?: Permission[];
+  requireAll?: boolean;
   fallback?: ReactNode;
 }
 
 /**
- * Komponen untuk membatasi akses berdasarkan peran pengguna
+ * Component to restrict access based on user role or permissions
  */
-const RoleGate = ({ children, allowedRoles, fallback }: RoleGateProps) => {
+const RoleGate = ({ 
+  children, 
+  allowedRoles, 
+  permissions, 
+  requireAll = false,
+  fallback 
+}: RoleGateProps) => {
   const { user } = useAuth();
   
   if (!user) return fallback || null;
   
-  const hasPermission = allowedRoles.includes(user.role);
+  // Role-based access check
+  const hasRoleAccess = allowedRoles 
+    ? allowedRoles.includes(user.role)
+    : true;
   
-  if (!hasPermission) return fallback || null;
+  // Permission-based access check
+  let hasPermissionAccess = true;
+  if (permissions && permissions.length > 0) {
+    hasPermissionAccess = requireAll 
+      ? hasAllPermissions(user, permissions)
+      : hasAnyPermission(user, permissions);
+  }
+  
+  // Access is granted if both role and permission checks pass
+  const hasAccess = hasRoleAccess && hasPermissionAccess;
+  
+  if (!hasAccess) return fallback || null;
   
   return <>{children}</>;
 };
