@@ -24,7 +24,7 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
           collapsed ? "ml-16" : "ml-64"  /* Account for fixed sidebar width */
         )}>
           <main className="flex-1 overflow-auto">
-            <div className="px-5 pt-4 max-w-7xl"> {/* Updated to pt-4 (was pt-5) */}
+            <div className="px-6 md:px-8 pt-4 pb-8 max-w-7xl mx-auto"> {/* Updated horizontal padding */}
               <Suspense fallback={<PageLoader />}>
                 {children || <Outlet />}
               </Suspense>

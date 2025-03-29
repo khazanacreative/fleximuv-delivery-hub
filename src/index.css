@@ -190,4 +190,24 @@
   .form-input {
     @apply text-left;
   }
+  
+  /* Adding proper margin to forms so content doesn't get cut off when scrolling */
+  .form-container,
+  form,
+  dialog,
+  [role="dialog"],
+  .dialog-content,
+  .popover-content {
+    @apply px-4 md:px-6;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Ensure dialog content has proper margins */
+  [data-radix-dialog-content],
+  [data-radix-popover-content],
+  .DialogContent {
+    @apply px-4 md:px-6;
+  }
 }
+
