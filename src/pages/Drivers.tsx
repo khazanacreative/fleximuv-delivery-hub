@@ -1,6 +1,6 @@
 
 import { useState, useCallback, useEffect } from "react";
-import { Truck, Plus, User, Phone, MapPin, Star, MoreHorizontal, Edit, UserX, UserCheck, Filter } from "lucide-react";
+import { Truck, Plus, User, Phone, MapPin, Star, MoreHorizontal, Edit, UserX, UserCheck, Filter, Trash } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { usePermissions } from "@/hooks/use-permissions";
 import { Button } from "@/components/ui/button";
@@ -448,7 +448,7 @@ const Drivers = () => {
                   
                   {driver.status === 'offline' ? (
                     <DropdownMenuItem onClick={() => {
-                      const updatedDriver = { ...driver, status: 'available' };
+                      const updatedDriver = { ...driver, status: 'available' as 'available' | 'busy' | 'offline' };
                       setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
                       
                       toast({
@@ -461,7 +461,7 @@ const Drivers = () => {
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem onClick={() => {
-                      const updatedDriver = { ...driver, status: 'offline' };
+                      const updatedDriver = { ...driver, status: 'offline' as 'available' | 'busy' | 'offline' };
                       setDrivers(prev => prev.map(d => d.id === driver.id ? updatedDriver : d));
                       
                       toast({
