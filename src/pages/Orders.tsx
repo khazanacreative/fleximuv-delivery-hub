@@ -156,9 +156,14 @@ const Orders = () => {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => setStatusFilters(
-                      Object.keys(statusFilters).reduce((acc, key) => ({ ...acc, [key]: false }), {})
-                    )}
+                    onClick={() => setStatusFilters({
+                      pending: false,
+                      accepted: false,
+                      assigned: false,
+                      in_progress: false,
+                      completed: false,
+                      cancelled: false,
+                    })}
                   >
                     Clear
                   </Button>
