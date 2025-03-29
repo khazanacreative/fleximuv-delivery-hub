@@ -21,13 +21,19 @@ export const usePermissions = () => {
     // Get user role description
     roleDescription: getUserRoleDescription(user),
     
-    // Flag for easier role checks - making these explicit and clearer
+    // Flag for easier role checks
     isAdmin: user?.role === 'admin',
     isPartner: user?.role === 'partner',
-    isFleetPartner: user?.role === 'partner' && user?.hasDrivers === true,
-    isBusinessPartner: user?.role === 'partner' && user?.hasDrivers !== true,
+    isFleetPartner: user?.role === 'partner' && user?.partnerType === 'fleet',
+    isIndependentCourier: user?.role === 'partner' && user?.partnerType === 'courier',
+    isBusinessPartner: user?.role === 'partner' && user?.partnerType === 'business',
     isDriver: user?.role === 'driver',
-    isIndependentCourier: user?.role === 'driver' && user?.partnerType === 'courier',
     isCustomer: user?.role === 'customer',
+    isGuest: user?.role === 'guest',
+    
+    // Check if a user can manage drivers (admin, fleet partner, or independent courier)
+    canManageDrivers: user?.role === 'admin' || 
+                      (user?.role === 'partner' && user?.partnerType === 'fleet') ||
+                      (user?.role === 'partner' && user?.partnerType === 'courier')
   };
 };

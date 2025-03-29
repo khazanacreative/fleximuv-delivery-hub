@@ -17,7 +17,9 @@ export type Permission =
   | 'accept_orders'
   | 'cancel_orders'
   | 'edit_orders'
-  | 'set_pricing';
+  | 'set_pricing'
+  | 'add_service_types'
+  | 'view_shared_order';
 
 // Function to check if user has specific permission
 export const hasPermission = (user: User | null, permission: Permission): boolean => {
@@ -26,11 +28,12 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
   // Admin has all permissions
   if (user.role === 'admin') return true;
   
-  // Partner with drivers (fleet)
-  if (user.role === 'partner' && user.hasDrivers === true) {
+  // Partner with fleet (can manage drivers and add services)
+  if (user.role === 'partner' && user.partnerType === 'fleet') {
     switch(permission) {
       case 'view_partner_profile':
       case 'view_all_orders':
+      case 'view_own_orders':
       case 'create_orders':
       case 'manage_own_drivers':
       case 'view_own_drivers':
@@ -39,35 +42,41 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
       case 'cancel_orders':
       case 'edit_orders':
       case 'set_pricing':
+      case 'add_service_types':
+      case 'view_courier_options':
         return true;
       default:
         return false;
     }
   }
   
-  // Partner without drivers (business partner)
-  if (user.role === 'partner' && !user.hasDrivers) {
+  // Independent courier (can manage own drivers including self)
+  if (user.role === 'partner' && user.partnerType === 'courier') {
     switch(permission) {
       case 'view_partner_profile':
-      case 'view_courier_options':
-      case 'create_orders':
       case 'view_own_orders':
-      case 'cancel_orders':
-      case 'edit_orders':
-        return true;
-      default:
-        return false;
-    }
-  }
-  
-  // Independent courier (driver who works independently)
-  if (user.role === 'driver' && user.partnerType === 'courier') {
-    switch(permission) {
-      case 'view_all_orders':
+      case 'create_orders':
       case 'manage_own_drivers':
       case 'view_own_drivers':
       case 'accept_orders':
+      case 'cancel_orders':
+      case 'edit_orders':
+      case 'add_service_types':
+        return true;
+      default:
+        return false;
+    }
+  }
+  
+  // Business partner (no drivers, can only make orders)
+  if (user.role === 'partner' && user.partnerType === 'business') {
+    switch(permission) {
+      case 'view_partner_profile':
+      case 'view_own_orders':
       case 'create_orders':
+      case 'view_courier_options':
+      case 'cancel_orders':
+      case 'edit_orders':
         return true;
       default:
         return false;
@@ -91,7 +100,17 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
       case 'view_own_orders':
       case 'create_orders':
       case 'view_courier_options':
-      case 'cancel_orders': // Customers can cancel their own orders
+      case 'cancel_orders':
+        return true;
+      default:
+        return false;
+    }
+  }
+  
+  // Guest user (can only view shared orders)
+  if (user.role === 'guest') {
+    switch(permission) {
+      case 'view_shared_order':
         return true;
       default:
         return false;
@@ -119,15 +138,19 @@ export const getUserRoleDescription = (user: User | null): string => {
     case 'admin':
       return 'Administrator with full system access';
     case 'partner':
-      return user.hasDrivers 
-        ? 'Fleet partner with delivery vehicles' 
-        : 'Business partner without delivery fleet';
+      if (user.partnerType === 'fleet') {
+        return 'Fleet partner with delivery vehicles';
+      } else if (user.partnerType === 'courier') {
+        return 'Independent courier service';
+      } else {
+        return 'Business partner without delivery fleet';
+      }
     case 'driver':
-      return user.partnerType === 'courier' 
-        ? 'Independent courier service' 
-        : 'Driver assigned to a partner';
+      return 'Driver assigned to a partner';
     case 'customer':
       return 'Customer account';
+    case 'guest':
+      return 'Guest access (limited to shared orders)';
     default:
       return '';
   }

@@ -125,9 +125,9 @@ const RegisterDialog = ({ isOpen, onOpenChange }: RegisterDialogProps) => {
                   <SelectValue placeholder="Select partnership type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="business">Business (Need Delivery Services)</SelectItem>
+                  <SelectItem value="business">Business Partner (Need Delivery Services)</SelectItem>
                   <SelectItem value="fleet">Fleet Partner (Have Drivers)</SelectItem>
-                  <SelectItem value="courier">Independent Courier</SelectItem>
+                  <SelectItem value="courier">Independent Courier (Self-employed)</SelectItem>
                 </SelectContent>
               </Select>
             </div>

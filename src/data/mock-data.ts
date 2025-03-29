@@ -19,8 +19,8 @@ export const mockUsers: User[] = [
     email: 'joko@surabayaexpress.com',
     phone: '+6281234567891',
     role: 'partner',
-    partnerType: 'general',
-    hasDrivers: true,  // Explicitly mark as fleet partner
+    partnerType: 'fleet',  // Changed to 'fleet' for clarity
+    hasDrivers: true,  // Fleet partner with drivers
     avatar: '/avatars/joko.jpg',
     createdAt: new Date('2023-02-10'),
     balance: 5000000,
@@ -31,8 +31,9 @@ export const mockUsers: User[] = [
     name: 'Siti Rahayu',
     email: 'siti@eastjavacourier.com',
     phone: '+6281234567892',
-    role: 'driver',
-    partnerType: 'courier',  // Changed to 'courier' to make her an independent courier
+    role: 'partner',
+    partnerType: 'business',  // Changed to 'business' for partner without fleet
+    hasDrivers: false,  // Business partner without drivers
     avatar: '/avatars/siti.jpg',
     createdAt: new Date('2023-03-05'),
     balance: 3500000,
@@ -44,36 +45,11 @@ export const mockUsers: User[] = [
     email: 'agus@surabayamart.com',
     phone: '+6281234567893',
     role: 'partner',
-    partnerType: 'business',
-    hasDrivers: false,  // Explicitly mark as not fleet partner
+    partnerType: 'courier',  // Changed to 'courier' for independent courier
+    hasDrivers: true,  // Independent courier can have drivers (including themselves)
     avatar: '/avatars/agus.jpg',
     createdAt: new Date('2023-04-12'),
     balance: 1200000,
-    status: 'active'
-  },
-  {
-    id: '7',
-    name: 'Ratna Dewi',
-    email: 'ratna@surabaya-fleet.com',
-    phone: '+6281234567899',
-    role: 'partner',
-    partnerType: 'general',
-    hasDrivers: true,  // Fleet partner
-    avatar: '/avatars/ratna.jpg',
-    createdAt: new Date('2023-05-10'),
-    balance: 4500000,
-    status: 'active'
-  },
-  {
-    id: '8',
-    name: 'Dimas Prasetya',
-    email: 'dimas@courier.com',
-    phone: '+6281234567800',
-    role: 'driver',
-    partnerType: 'courier',  // Independent courier
-    avatar: '/avatars/dimas.jpg',
-    createdAt: new Date('2023-06-15'),
-    balance: 2800000,
     status: 'active'
   },
   {
@@ -96,6 +72,17 @@ export const mockUsers: User[] = [
     avatar: '/avatars/dewi.jpg',
     createdAt: new Date('2023-06-18'),
     balance: 150000,
+    status: 'active'
+  },
+  {
+    id: '7',
+    name: 'Dimas Prasetya',
+    email: 'dimas@courier.com',
+    phone: '+6281234567800',
+    role: 'driver',
+    avatar: '/avatars/dimas.jpg',
+    createdAt: new Date('2023-06-15'),
+    balance: 2800000,
     status: 'active'
   }
 ];

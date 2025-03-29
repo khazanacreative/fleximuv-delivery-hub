@@ -1,9 +1,9 @@
 
 // User Roles
-export type UserRole = 'admin' | 'partner' | 'driver' | 'customer';
+export type UserRole = 'admin' | 'partner' | 'driver' | 'customer' | 'guest';
 
 // Partner Types
-export type PartnerType = 'general' | 'courier' | 'business';
+export type PartnerType = 'fleet' | 'courier' | 'business';
 
 // User
 export interface User {
