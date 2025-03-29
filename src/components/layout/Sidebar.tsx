@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Users, Truck, Package, CreditCard, 
-  Settings, BarChart, LogOut
+  Settings, BarChart, LogOut, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,6 +19,7 @@ const Sidebar = () => {
   const { user, logout } = useAuth();
   const isMobile = useIsMobile();
   const [activeDescription, setActiveDescription] = useState('');
+  const [hoveredLink, setHoveredLink] = useState('');
 
   // Close sidebar on mobile when navigating
   useEffect(() => {
@@ -163,6 +164,14 @@ const Sidebar = () => {
   else if (isDriver) links = [...links, ...driverLinks];
   else if (isCustomer) links = [...links, ...customerLinks];
 
+  // Find the active link description based on current path
+  useEffect(() => {
+    const activeLink = links.find(link => link.path === location.pathname);
+    if (activeLink) {
+      setActiveDescription(activeLink.description);
+    }
+  }, [location.pathname, links]);
+
   return (
     <div 
       className={cn(
@@ -171,10 +180,21 @@ const Sidebar = () => {
         isMobile && !collapsed && "z-50 shadow-lg"
       )}
     >
+      <div className="flex justify-end p-2">
+        <Button 
+          variant="ghost" 
+          size="icon"
+          onClick={toggleSidebar}
+          className="h-8 w-8 rounded-full bg-sidebar-accent/30"
+        >
+          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+        </Button>
+      </div>
+      
       <div className="flex flex-col h-full">
         {/* Navigation Links - with ScrollArea */}
         <ScrollArea className="flex-1 overflow-x-hidden">
-          <div className="p-2 mt-2">
+          <div className="p-2">
             <nav className="flex flex-col gap-1">
               {links.map((link) => (
                 <Link
@@ -186,8 +206,19 @@ const Sidebar = () => {
                       ? "bg-sidebar-accent/70 text-sidebar-accent-foreground shadow-sm border border-sidebar-border/40"
                       : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground hover:border hover:border-sidebar-border/20"
                   )}
-                  onMouseEnter={() => !collapsed && setActiveDescription(link.description)}
-                  onMouseLeave={() => setActiveDescription('')}
+                  onMouseEnter={() => {
+                    if (!collapsed) {
+                      setHoveredLink(link.path);
+                      setActiveDescription(link.description);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (!collapsed) {
+                      setHoveredLink('');
+                      const activeLink = links.find(l => l.path === location.pathname);
+                      setActiveDescription(activeLink ? activeLink.description : '');
+                    }
+                  }}
                 >
                   <link.icon size={18} className="flex-shrink-0" />
                   {!collapsed && <span>{link.name}</span>}
@@ -196,9 +227,9 @@ const Sidebar = () => {
             </nav>
           </div>
           
-          {/* Description area */}
+          {/* Description area - only shows when sidebar is expanded */}
           {!collapsed && activeDescription && (
-            <div className="px-4 py-3 mt-2 text-xs text-muted-foreground">
+            <div className="px-4 py-3 mt-auto mb-4 mx-2 text-xs text-muted-foreground bg-sidebar-accent/20 rounded-lg">
               {activeDescription}
             </div>
           )}

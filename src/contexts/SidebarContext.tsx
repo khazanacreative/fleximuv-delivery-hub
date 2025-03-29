@@ -1,5 +1,6 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SidebarContextType {
   collapsed: boolean;
@@ -10,8 +11,27 @@ interface SidebarContextType {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
+const SIDEBAR_STATE_KEY = 'fleximov-sidebar-state';
+
 export const SidebarProvider = ({ children }: { children: React.ReactNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const isMobile = useIsMobile();
+  const [collapsed, setCollapsed] = useState(() => {
+    // Get initial state from localStorage if available
+    const savedState = localStorage.getItem(SIDEBAR_STATE_KEY);
+    return savedState ? JSON.parse(savedState) : false;
+  });
+
+  // Auto-collapse on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setCollapsed(true);
+    }
+  }, [isMobile]);
+
+  // Save to localStorage when state changes
+  useEffect(() => {
+    localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(collapsed));
+  }, [collapsed]);
 
   const toggleSidebar = () => setCollapsed(!collapsed);
   const expandSidebar = () => setCollapsed(false);
