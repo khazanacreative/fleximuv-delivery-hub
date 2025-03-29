@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from "sonner";
+import { migrateData } from '@/utils/migrate-data';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -29,7 +30,7 @@ const LoginForm = () => {
       // Attempt login with clear console logs
       console.log(`Login form submitting with email: ${email}`);
       await login(email, password);
-      console.log('Login function completed successfully');
+      console.log('Login function called successfully');
       
       // Navigation happens in the auth provider after successful login
     } catch (error: any) {
@@ -53,6 +54,30 @@ const LoginForm = () => {
     toast.info(`Demo account selected`, {
       description: `Email: ${demoEmail}, Password: password123`
     });
+  };
+
+  const initializeDemoUsers = async () => {
+    setIsLoading(true);
+    try {
+      const result = await migrateData();
+      console.log('Demo users initialization result:', result);
+      if (result.success) {
+        toast.success('Demo users initialized', {
+          description: 'You can now login with the demo accounts'
+        });
+      } else {
+        toast.error('Failed to initialize demo users', {
+          description: result.message || 'Please try again'
+        });
+      }
+    } catch (error: any) {
+      console.error('Error initializing demo users:', error);
+      toast.error('Failed to initialize demo users', {
+        description: error.message || 'Please try again'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Define the demo accounts
@@ -136,6 +161,16 @@ const LoginForm = () => {
             disabled={isLoading}
           >
             {isLoading ? 'Logging in...' : 'Login'}
+          </Button>
+
+          <Button 
+            type="button" 
+            className="w-full"
+            variant="outline"
+            onClick={initializeDemoUsers}
+            disabled={isLoading}
+          >
+            Reset Demo Accounts
           </Button>
           
           <div className="text-center text-sm">

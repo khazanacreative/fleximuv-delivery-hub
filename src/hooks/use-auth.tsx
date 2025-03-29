@@ -22,8 +22,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const refreshUser = async () => {
     if (session?.user?.id) {
       try {
+        console.log('Refreshing user data for ID:', session.user.id);
         const userData = await fetchUserProfile(session.user.id, session);
         if (userData) {
+          console.log('User data refreshed:', userData);
           setUser(userData);
         }
       } catch (error) {
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Defer profile fetching to prevent deadlocks
           setTimeout(async () => {
             try {
+              console.log('Fetching user profile after auth change');
               const userData = await fetchUserProfile(currentSession.user.id, currentSession);
               console.log('User profile fetched:', userData);
               setUser(userData);
@@ -83,6 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (currentSession?.user) {
         try {
+          console.log('Fetching initial user profile with ID:', currentSession.user.id);
           const userData = await fetchUserProfile(currentSession.user.id, currentSession);
           console.log('Initial user profile:', userData);
           setUser(userData);
