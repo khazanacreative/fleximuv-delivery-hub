@@ -11,9 +11,12 @@ export type Permission =
   | 'manage_all_drivers'
   | 'manage_own_drivers'
   | 'view_all_drivers'
+  | 'view_own_drivers'
   | 'view_courier_options'
   | 'assign_drivers'
   | 'accept_orders'
+  | 'cancel_orders'
+  | 'edit_orders'
   | 'set_pricing';
 
 // Function to check if user has specific permission
@@ -30,7 +33,11 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
       case 'view_all_orders':
       case 'create_orders':
       case 'manage_own_drivers':
+      case 'view_own_drivers':
       case 'assign_drivers':
+      case 'accept_orders':
+      case 'cancel_orders':
+      case 'edit_orders':
       case 'set_pricing':
         return true;
       default:
@@ -45,6 +52,8 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
       case 'view_courier_options':
       case 'create_orders':
       case 'view_own_orders':
+      case 'cancel_orders':
+      case 'edit_orders':
         return true;
       default:
         return false;
@@ -56,6 +65,7 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
     switch(permission) {
       case 'view_all_orders':
       case 'manage_own_drivers':
+      case 'view_own_drivers':
       case 'accept_orders':
         return true;
       default:
@@ -80,6 +90,7 @@ export const hasPermission = (user: User | null, permission: Permission): boolea
       case 'view_own_orders':
       case 'create_orders':
       case 'view_courier_options':
+      case 'cancel_orders': // Customers can cancel their own orders
         return true;
       default:
         return false;

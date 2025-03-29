@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus, User, Phone, MapPin, Star, MoreHorizontal, Edit, UserX, UserCheck, Filter } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { usePermissions } from "@/hooks/use-permissions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,15 +48,26 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { mockDrivers } from "@/data/mock-data";
 import { Driver } from "@/types";
+import RoleGate from "@/components/permissions/RoleGate";
 
 const Drivers = () => {
   const { user } = useAuth();
+  const { can, isAdmin, isFleetPartner, isIndependentCourier } = usePermissions();
   const { toast } = useToast();
   const [drivers, setDrivers] = useState(mockDrivers);
   const [filteredDrivers, setFilteredDrivers] = useState(mockDrivers);
   const [addDriverOpen, setAddDriverOpen] = useState(false);
   const [viewProfileOpen, setViewProfileOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+  // New driver form state
+  const [newDriver, setNewDriver] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    vehicleType: "motorcycle",
+    licensePlate: "",
+  });
   // Filter states
   const [statusFilters, setStatusFilters] = useState({
     available: false,
@@ -63,18 +75,22 @@ const Drivers = () => {
     offline: false,
   });
 
-  const isAdmin = user?.role === 'admin';
-  const isPartner = user?.role === 'partner';
-
   // Apply filters
   const applyFilters = useCallback(() => {
+    // Show only drivers belonging to the current partner if not admin
+    let filteredByPermission = drivers;
+    if (!isAdmin) {
+      filteredByPermission = drivers.filter(driver => driver.partnerId === user?.id);
+    }
+    
+    // Then filter by status if any status filters are active
     if (Object.values(statusFilters).every(v => v === false)) {
-      setFilteredDrivers(drivers);
+      setFilteredDrivers(filteredByPermission);
     } else {
       const activeFilters = Object.keys(statusFilters).filter(key => statusFilters[key]);
-      setFilteredDrivers(drivers.filter(driver => activeFilters.includes(driver.status)));
+      setFilteredDrivers(filteredByPermission.filter(driver => activeFilters.includes(driver.status)));
     }
-  }, [drivers, statusFilters]);
+  }, [drivers, statusFilters, user, isAdmin]);
 
   // Filter change handler
   const handleFilterChange = (status: string, checked: boolean) => {
@@ -84,10 +100,10 @@ const Drivers = () => {
     }));
   };
 
-  // Apply filters when status filters change
+  // Apply filters when status filters change or user changes
   useEffect(() => {
     applyFilters();
-  }, [applyFilters]);
+  }, [applyFilters, user]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -105,6 +121,64 @@ const Drivers = () => {
   const handleViewProfile = (driver: Driver) => {
     setSelectedDriver(driver);
     setViewProfileOpen(true);
+  };
+
+  // Handle new driver form changes
+  const handleNewDriverChange = (field: string, value: string) => {
+    setNewDriver(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Add new driver
+  const handleAddDriver = () => {
+    // Validate form
+    if (!newDriver.name || !newDriver.phone || !newDriver.vehicleType) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields (name, phone, vehicle type)",
+      });
+      return;
+    }
+
+    // Create new driver
+    const newDriverData: Driver = {
+      id: `d-${Date.now()}`,
+      name: newDriver.name,
+      phone: newDriver.phone,
+      email: newDriver.email || "",
+      partnerId: user?.id || "",
+      vehicleType: newDriver.vehicleType,
+      vehicleNumber: newDriver.licensePlate,
+      status: 'available',
+      completedOrders: 0,
+      rating: 5.0,
+      balance: 0,
+      createdAt: new Date(),
+      currentLocation: newDriver.address || "Not specified",
+      licensePlate: newDriver.licensePlate,
+    };
+
+    // Add to drivers list
+    setDrivers(prev => [newDriverData, ...prev]);
+    
+    // Reset form
+    setNewDriver({
+      name: "",
+      phone: "",
+      email: "",
+      address: "",
+      vehicleType: "motorcycle",
+      licensePlate: "",
+    });
+
+    // Close dialog and show success message
+    setAddDriverOpen(false);
+    toast({
+      title: "Driver Added",
+      description: "New driver has been successfully added to your fleet",
+    });
   };
 
   // Function to open WhatsApp with the driver's phone number
@@ -190,85 +264,111 @@ const Drivers = () => {
             </PopoverContent>
           </Popover>
           
-          {/* Add Driver Dialog */}
-          <Dialog open={addDriverOpen} onOpenChange={setAddDriverOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Driver
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-              <DialogHeader>
-                <DialogTitle>Add New Driver</DialogTitle>
-                <DialogDescription>
-                  Enter the details for the new delivery driver
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-left">
-                    Full Name
-                  </Label>
-                  <Input id="name" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="phone" className="text-left">
-                    Phone
-                  </Label>
-                  <Input id="phone" type="tel" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="email" className="text-left">
-                    Email
-                  </Label>
-                  <Input id="email" type="email" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="address" className="text-left">
-                    Address
-                  </Label>
-                  <Input id="address" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="vehicle" className="text-left">
-                    Vehicle Type
-                  </Label>
-                  <Select>
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Select vehicle type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="motorcycle">Motorcycle</SelectItem>
-                      <SelectItem value="car">Car</SelectItem>
-                      <SelectItem value="van">Van</SelectItem>
-                      <SelectItem value="truck">Truck</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="license" className="text-left">
-                    License Plate
-                  </Label>
-                  <Input id="license" className="col-span-3" />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setAddDriverOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => {
-                  toast({
-                    title: "Driver Added",
-                    description: "New driver has been successfully added",
-                  });
-                  setAddDriverOpen(false);
-                }}>
+          <RoleGate allowedRoles={['admin', 'partner']} permissions={['manage_own_drivers']}>
+            {/* Add Driver Dialog */}
+            <Dialog open={addDriverOpen} onOpenChange={setAddDriverOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
                   Add Driver
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle>Add New Driver</DialogTitle>
+                  <DialogDescription>
+                    Enter the details for the new delivery driver
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-left">
+                      Full Name
+                    </Label>
+                    <Input 
+                      id="name" 
+                      value={newDriver.name}
+                      onChange={(e) => handleNewDriverChange('name', e.target.value)}
+                      className="col-span-3" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="phone" className="text-left">
+                      Phone
+                    </Label>
+                    <Input 
+                      id="phone" 
+                      type="tel" 
+                      value={newDriver.phone}
+                      onChange={(e) => handleNewDriverChange('phone', e.target.value)}
+                      className="col-span-3" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="email" className="text-left">
+                      Email
+                    </Label>
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={newDriver.email}
+                      onChange={(e) => handleNewDriverChange('email', e.target.value)}
+                      className="col-span-3" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="address" className="text-left">
+                      Address
+                    </Label>
+                    <Input 
+                      id="address" 
+                      value={newDriver.address}
+                      onChange={(e) => handleNewDriverChange('address', e.target.value)}
+                      className="col-span-3" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="vehicle" className="text-left">
+                      Vehicle Type
+                    </Label>
+                    <Select 
+                      value={newDriver.vehicleType}
+                      onValueChange={(value) => handleNewDriverChange('vehicleType', value)}
+                    >
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select vehicle type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="motorcycle">Motorcycle</SelectItem>
+                        <SelectItem value="car">Car</SelectItem>
+                        <SelectItem value="van">Van</SelectItem>
+                        <SelectItem value="truck">Truck</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="license" className="text-left">
+                      License Plate
+                    </Label>
+                    <Input 
+                      id="license" 
+                      value={newDriver.licensePlate}
+                      onChange={(e) => handleNewDriverChange('licensePlate', e.target.value)}
+                      className="col-span-3" 
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setAddDriverOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleAddDriver}>
+                    Add Driver
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </RoleGate>
         </div>
       </div>
 

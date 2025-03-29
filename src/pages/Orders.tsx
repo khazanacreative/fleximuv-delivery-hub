@@ -1,7 +1,7 @@
-
 import { useState, useEffect, useCallback } from "react";
-import { Package, Plus, MapPin, Filter, ArrowUpDown, MoreHorizontal, Trash, Edit, Eye, Share2 } from "lucide-react";
+import { Package, Plus, MapPin, Filter, ArrowUpDown, MoreHorizontal, Trash, Edit, Eye, Share2, Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { usePermissions } from "@/hooks/use-permissions";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -46,10 +46,12 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { mockOrders } from "@/data/mock-data";
-import LiveMap from "@/components/maps/LiveMap"; // Use the actual map component
+import LiveMap from "@/components/maps/LiveMap";
+import RoleGate from "@/components/permissions/RoleGate";
 
 const Orders = () => {
   const { user } = useAuth();
+  const { can, isAdmin, isPartner, isDriver } = usePermissions();
   const { toast } = useToast();
   const [orders, setOrders] = useState(mockOrders);
   const [filteredOrders, setFilteredOrders] = useState(mockOrders);
@@ -57,6 +59,7 @@ const Orders = () => {
   const [viewOrderDetails, setViewOrderDetails] = useState(null);
   const [mapOpen, setMapOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [partnerForOrder, setPartnerForOrder] = useState("");
   const [statusFilters, setStatusFilters] = useState({
     pending: false,
     accepted: false,
@@ -66,21 +69,33 @@ const Orders = () => {
     cancelled: false,
   });
 
-  const isAdmin = user?.role === 'admin';
-  const isPartner = user?.role === 'partner';
-  const isDriver = user?.role === 'driver';
-
-  // Fix bug: Use useCallback to memoize the filter function
   const applyFilters = useCallback(() => {
+    let permissionFiltered = orders;
+    
+    if (!isAdmin) {
+      if (isPartner && user?.hasDrivers) {
+        permissionFiltered = orders.filter(order => 
+          !order.partnerId || order.partnerId === user?.id
+        );
+      } else if (isPartner && !user?.hasDrivers) {
+        permissionFiltered = orders.filter(order => 
+          order.customerId === user?.id
+        );
+      } else if (isDriver) {
+        permissionFiltered = orders.filter(order => 
+          !order.partnerId || order.partnerId === user?.id || order.driverId === user?.id
+        );
+      }
+    }
+    
     if (Object.values(statusFilters).every(v => v === false)) {
-      setFilteredOrders(orders);
+      setFilteredOrders(permissionFiltered);
     } else {
       const activeFilters = Object.keys(statusFilters).filter(key => statusFilters[key]);
-      setFilteredOrders(orders.filter(order => activeFilters.includes(order.status)));
+      setFilteredOrders(permissionFiltered.filter(order => activeFilters.includes(order.status)));
     }
-  }, [statusFilters, orders]);
+  }, [statusFilters, orders, isAdmin, isPartner, isDriver, user]);
 
-  // Apply filters when they change
   useEffect(() => {
     applyFilters();
   }, [applyFilters]);
@@ -121,7 +136,6 @@ const Orders = () => {
   };
 
   const handleViewDetails = (order) => {
-    // Fix bug: Make a separate copy of the order
     setViewOrderDetails({...order});
   };
 
@@ -131,19 +145,78 @@ const Orders = () => {
   };
 
   const handleShareLocation = (order) => {
-    // Simulating sharing location via WhatsApp
     toast({
       title: "Link Generated",
       description: "Live tracking link has been copied. Ready to share via WhatsApp.",
     });
     
-    // In a real implementation, this would generate a link to a live tracking page
-    // and open WhatsApp Web with the link pre-populated
+    const trackingUrl = `https://track.example.com/order/${order.id}`;
+    window.open(`https://wa.me/?text=Track your order here: ${trackingUrl}`, '_blank');
   };
 
   const canEditOrder = (status) => {
-    // Only allow editing if status is pending
     return status === 'pending';
+  };
+
+  const handleCancelOrder = (order) => {
+    if (order.status !== 'pending') {
+      toast({
+        title: "Cannot Cancel Order",
+        description: "Only pending orders can be cancelled.",
+      });
+      return;
+    }
+
+    setOrders(prev => prev.filter(o => o.id !== order.id));
+    
+    toast({
+      title: "Order Cancelled",
+      description: "The order has been successfully cancelled and removed from the list.",
+    });
+  };
+
+  const handleAcceptOrder = (order) => {
+    const updatedOrder = {
+      ...order,
+      status: 'accepted',
+      partnerId: user?.id || order.partnerId
+    };
+    
+    setOrders(prev => 
+      prev.map(o => o.id === order.id ? updatedOrder : o)
+    );
+    
+    toast({
+      title: "Order Accepted",
+      description: "You have successfully accepted this order.",
+    });
+  };
+
+  const handleCreateOrder = () => {
+    const newOrder = {
+      id: `order-${Date.now()}`,
+      customerName: "New Customer",
+      customerId: user?.id || "",
+      partnerId: partnerForOrder || "",
+      status: "pending",
+      createdAt: new Date(),
+      amount: Math.floor(Math.random() * 100) + 10,
+      serviceType: "Standard Delivery",
+      pickupAddress: "123 Pickup St",
+      deliveryAddress: "456 Delivery Ave",
+    };
+    
+    setOrders(prev => [newOrder, ...prev]);
+    
+    setOpen(false);
+    toast({
+      title: "Order Created",
+      description: partnerForOrder 
+        ? "New order has been created and assigned to the selected partner" 
+        : "New order has been created and is available for all partners"
+    });
+    
+    setPartnerForOrder("");
   };
 
   return (
@@ -155,7 +228,7 @@ const Orders = () => {
             Orders
           </h2>
           <p className="text-muted-foreground">
-            Kelola semua pesanan pengiriman dan tetap bisa komunikasi dan memantau melalui notifikasi WhatsApp
+            Manage all delivery orders and stay connected through WhatsApp notifications
           </p>
         </div>
         
@@ -210,83 +283,81 @@ const Orders = () => {
             </PopoverContent>
           </Popover>
           
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Create Order
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Create New Order</DialogTitle>
-                <DialogDescription>
-                  Enter the details for the new delivery order
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="customer" className="text-left">
-                    Customer
-                  </Label>
-                  <Input id="customer" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="pickup" className="text-left">
-                    Pickup
-                  </Label>
-                  <Input id="pickup" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="destination" className="text-left">
-                    Destination
-                  </Label>
-                  <Input id="destination" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="items" className="text-left">
-                    Items
-                  </Label>
-                  <Input id="items" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="pickupTime" className="text-left">
-                    Pickup Time
-                  </Label>
-                  <Input id="pickupTime" type="datetime-local" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="driver" className="text-left">
-                    Driver
-                  </Label>
-                  <Select>
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Select a driver" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="driver1">Agus Wahyudi</SelectItem>
-                      <SelectItem value="driver2">Budi Santoso</SelectItem>
-                      <SelectItem value="driver3">Candra Wijaya</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
+          <RoleGate permissions={['create_orders']}>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Order
                 </Button>
-                <Button onClick={() => {
-                  toast({
-                    title: "Order Created",
-                    description: "New order has been created successfully"
-                  });
-                  setOpen(false);
-                }}>
-                  Create
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Create New Order</DialogTitle>
+                  <DialogDescription>
+                    Enter the details for the new delivery order
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="customer" className="text-left">
+                      Customer
+                    </Label>
+                    <Input id="customer" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="pickup" className="text-left">
+                      Pickup
+                    </Label>
+                    <Input id="pickup" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="destination" className="text-left">
+                      Destination
+                    </Label>
+                    <Input id="destination" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="items" className="text-left">
+                      Items
+                    </Label>
+                    <Input id="items" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="pickupTime" className="text-left">
+                      Pickup Time
+                    </Label>
+                    <Input id="pickupTime" type="datetime-local" className="col-span-3" />
+                  </div>
+                  
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="partner" className="text-left">
+                      Assign to Partner
+                    </Label>
+                    <Select value={partnerForOrder} onValueChange={setPartnerForOrder}>
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Leave unassigned for all partners" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">Leave unassigned (all partners can see)</SelectItem>
+                        <SelectItem value="partner1">AgungCargo Express</SelectItem>
+                        <SelectItem value="partner2">FastWheels Delivery</SelectItem>
+                        <SelectItem value="partner3">Wira Logistics</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleCreateOrder}>
+                    Create
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </RoleGate>
         </div>
       </div>
 
@@ -339,17 +410,42 @@ const Orders = () => {
                       <DropdownMenuItem onClick={() => handleShareLocation(order)}>
                         <Share2 className="mr-2 h-4 w-4" /> Share to WhatsApp
                       </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        disabled={!canEditOrder(order.status)}
-                        className={!canEditOrder(order.status) ? "opacity-50 cursor-not-allowed" : ""}
-                      >
-                        <Edit className="mr-2 h-4 w-4" /> Edit Order
-                      </DropdownMenuItem>
-                      {(isAdmin || isPartner) && (
-                        <DropdownMenuItem className="text-destructive">
-                          <Trash className="mr-2 h-4 w-4" /> Cancel Order
+                      
+                      <RoleGate permissions={['edit_orders']}>
+                        <DropdownMenuItem 
+                          disabled={!canEditOrder(order.status)}
+                          className={!canEditOrder(order.status) ? "opacity-50 cursor-not-allowed" : ""}
+                          onClick={() => {
+                            if (canEditOrder(order.status)) {
+                              toast({
+                                title: "Edit Order",
+                                description: "Editing functionality would open here",
+                              });
+                            }
+                          }}
+                        >
+                          <Edit className="mr-2 h-4 w-4" /> Edit Order
                         </DropdownMenuItem>
-                      )}
+                      </RoleGate>
+                      
+                      <RoleGate permissions={['accept_orders']}>
+                        {order.status === 'pending' && (!order.partnerId || order.partnerId === user?.id) && (
+                          <DropdownMenuItem onClick={() => handleAcceptOrder(order)}>
+                            <Check className="mr-2 h-4 w-4" /> Accept Order
+                          </DropdownMenuItem>
+                        )}
+                      </RoleGate>
+                      
+                      <RoleGate permissions={['cancel_orders']}>
+                        {canEditOrder(order.status) && (
+                          <DropdownMenuItem 
+                            className="text-destructive"
+                            onClick={() => handleCancelOrder(order)}
+                          >
+                            <Trash className="mr-2 h-4 w-4" /> Cancel Order
+                          </DropdownMenuItem>
+                        )}
+                      </RoleGate>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -359,7 +455,6 @@ const Orders = () => {
         </Table>
       </div>
 
-      {/* Order Details Dialog */}
       <Dialog open={viewOrderDetails !== null} onOpenChange={(open) => !open && setViewOrderDetails(null)}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
@@ -440,7 +535,6 @@ const Orders = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Map Dialog */}
       <Dialog open={mapOpen} onOpenChange={setMapOpen}>
         <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-auto">
           <DialogHeader>
