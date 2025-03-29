@@ -29,6 +29,15 @@ const LoginForm = () => {
     }
   };
 
+  // Define the demo accounts we want to show
+  const demoAccounts = [
+    { name: "Bambang Supratman (Admin)", email: "bambang@fleximov.com" },
+    { name: "Joko Widodo (Mitra dengan Armada)", email: "joko@surabayaexpress.com" },
+    { name: "Agus Santoso (Mitra Kurir Mandiri)", email: "agus@surabayamart.com" },
+    { name: "Siti Rahayu (Mitra Tanpa Armada)", email: "siti@eastjavacourier.com" },
+    { name: "Budi Setiawan (Driver)", email: "budi@gmail.com" },
+  ];
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
@@ -70,14 +79,14 @@ const LoginForm = () => {
           <div className="text-sm text-muted-foreground">
             <p>Demo Accounts (use password: 'password'):</p>
             <ul className="mt-2 space-y-1">
-              {mockUsers.slice(0, 4).map((user) => (
-                <li key={user.id} className="text-xs">
+              {demoAccounts.map((account, index) => (
+                <li key={index} className="text-xs">
                   <button
                     type="button"
                     className="text-fleximov-500 hover:underline"
-                    onClick={() => setEmail(user.email)}
+                    onClick={() => setEmail(account.email)}
                   >
-                    {user.name} ({user.role})
+                    {account.name}
                   </button>
                 </li>
               ))}
