@@ -33,8 +33,8 @@ const LoginForm = () => {
   const demoAccounts = [
     { name: "Bambang Supratman (Admin)", email: "bambang@fleximov.com" },
     { name: "Joko Widodo (Fleet Partner)", email: "joko@surabayaexpress.com" },
-    { name: "Agus Santoso (Independent Courier)", email: "agus@surabayamart.com" },
-    { name: "Siti Rahayu (Business Partner)", email: "siti@eastjavacourier.com" },
+    { name: "Agus Santoso (Independent Courier)", email: "agus@eastjavacourier.com" },
+    { name: "Siti Rahayu (Business Partner)", email: "siti@surabayamart.com" },
     { name: "Budi Setiawan (Driver)", email: "budi@gmail.com" },
   ];
 
