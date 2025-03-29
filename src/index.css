@@ -176,4 +176,18 @@
   .form-left-aligned .form-row {
     @apply text-left;
   }
+  
+  /* Apply left alignment to all forms by default */
+  form input,
+  form select,
+  form textarea,
+  form label,
+  form .form-group,
+  form .form-section,
+  form .form-row,
+  .form-container,
+  .form-label,
+  .form-input {
+    @apply text-left;
+  }
 }

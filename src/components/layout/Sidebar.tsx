@@ -1,9 +1,9 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Users, Truck, Package, CreditCard, 
-  Settings, BarChart, LogOut, ChevronLeft, ChevronRight
+  Settings, BarChart, LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -20,6 +20,7 @@ const Sidebar = () => {
   const isMobile = useIsMobile();
   const [activeDescription, setActiveDescription] = useState('');
   const [hoveredLink, setHoveredLink] = useState('');
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   // Close sidebar on mobile when navigating
   useEffect(() => {
@@ -27,6 +28,20 @@ const Sidebar = () => {
       // collapseSidebar();
     }
   }, [location.pathname, isMobile]);
+
+  // Setup double click handler for sidebar toggle
+  useEffect(() => {
+    const handleDoubleClick = (e: MouseEvent) => {
+      if (sidebarRef.current && sidebarRef.current.contains(e.target as Node)) {
+        toggleSidebar();
+      }
+    };
+
+    document.addEventListener('dblclick', handleDoubleClick);
+    return () => {
+      document.removeEventListener('dblclick', handleDoubleClick);
+    };
+  }, [toggleSidebar]);
 
   if (!user) return null;
 
@@ -174,21 +189,15 @@ const Sidebar = () => {
 
   return (
     <div 
+      ref={sidebarRef}
       className={cn(
         "flex flex-col h-[calc(100vh-4rem)] bg-sidebar border-r border-sidebar-border transition-all duration-300",
         collapsed ? "w-16" : "w-64",
         isMobile && !collapsed && "z-50 shadow-lg"
       )}
     >
-      <div className="flex justify-end p-2">
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={toggleSidebar}
-          className="h-8 w-8 rounded-full bg-sidebar-accent/30"
-        >
-          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-        </Button>
+      <div className="pt-5"> {/* Reduced to 20px (pt-5) spacing from navbar */}
+        {/* Removed the toggle button */}
       </div>
       
       <div className="flex flex-col h-full">
