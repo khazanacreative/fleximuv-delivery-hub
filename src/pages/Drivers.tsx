@@ -30,6 +30,20 @@ const Drivers = () => {
     offline: false,
   });
 
+  // Load drivers from localStorage on component mount
+  useEffect(() => {
+    const savedDrivers = localStorage.getItem('fleximov_drivers');
+    if (savedDrivers) {
+      try {
+        const parsedDrivers = JSON.parse(savedDrivers);
+        setDrivers(parsedDrivers);
+        setFilteredDrivers(parsedDrivers);
+      } catch (error) {
+        console.error("Error parsing saved drivers:", error);
+      }
+    }
+  }, []);
+
   const applyFilters = useCallback(() => {
     let filteredByPermission = drivers;
     if (!isAdmin) {
@@ -74,14 +88,12 @@ const Drivers = () => {
   };
 
   const handleUpdateDriver = (updatedDriver: Driver) => {
-    setDrivers(prev => 
-      prev.map(driver => driver.id === updatedDriver.id ? updatedDriver : driver)
-    );
-    
-    // Save to localStorage for persistence
     const updatedDrivers = drivers.map(driver => 
       driver.id === updatedDriver.id ? updatedDriver : driver
     );
+    setDrivers(updatedDrivers);
+    
+    // Save to localStorage for persistence
     localStorage.setItem('fleximov_drivers', JSON.stringify(updatedDrivers));
     
     toast({
@@ -146,20 +158,6 @@ const Drivers = () => {
       description: `Driver status has been set to ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
     });
   };
-
-  // Load drivers from localStorage on component mount
-  useEffect(() => {
-    const savedDrivers = localStorage.getItem('fleximov_drivers');
-    if (savedDrivers) {
-      try {
-        const parsedDrivers = JSON.parse(savedDrivers);
-        setDrivers(parsedDrivers);
-        setFilteredDrivers(parsedDrivers);
-      } catch (error) {
-        console.error("Error parsing saved drivers:", error);
-      }
-    }
-  }, []);
 
   const openWhatsApp = (phone: string) => {
     const formattedPhone = phone.replace(/\D/g, '');
