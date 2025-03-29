@@ -29,12 +29,12 @@ const LoginForm = () => {
     }
   };
 
-  // Define the demo accounts we want to show
+  // Define the demo accounts we want to show with English translations
   const demoAccounts = [
     { name: "Bambang Supratman (Admin)", email: "bambang@fleximov.com" },
-    { name: "Joko Widodo (Mitra dengan Armada)", email: "joko@surabayaexpress.com" },
-    { name: "Agus Santoso (Mitra Kurir Mandiri)", email: "agus@surabayamart.com" },
-    { name: "Siti Rahayu (Mitra Tanpa Armada)", email: "siti@eastjavacourier.com" },
+    { name: "Joko Widodo (Fleet Partner)", email: "joko@surabayaexpress.com" },
+    { name: "Agus Santoso (Independent Courier)", email: "agus@surabayamart.com" },
+    { name: "Siti Rahayu (Business Partner)", email: "siti@eastjavacourier.com" },
     { name: "Budi Setiawan (Driver)", email: "budi@gmail.com" },
   ];
 
