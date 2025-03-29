@@ -1,5 +1,4 @@
-
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus, User, Phone, MapPin, Star, MoreHorizontal, Edit, UserX, UserCheck, Filter } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -76,16 +75,8 @@ const Drivers = () => {
     }
   }, [drivers, statusFilters]);
 
-  // Update when filters change
-  const handleFilterChange = (status: string, checked: boolean) => {
-    setStatusFilters(prev => ({
-      ...prev,
-      [status]: checked
-    }));
-  };
-
-  // Apply filters when they change
-  useState(() => {
+  // Fix: Replace the incorrect useState usage with useEffect
+  useEffect(() => {
     applyFilters();
   }, [applyFilters, statusFilters]);
 
@@ -422,7 +413,6 @@ const Drivers = () => {
               Close
             </Button>
             <Button onClick={() => {
-              // Add action to contact driver here
               toast({
                 title: "WhatsApp Opened",
                 description: `Ready to message ${selectedDriver?.name}`,
