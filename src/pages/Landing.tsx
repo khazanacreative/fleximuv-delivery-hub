@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, Package, Shield, Truck, Users } from 'lucide-react';
+import { ArrowRight, Package, Shield, Truck, Users, MessageCircle, SmartphoneNfc } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Landing = () => {
@@ -31,10 +31,10 @@ const Landing = () => {
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Delivery Management <span className="text-fleximov-500">Simplified</span>
+              Simplified <span className="text-fleximov-500">UMKM</span> Delivery Management
             </h1>
             <p className="text-xl text-muted-foreground">
-              A complete delivery management platform for businesses of all sizes in Surabaya and beyond.
+              Helping small and medium enterprises manage orders and deliveries without changing your existing workflow.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/login">
@@ -64,24 +64,24 @@ const Landing = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">Why Choose Fleximov?</h2>
+            <h2 className="text-3xl font-bold">Why SMEs Choose Fleximov</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: "Multiple User Roles",
-                description: "Specialized features for admins, partners, drivers, and customers.",
-                icon: <Users className="h-10 w-10 text-fleximov-500" />
+                title: "Keep Using WhatsApp",
+                description: "Continue using WhatsApp as your primary communication tool while gaining delivery management features.",
+                icon: <MessageCircle className="h-10 w-10 text-fleximov-500" />
               },
               {
-                title: "Flexible Delivery Options",
-                description: "Support for various delivery types including pharmacy, school shuttles, and UMKM services.",
+                title: "Simple Order Management",
+                description: "Easily manage orders, assign drivers, and track deliveries without complex technical knowledge.",
+                icon: <Package className="h-10 w-10 text-fleximov-500" />
+              },
+              {
+                title: "Flexible Driver Options",
+                description: "Use your own drivers or request drivers from our network when you need extra delivery capacity.",
                 icon: <Truck className="h-10 w-10 text-fleximov-500" />
-              },
-              {
-                title: "Secure & Reliable",
-                description: "Enterprise-level security with real-time tracking and management.",
-                icon: <Shield className="h-10 w-10 text-fleximov-500" />
               }
             ].map((feature, i) => (
               <div key={i} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
@@ -94,26 +94,71 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* UMKM Benefits Section */}
       <section className="py-16 bg-fleximov-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">Trusted by Businesses in Surabaya</h2>
+            <h2 className="text-3xl font-bold">Made for UMKM Business Needs</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our platform integrates with your existing workflows to make delivery management easier.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Keep Using WhatsApp",
+                description: "Continue communicating with customers and drivers through WhatsApp while managing everything in one place."
+              },
+              {
+                title: "No Technical Expertise Required",
+                description: "Simple, intuitive interface designed for business owners, not tech experts."
+              },
+              {
+                title: "Pay-as-You-Go",
+                description: "Affordable pricing model that grows with your business needs."
+              },
+              {
+                title: "Digitize Without Disruption",
+                description: "Gradually transition to digital management while maintaining your familiar processes."
+              },
+              {
+                title: "Multi-Service Support",
+                description: "From pharmacy deliveries to school shuttles and UMKM services - we support various delivery types."
+              },
+              {
+                title: "Access to Driver Network",
+                description: "Request additional drivers during peak times without maintaining a large permanent team."
+              }
+            ].map((benefit, i) => (
+              <div key={i} className="bg-white rounded-lg p-6 shadow-sm border">
+                <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
+                <p className="text-muted-foreground text-sm">{benefit.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold">What UMKM Owners Say</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
                 name: "Bambang Suprapto",
                 role: "Owner, Apotek Sehat Jaya",
-                testimonial: "Fleximov has transformed our pharmacy delivery operations. Our customers are happier and we're saving on logistics costs."
+                testimonial: "With Fleximov, we still use WhatsApp to talk to customers, but now we have a system to track orders and deliveries. It's simple but powerful."
               },
               {
                 name: "Dewi Kartika",
                 role: "Manager, Pasar Turi Delivery",
-                testimonial: "The driver management system has made it so much easier to coordinate our fleet. We've increased our daily deliveries by 40%."
+                testimonial: "The ability to request additional drivers during busy periods has helped us scale our business without the overhead of hiring full-time staff."
               }
             ].map((testimonial, i) => (
-              <div key={i} className="bg-white border rounded-lg p-6 shadow-sm">
+              <div key={i} className="bg-fleximov-50 border rounded-lg p-6 shadow-sm">
                 <p className="italic mb-4">"{testimonial.testimonial}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-fleximov-200 flex items-center justify-center">
@@ -135,9 +180,9 @@ const Landing = () => {
       {/* CTA */}
       <section className="py-16 bg-fleximov-600 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Optimize Your Delivery Operations?</h2>
+          <h2 className="text-3xl font-bold mb-6">Ready to Simplify Your Delivery Operations?</h2>
           <p className="text-fleximov-100 max-w-2xl mx-auto mb-8">
-            Join businesses across Surabaya who are using Fleximov Delivery Hub to streamline their delivery management.
+            Join small and medium businesses who are using Fleximov Delivery Hub to manage orders and deliveries while maintaining their familiar workflows.
           </p>
           <Link to="/login">
             <Button size="lg" variant="outline" className="bg-white text-fleximov-600 hover:bg-fleximov-50">
@@ -159,7 +204,7 @@ const Landing = () => {
                 <span className="font-semibold text-white">Fleximov</span>
               </div>
               <p className="text-sm">
-                The complete delivery management platform for your business needs in Surabaya and beyond.
+                The complete delivery management platform designed for UMKM business needs, integrating with your existing workflows.
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8">

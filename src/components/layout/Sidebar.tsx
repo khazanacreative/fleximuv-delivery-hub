@@ -124,10 +124,11 @@ const Sidebar = () => {
         </div>
       </ScrollArea>
 
-      {/* User Info - Hidden from sidebar as it's moved to header */}
-      
       {/* Logout Button - Fixed at bottom */}
-      <div className="p-3 border-t border-sidebar-border mt-auto">
+      <div className={cn(
+        "border-t border-sidebar-border p-3",
+        "absolute bottom-0 left-0 right-0 bg-sidebar" // Make fixed at bottom
+      )}>
         <Button 
           variant="ghost" 
           className={cn(
