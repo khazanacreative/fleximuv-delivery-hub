@@ -14,7 +14,7 @@ const Drivers = () => {
   const { toast } = useToast();
   const { isAdmin, isFleetPartner, isIndependentCourier } = usePermissions();
   
-  // This is specifically moved before the useEffect
+  // Determine if the user can manage drivers
   const canManageDrivers = isAdmin || isFleetPartner || isIndependentCourier;
   
   const {
