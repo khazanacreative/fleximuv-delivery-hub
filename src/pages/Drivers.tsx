@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from "react";
 import { Truck, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -9,6 +10,7 @@ import { Driver } from "@/types";
 import DriversList from "@/components/drivers/DriversList";
 import DriverFilters from "@/components/drivers/DriverFilters";
 import AddDriverDialog from "@/components/drivers/AddDriverDialog";
+import EditDriverDialog from "@/components/drivers/EditDriverDialog";
 import DriverProfileDialog from "@/components/drivers/DriverProfileDialog";
 
 const Drivers = () => {
@@ -18,6 +20,8 @@ const Drivers = () => {
   const [drivers, setDrivers] = useState(mockDrivers);
   const [filteredDrivers, setFilteredDrivers] = useState(mockDrivers);
   const [addDriverOpen, setAddDriverOpen] = useState(false);
+  const [editDriverOpen, setEditDriverOpen] = useState(false);
+  const [driverToEdit, setDriverToEdit] = useState<Driver | null>(null);
   const [viewProfileOpen, setViewProfileOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
   const [statusFilters, setStatusFilters] = useState({
@@ -62,6 +66,22 @@ const Drivers = () => {
   const handleViewProfile = (driver: Driver) => {
     setSelectedDriver(driver);
     setViewProfileOpen(true);
+  };
+
+  const handleEditDriver = (driver: Driver) => {
+    setDriverToEdit(driver);
+    setEditDriverOpen(true);
+  };
+
+  const handleUpdateDriver = (updatedDriver: Driver) => {
+    setDrivers(prev => 
+      prev.map(driver => driver.id === updatedDriver.id ? updatedDriver : driver)
+    );
+    
+    toast({
+      title: "Driver Updated",
+      description: "Driver information has been successfully updated",
+    });
   };
 
   const handleAddDriver = (newDriverData: any) => {
@@ -128,7 +148,10 @@ const Drivers = () => {
     }
   };
 
-  const canAddDriver = isAdmin || isFleetPartner || isIndependentCourier;
+  // Check if the current user can add drivers
+  const canManageDrivers = isAdmin || 
+                          (user?.role === 'partner' && user?.hasDrivers === true) || 
+                          (user?.role === 'driver' && user?.partnerType === 'courier');
 
   return (
     <div className="space-y-6">
@@ -151,7 +174,7 @@ const Drivers = () => {
             onClearFilters={clearFilters}
           />
           
-          {canAddDriver && (
+          {canManageDrivers && (
             <Button
               onClick={() => setAddDriverOpen(true)}
               className="flex items-center gap-2"
@@ -168,6 +191,7 @@ const Drivers = () => {
         onViewProfile={handleViewProfile}
         onDeleteDriver={handleDeleteDriver}
         onStatusChange={handleDriverStatusChange}
+        onEditDriver={handleEditDriver}
       />
 
       <DriverProfileDialog
@@ -181,12 +205,19 @@ const Drivers = () => {
         onShareLocation={shareLocationViaWhatsApp}
       />
       
-      {canAddDriver && (
-        <AddDriverDialog
-          isOpen={addDriverOpen}
-          onOpenChange={setAddDriverOpen}
-          onAddDriver={handleAddDriver}
-          currentUser={user}
+      <AddDriverDialog
+        isOpen={addDriverOpen}
+        onOpenChange={setAddDriverOpen}
+        onAddDriver={handleAddDriver}
+        currentUser={user}
+      />
+
+      {driverToEdit && (
+        <EditDriverDialog
+          isOpen={editDriverOpen}
+          onOpenChange={setEditDriverOpen}
+          driver={driverToEdit}
+          onUpdateDriver={handleUpdateDriver}
         />
       )}
     </div>

@@ -7,13 +7,15 @@ interface DriversListProps {
   onViewProfile: (driver: Driver) => void;
   onDeleteDriver: (driverId: string) => void;
   onStatusChange: (driver: Driver, newStatus: 'available' | 'busy' | 'offline') => void;
+  onEditDriver: (driver: Driver) => void;
 }
 
 const DriversList = ({ 
   drivers, 
   onViewProfile, 
   onDeleteDriver, 
-  onStatusChange 
+  onStatusChange,
+  onEditDriver
 }: DriversListProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -24,6 +26,7 @@ const DriversList = ({
           onViewProfile={onViewProfile}
           onDeleteDriver={onDeleteDriver}
           onStatusChange={onStatusChange}
+          onEditDriver={onEditDriver}
         />
       ))}
       

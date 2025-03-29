@@ -27,13 +27,15 @@ interface DriverCardProps {
   onViewProfile: (driver: Driver) => void;
   onDeleteDriver: (driverId: string) => void;
   onStatusChange: (driver: Driver, newStatus: 'available' | 'busy' | 'offline') => void;
+  onEditDriver: (driver: Driver) => void;
 }
 
 const DriverCard = ({ 
   driver, 
   onViewProfile, 
   onDeleteDriver, 
-  onStatusChange 
+  onStatusChange,
+  onEditDriver
 }: DriverCardProps) => {
   const { toast } = useToast();
 
@@ -105,10 +107,7 @@ const DriverCard = ({
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => toast({
-              title: "Edit Driver",
-              description: "Edit driver functionality would be implemented here",
-            })}>
+            <DropdownMenuItem onClick={() => onEditDriver(driver)}>
               <Edit className="h-4 w-4 mr-2" />
               Edit Details
             </DropdownMenuItem>
