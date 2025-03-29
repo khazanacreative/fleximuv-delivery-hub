@@ -30,6 +30,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { usePermissions } from "@/hooks/use-permissions";
+import PartnerEditDialog from "@/components/partners/PartnerEditDialog";
 
 // Sample partner data
 const initialPartners = [
@@ -68,6 +70,8 @@ const initialPartners = [
 const Partners = () => {
   const [partners, setPartners] = useState(initialPartners);
   const [open, setOpen] = useState(false);
+  const [editPartnerOpen, setEditPartnerOpen] = useState(false);
+  const [selectedPartner, setSelectedPartner] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -76,6 +80,7 @@ const Partners = () => {
   });
   
   const { toast } = useToast();
+  const { canEditPartnerDetails } = usePermissions();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -103,6 +108,28 @@ const Partners = () => {
     toast({
       title: "Partner added",
       description: `${newPartner.name} has been successfully added as a partner.`,
+    });
+  };
+
+  const handleEditPartner = (partner) => {
+    setSelectedPartner(partner);
+    setEditPartnerOpen(true);
+  };
+
+  const handleUpdatePartner = (updatedPartner) => {
+    const updatedPartners = partners.map(p => 
+      p.id === updatedPartner.id ? updatedPartner : p
+    );
+    setPartners(updatedPartners);
+  };
+
+  const handleDeletePartner = (partnerId) => {
+    const updatedPartners = partners.filter(p => p.id !== partnerId);
+    setPartners(updatedPartners);
+    
+    toast({
+      title: "Partner deleted",
+      description: "The partner has been removed from your network.",
     });
   };
 
@@ -246,7 +273,7 @@ const Partners = () => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleEditPartner(partner)}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit Details
                   </DropdownMenuItem>
@@ -254,7 +281,10 @@ const Partners = () => {
                     <Users className="h-4 w-4 mr-2" />
                     Manage Drivers
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">
+                  <DropdownMenuItem 
+                    className="text-destructive"
+                    onClick={() => handleDeletePartner(partner.id)}
+                  >
                     <Trash className="h-4 w-4 mr-2" />
                     Delete Partner
                   </DropdownMenuItem>
@@ -264,6 +294,13 @@ const Partners = () => {
           </Card>
         ))}
       </div>
+
+      <PartnerEditDialog 
+        isOpen={editPartnerOpen}
+        onOpenChange={setEditPartnerOpen}
+        partner={selectedPartner}
+        onUpdatePartner={handleUpdatePartner}
+      />
     </div>
   );
 };

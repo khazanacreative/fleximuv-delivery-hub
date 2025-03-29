@@ -27,6 +27,8 @@ const Orders = () => {
   const [mapOpen, setMapOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [createOrderOpen, setCreateOrderOpen] = useState(false);
+  const [editOrderOpen, setEditOrderOpen] = useState(false);
+  const [orderToEdit, setOrderToEdit] = useState<Order | null>(null);
   const [statusFilters, setStatusFilters] = useState({
     pending: false,
     accepted: false,
@@ -180,6 +182,38 @@ const Orders = () => {
     applyFilters();
   };
 
+  const handleEditOrder = (order: Order) => {
+    if (order.status !== 'pending') {
+      toast({
+        title: "Cannot Edit Order",
+        description: "Only pending orders can be edited.",
+      });
+      return;
+    }
+    
+    setOrderToEdit({...order});
+    setEditOrderOpen(true);
+  };
+
+  const handleUpdateOrder = (updatedOrder: Order) => {
+    const updatedOrders = orders.map(o => 
+      o.id === updatedOrder.id ? updatedOrder : o
+    );
+    
+    setOrders(updatedOrders);
+    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
+    
+    toast({
+      title: "Order Updated",
+      description: `Order #${updatedOrder.orderNumber || updatedOrder.id.substring(0, 6)} has been updated successfully.`,
+    });
+    
+    // Close dialog and reset state
+    setEditOrderOpen(false);
+    setOrderToEdit(null);
+    applyFilters();
+  };
+
   return (
     <div className="space-y-6">
       {isDriver && !isIndependentCourier ? (
@@ -246,6 +280,7 @@ const Orders = () => {
         viewOrderDetails={viewOrderDetails}
         setViewOrderDetails={setViewOrderDetails}
         handleShareLocation={handleShareLocation}
+        handleEditOrder={handleEditOrder}
       />
 
       <LocationMap 
@@ -259,6 +294,16 @@ const Orders = () => {
         isOpen={createOrderOpen}
         onOpenChange={setCreateOrderOpen}
         addOrder={handleAddOrder}
+        orderToEdit={null}
+        updateOrder={null}
+      />
+
+      <OrderForm 
+        isOpen={editOrderOpen}
+        onOpenChange={setEditOrderOpen}
+        addOrder={handleAddOrder}
+        orderToEdit={orderToEdit}
+        updateOrder={handleUpdateOrder}
       />
     </div>
   );

@@ -32,9 +32,11 @@ interface OrderFormProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   addOrder: (order: Order) => void;
+  orderToEdit: Order | null;
+  updateOrder: ((order: Order) => void) | null;
 }
 
-const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
+const OrderForm = ({ isOpen, onOpenChange, addOrder, orderToEdit, updateOrder }: OrderFormProps) => {
   const { user } = useAuth();
   const { isFleetPartner, isIndependentCourier, isBusinessPartner } = usePermissions();
   const { toast } = useToast();
@@ -56,6 +58,29 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
     deliveryNotes: '',
     paymentMethod: 'cash',
   });
+  
+  const isEditMode = Boolean(orderToEdit && updateOrder);
+
+  // Initialize form with order data if in edit mode
+  useEffect(() => {
+    if (isEditMode && orderToEdit) {
+      setFormData({
+        customerName: orderToEdit.customerName || orderToEdit.customer || '',
+        customerPhone: orderToEdit.customerPhone || '',
+        customerEmail: orderToEdit.customerEmail || '',
+        pickupAddress: orderToEdit.pickupAddress || '',
+        deliveryAddress: orderToEdit.deliveryAddress || '',
+        packageDetails: orderToEdit.packageDetails || '',
+        deliveryNotes: orderToEdit.deliveryNotes || orderToEdit.notes || '',
+        paymentMethod: orderToEdit.paymentMethod || 'cash',
+      });
+      setIsGuestOrder(orderToEdit.isGuestOrder || false);
+      setSelectedDriverId(orderToEdit.driverId || '');
+      setSelectedPartnerId(orderToEdit.partnerId || '');
+    } else {
+      resetForm();
+    }
+  }, [orderToEdit, isEditMode, isOpen]);
 
   // Load drivers from localStorage
   useEffect(() => {
@@ -89,7 +114,7 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
         console.error("Error loading available partners:", error);
       }
     }
-  }, [isFleetPartner, isIndependentCourier, isBusinessPartner, user]);
+  }, [isFleetPartner, isIndependentCourier, isBusinessPartner, user, isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -135,66 +160,97 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const orderNumber = generateOrderNumber();
-      const trackingCode = generateTrackingCode();
-      
       // Use selected partner's ID if Business Partner has selected a partner
       const effectivePartnerId = isBusinessPartner && selectedPartnerId 
         ? selectedPartnerId 
         : (user?.role === 'partner' ? user?.id : '');
       
-      const newOrder: Order = {
-        id: `order-${Date.now()}`,
-        orderNumber: orderNumber,
-        customerId: isGuestOrder ? '' : user?.id || '',
-        customerName: formData.customerName,
-        customerPhone: formData.customerPhone,
-        customerEmail: formData.customerEmail,
-        partnerId: effectivePartnerId,
-        driverId: selectedDriverId,
-        status: selectedDriverId ? 'assigned' : 'pending',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        pickupAddress: formData.pickupAddress,
-        deliveryAddress: formData.deliveryAddress,
-        packageDetails: formData.packageDetails,
-        deliveryNotes: formData.deliveryNotes,
-        paymentMethod: formData.paymentMethod,
-        paymentStatus: 'pending',
-        amount: Math.floor(Math.random() * 50) + 10,
-        serviceType: formData.packageDetails || 'General Delivery',
-        trackingCode: trackingCode,
-        isGuestOrder: isGuestOrder,
-      };
-      
-      addOrder(newOrder);
-      
-      // Generate tracking link for guest orders
-      if (isGuestOrder) {
-        const baseUrl = window.location.origin;
-        const link = `${baseUrl}/track/${trackingCode}`;
-        setTrackingLink(link);
-        setShowTrackingLink(true);
-      } else {
-        onOpenChange(false);
-      }
-      
-      toast({
-        title: "Order Created",
-        description: `Order ${newOrder.orderNumber} has been created successfully.`,
-      });
-
-      // Reset form only if not showing tracking link
-      if (!isGuestOrder) {
+      if (isEditMode && orderToEdit && updateOrder) {
+        // Update existing order
+        const updatedOrder: Order = {
+          ...orderToEdit,
+          customerName: formData.customerName,
+          customerPhone: formData.customerPhone,
+          customerEmail: formData.customerEmail,
+          partnerId: effectivePartnerId,
+          driverId: selectedDriverId,
+          status: selectedDriverId && orderToEdit.status === 'pending' ? 'assigned' : orderToEdit.status,
+          updatedAt: new Date(),
+          pickupAddress: formData.pickupAddress,
+          deliveryAddress: formData.deliveryAddress,
+          packageDetails: formData.packageDetails,
+          deliveryNotes: formData.deliveryNotes,
+          paymentMethod: formData.paymentMethod,
+          isGuestOrder: isGuestOrder,
+        };
+        
+        updateOrder(updatedOrder);
+        toast({
+          title: "Order Updated",
+          description: `Order ${updatedOrder.orderNumber || updatedOrder.id.substring(0, 6)} has been updated successfully.`,
+        });
+        
         resetForm();
+        onOpenChange(false);
+      } else {
+        // Create new order
+        const orderNumber = generateOrderNumber();
+        const trackingCode = generateTrackingCode();
+        
+        const newOrder: Order = {
+          id: `order-${Date.now()}`,
+          orderNumber: orderNumber,
+          customerId: isGuestOrder ? '' : user?.id || '',
+          customerName: formData.customerName,
+          customerPhone: formData.customerPhone,
+          customerEmail: formData.customerEmail,
+          partnerId: effectivePartnerId,
+          driverId: selectedDriverId,
+          status: selectedDriverId ? 'assigned' : 'pending',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          pickupAddress: formData.pickupAddress,
+          deliveryAddress: formData.deliveryAddress,
+          packageDetails: formData.packageDetails,
+          deliveryNotes: formData.deliveryNotes,
+          paymentMethod: formData.paymentMethod,
+          paymentStatus: 'pending',
+          amount: Math.floor(Math.random() * 50) + 10,
+          serviceType: formData.packageDetails || 'General Delivery',
+          trackingCode: trackingCode,
+          isGuestOrder: isGuestOrder,
+        };
+        
+        addOrder(newOrder);
+        
+        // Generate tracking link for guest orders
+        if (isGuestOrder) {
+          const baseUrl = window.location.origin;
+          const link = `${baseUrl}/track/${trackingCode}`;
+          setTrackingLink(link);
+          setShowTrackingLink(true);
+        } else {
+          onOpenChange(false);
+        }
+        
+        toast({
+          title: "Order Created",
+          description: `Order ${newOrder.orderNumber} has been created successfully.`,
+        });
+
+        // Reset form only if not showing tracking link
+        if (!isGuestOrder) {
+          resetForm();
+        }
       }
     } catch (error) {
-      console.error('Error creating order:', error);
+      console.error('Error processing order:', error);
       toast({
         title: "Error",
-        description: "Failed to create order. Please try again.",
+        description: "Failed to process order. Please try again.",
         variant: "destructive"
       });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -242,22 +298,24 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
         {!showTrackingLink ? (
           <>
             <DialogHeader>
-              <DialogTitle>Create New Order</DialogTitle>
+              <DialogTitle>{isEditMode ? "Edit Order" : "Create New Order"}</DialogTitle>
               <DialogDescription>
-                Fill out the form below to create a new delivery order
+                {isEditMode ? "Update the order details below" : "Fill out the form below to create a new delivery order"}
               </DialogDescription>
             </DialogHeader>
             <ScrollArea className="max-h-[60vh] pr-4">
               <form onSubmit={handleSubmit}>
                 <div className="grid gap-4 py-4">
-                  <div className="flex items-center space-x-2">
-                    <Switch 
-                      id="guest-mode"
-                      checked={isGuestOrder}
-                      onCheckedChange={setIsGuestOrder}
-                    />
-                    <Label htmlFor="guest-mode">Create order for guest user</Label>
-                  </div>
+                  {!isEditMode && (
+                    <div className="flex items-center space-x-2">
+                      <Switch 
+                        id="guest-mode"
+                        checked={isGuestOrder}
+                        onCheckedChange={setIsGuestOrder}
+                      />
+                      <Label htmlFor="guest-mode">Create order for guest user</Label>
+                    </div>
+                  )}
                   
                   <div className="grid gap-2">
                     <Label htmlFor="customerName">Customer Name</Label>
@@ -283,7 +341,7 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
                     />
                   </div>
                   
-                  {isGuestOrder && (
+                  {(isGuestOrder || orderToEdit?.isGuestOrder) && (
                     <div className="grid gap-2">
                       <Label htmlFor="customerEmail">Customer Email (optional)</Label>
                       <Input
@@ -414,7 +472,7 @@ const OrderForm = ({ isOpen, onOpenChange, addOrder }: OrderFormProps) => {
                     Cancel
                   </Button>
                   <Button type="submit" disabled={isLoading}>
-                    {isLoading ? "Creating..." : "Create Order"}
+                    {isLoading ? (isEditMode ? "Updating..." : "Creating...") : (isEditMode ? "Update Order" : "Create Order")}
                   </Button>
                 </DialogFooter>
               </form>

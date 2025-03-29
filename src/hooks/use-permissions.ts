@@ -40,5 +40,16 @@ export const usePermissions = () => {
     canSeeIndependentCouriers: user?.role === 'admin' || 
                                (user?.role === 'partner' && user?.partnerType === 'business') ||
                                (user?.role === 'partner' && user?.partnerType === 'fleet'),
+                               
+    // Check if user can edit partner details (admin only)
+    canEditPartnerDetails: user?.role === 'admin',
+    
+    // Check if user can view partner details (admin, partner themselves)
+    canViewPartnerDetails: user?.role === 'admin' || user?.role === 'partner',
+    
+    // Check if user can edit orders (admin, partner who created the order, or assigned driver)
+    canEditOrders: user?.role === 'admin' || 
+                   user?.role === 'partner' ||
+                   (user?.role === 'driver' && user?.canEditOrders === true),
   };
 };

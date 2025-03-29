@@ -13,17 +13,20 @@ import { Copy, Share2 } from "lucide-react";
 import { Order } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface OrderDetailsProps {
   viewOrderDetails: Order | null;
   setViewOrderDetails: (order: Order | null) => void;
   handleShareLocation: (order: Order) => void;
+  handleEditOrder?: (order: Order) => void;
 }
 
 const OrderDetails = ({
   viewOrderDetails,
   setViewOrderDetails,
   handleShareLocation,
+  handleEditOrder,
 }: OrderDetailsProps) => {
   const { toast } = useToast();
   
@@ -77,107 +80,126 @@ const OrderDetails = ({
     });
   };
 
+  const canEditOrder = viewOrderDetails.status === 'pending' && handleEditOrder;
+
   return (
     <Dialog 
       open={viewOrderDetails !== null} 
-      onOpenChange={(open) => !open && setViewOrderDetails(null)}
+      onOpenChange={(open) => {
+        if (!open) {
+          // Use setTimeout to ensure state updates don't conflict
+          setTimeout(() => {
+            setViewOrderDetails(null);
+          }, 100);
+        }
+      }}
     >
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[85vh]">
         <DialogHeader>
           <DialogTitle>Order Details</DialogTitle>
           <DialogDescription>
             Complete information about this order
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <p className="text-sm text-muted-foreground">Order ID</p>
-              <p className="font-medium">#{viewOrderDetails.orderNumber || viewOrderDetails.id.substring(0, 6)}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Status</p>
-              <Badge className={getStatusColor(viewOrderDetails.status)}>
-                {formatStatus(viewOrderDetails.status)}
-              </Badge>
-            </div>
-          </div>
-          
-          <div>
-            <p className="text-sm text-muted-foreground">Customer</p>
-            <p className="font-medium">{viewOrderDetails.customer || viewOrderDetails.customerName}</p>
-          </div>
-          
-          {viewOrderDetails.customerPhone && (
-            <div>
-              <p className="text-sm text-muted-foreground">Phone</p>
-              <p className="font-medium">{viewOrderDetails.customerPhone}</p>
-            </div>
-          )}
-          
-          {viewOrderDetails.isGuestOrder && (
-            <div>
-              <p className="text-sm text-muted-foreground font-medium">Guest Order</p>
-            </div>
-          )}
-          
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <p className="text-sm text-muted-foreground">Created Date</p>
-              <p className="font-medium">{formatDate(viewOrderDetails.date || viewOrderDetails.createdAt)}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Estimated Delivery</p>
-              <p className="font-medium">{formatDate(viewOrderDetails.scheduledFor || new Date(new Date(viewOrderDetails.date || viewOrderDetails.createdAt).getTime() + 3600000))}</p>
-            </div>
-          </div>
-          
-          <div>
-            <p className="text-sm text-muted-foreground">Items</p>
-            <p className="font-medium">{viewOrderDetails.items ? viewOrderDetails.items.join(", ") : (viewOrderDetails.packageDetails || viewOrderDetails.serviceType)}</p>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <p className="text-sm text-muted-foreground">Pickup Location</p>
-              <p className="font-medium">{viewOrderDetails.pickupAddress}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Delivery Location</p>
-              <p className="font-medium">{viewOrderDetails.deliveryAddress}</p>
-            </div>
-          </div>
-          
-          <div>
-            <p className="text-sm text-muted-foreground">Driver</p>
-            <p className="font-medium">{viewOrderDetails.driver || (viewOrderDetails.driverId ? `Driver #${viewOrderDetails.driverId}` : "Unassigned")}</p>
-          </div>
-
-          <div>
-            <p className="text-sm text-muted-foreground">Notes</p>
-            <p className="font-medium">{viewOrderDetails.notes || viewOrderDetails.deliveryNotes || "No special instructions"}</p>
-          </div>
-          
-          {viewOrderDetails.trackingCode && (
-            <div className="pt-2">
-              <p className="text-sm text-muted-foreground mb-2">Tracking Link</p>
-              <div className="flex items-center space-x-2">
-                <Input 
-                  value={getTrackingLink()} 
-                  readOnly 
-                  className="text-xs"
-                />
-                <Button size="icon" variant="outline" onClick={handleCopyLink}>
-                  <Copy className="h-4 w-4" />
-                </Button>
+        <ScrollArea className="max-h-[60vh] pr-4">
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <p className="text-sm text-muted-foreground">Order ID</p>
+                <p className="font-medium">#{viewOrderDetails.orderNumber || viewOrderDetails.id.substring(0, 6)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Status</p>
+                <Badge className={getStatusColor(viewOrderDetails.status)}>
+                  {formatStatus(viewOrderDetails.status)}
+                </Badge>
               </div>
             </div>
-          )}
-        </div>
-        <DialogFooter>
+            
+            <div>
+              <p className="text-sm text-muted-foreground">Customer</p>
+              <p className="font-medium">{viewOrderDetails.customer || viewOrderDetails.customerName}</p>
+            </div>
+            
+            {viewOrderDetails.customerPhone && (
+              <div>
+                <p className="text-sm text-muted-foreground">Phone</p>
+                <p className="font-medium">{viewOrderDetails.customerPhone}</p>
+              </div>
+            )}
+            
+            {viewOrderDetails.isGuestOrder && (
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Guest Order</p>
+              </div>
+            )}
+            
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <p className="text-sm text-muted-foreground">Created Date</p>
+                <p className="font-medium">{formatDate(viewOrderDetails.date || viewOrderDetails.createdAt)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Estimated Delivery</p>
+                <p className="font-medium">{formatDate(viewOrderDetails.scheduledFor || new Date(new Date(viewOrderDetails.date || viewOrderDetails.createdAt).getTime() + 3600000))}</p>
+              </div>
+            </div>
+            
+            <div>
+              <p className="text-sm text-muted-foreground">Items</p>
+              <p className="font-medium">{viewOrderDetails.items ? viewOrderDetails.items.join(", ") : (viewOrderDetails.packageDetails || viewOrderDetails.serviceType)}</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <p className="text-sm text-muted-foreground">Pickup Location</p>
+                <p className="font-medium">{viewOrderDetails.pickupAddress}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Delivery Location</p>
+                <p className="font-medium">{viewOrderDetails.deliveryAddress}</p>
+              </div>
+            </div>
+            
+            <div>
+              <p className="text-sm text-muted-foreground">Driver</p>
+              <p className="font-medium">{viewOrderDetails.driver || (viewOrderDetails.driverId ? `Driver #${viewOrderDetails.driverId}` : "Unassigned")}</p>
+            </div>
+
+            <div>
+              <p className="text-sm text-muted-foreground">Notes</p>
+              <p className="font-medium">{viewOrderDetails.notes || viewOrderDetails.deliveryNotes || "No special instructions"}</p>
+            </div>
+            
+            {viewOrderDetails.trackingCode && (
+              <div className="pt-2">
+                <p className="text-sm text-muted-foreground mb-2">Tracking Link</p>
+                <div className="flex items-center space-x-2">
+                  <Input 
+                    value={getTrackingLink()} 
+                    readOnly 
+                    className="text-xs"
+                  />
+                  <Button size="icon" variant="outline" onClick={handleCopyLink}>
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+        <DialogFooter className="mt-4 gap-2">
           <Button variant="outline" onClick={() => setViewOrderDetails(null)}>
             Close
           </Button>
+          {canEditOrder && (
+            <Button variant="secondary" onClick={() => {
+              if (handleEditOrder) handleEditOrder(viewOrderDetails);
+              setViewOrderDetails(null);
+            }}>
+              Edit Order
+            </Button>
+          )}
           <Button onClick={() => {
             handleShareLocation(viewOrderDetails);
             setViewOrderDetails(null);
