@@ -54,11 +54,12 @@ const createAdminUser = async () => {
     const userId = authUser?.user?.id;
     
     if (!userId) {
-      console.log('No user ID available, attempting to get existing admin');
+      console.log('No user ID available, attempting to find existing admin');
+      // Check profiles table for admin instead of users table
       const { data: existingAdmin } = await supabase
-        .from('users')
+        .from('profiles')
         .select('id')
-        .eq('email', 'admin@fleximov.com')
+        .eq('role', 'admin')
         .maybeSingle();
         
       if (!existingAdmin?.id) {
@@ -75,7 +76,6 @@ const createAdminUser = async () => {
         full_name: 'Bambang Supratman',
         role: 'admin',
         status: 'active',
-        email: 'admin@fleximov.com',
       });
       
     if (profileError) {
