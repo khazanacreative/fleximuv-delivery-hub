@@ -20,7 +20,7 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
       <div className="flex flex-1 pt-16"> {/* Header height space */}
         <Sidebar />
         <div className={cn(
-          "flex-1 flex flex-col min-h-screen",
+          "flex-1 flex flex-col min-h-screen transition-all duration-300",
           collapsed ? "ml-16" : "ml-64"  /* Account for fixed sidebar width */
         )}>
           <main className="flex-1 overflow-auto">

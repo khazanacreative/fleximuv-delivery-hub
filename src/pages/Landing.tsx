@@ -29,7 +29,7 @@ const Landing = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - Updated with the provided image */}
       <section className="flex-grow flex items-center bg-gradient-to-b from-gray-50 to-gray-100 py-16">
         <div className="container mx-auto px-4 flex flex-col-reverse md:flex-row items-center justify-between gap-8">
           <div className="md:w-1/2 space-y-6">
@@ -51,8 +51,8 @@ const Landing = () => {
           </div>
           <div className="md:w-1/2">
             <img 
-              src="/placeholder.svg" 
-              alt="Delivery Management" 
+              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" 
+              alt="Delivery Management Platform" 
               className="w-full max-w-lg mx-auto rounded-lg shadow-xl"
             />
           </div>
