@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from "sonner";
+import { migrateData } from '@/utils/migrate-data';
 
 const InitDbButton = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,26 +12,20 @@ const InitDbButton = () => {
     setIsLoading(true);
     
     try {
-      // Call the RPC function to initialize demo users
-      const { data, error } = await supabase.rpc('initialize_demo_users');
+      // Use the migrateData utility instead of direct RPC call
+      const result = await migrateData();
       
-      if (error) {
-        throw new Error(error.message);
-      }
-      
-      console.log('Initialize database response:', data);
-      
-      if (data) {
+      if (result.success) {
         toast.success('Demo accounts initialized', {
           description: 'Test accounts are now ready to use. You can now login with them.',
           duration: 5000,
         });
       } else {
         toast.error('Failed to initialize demo accounts', {
-          description: 'An unknown error occurred',
+          description: result.message || 'An unknown error occurred',
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error initializing database:', error);
       toast.error('Failed to initialize demo accounts', {
         description: error.message || 'An unknown error occurred',
