@@ -12,8 +12,8 @@ const InitDbButton = () => {
     setIsLoading(true);
     
     try {
-      // Call the edge function to initialize demo users
-      const { data, error } = await supabase.functions.invoke('initialize-demo-users');
+      // Call the RPC function to initialize demo users
+      const { data, error } = await supabase.rpc('initialize_demo_users');
       
       if (error) {
         throw new Error(error.message);
@@ -21,14 +21,14 @@ const InitDbButton = () => {
       
       console.log('Initialize database response:', data);
       
-      if (data.success) {
+      if (data) {
         toast.success('Demo accounts initialized', {
           description: 'Test accounts are now ready to use. You can now login with them.',
           duration: 5000,
         });
       } else {
         toast.error('Failed to initialize demo accounts', {
-          description: data.message || 'An unknown error occurred',
+          description: 'An unknown error occurred',
         });
       }
     } catch (error) {
@@ -45,8 +45,8 @@ const InitDbButton = () => {
     <Button
       onClick={initializeDatabase}
       disabled={isLoading}
-      className="mt-8"
       variant="outline"
+      className="h-10 flex items-center px-6 py-2.5"
     >
       {isLoading ? (
         <>
