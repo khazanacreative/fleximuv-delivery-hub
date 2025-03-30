@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, Package, Shield, Truck, Users, MessageCircle, SmartphoneNfc } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -40,10 +41,10 @@ const Landing = () => {
               Streamline your delivery operations with our comprehensive platform designed for businesses, delivery partners, and drivers.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+              <Link to="/register" className="bg-fleximov-500 hover:bg-fleximov-600 text-white px-6 py-2.5 rounded-lg font-medium transition-colors text-sm h-10 flex items-center">
                 Get Started
               </Link>
-              <Link to="/login" className="border border-fleximov-500 text-fleximov-500 hover:bg-fleximov-50 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+              <Link to="/login" className="border border-fleximov-500 text-fleximov-500 hover:bg-fleximov-50 px-6 py-2.5 rounded-lg font-medium transition-colors text-sm h-10 flex items-center">
                 Login
               </Link>
               <InitDbButton />
@@ -51,7 +52,7 @@ const Landing = () => {
           </div>
           <div className="md:w-1/2">
             <img 
-              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" 
+              src="https://cdn.pixabay.com/photo/2022/02/25/04/11/traffic-7033509_1280.jpg" 
               alt="Delivery Management Platform" 
               className="w-full max-w-lg mx-auto rounded-lg shadow-xl"
             />
