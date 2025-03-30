@@ -13,22 +13,25 @@ interface LayoutContentProps {
 }
 
 const LayoutContent = ({ children }: LayoutContentProps) => {
-  const { collapsed } = useSidebar();
+  const { collapsed, expandSidebar } = useSidebar();
   const { user } = useAuth();
   
-  // Ensure sidebar is always visible for authenticated users
+  // Force sidebar to be visible when first rendering the dashboard
   useEffect(() => {
-    // Verify the sidebar container element is properly rendered
-    const sidebarElement = document.querySelector('.sidebar-container');
-    if (!sidebarElement && user) {
-      console.log('Sidebar element not found but user is authenticated, forcing re-render');
-      // Force a re-render by toggling a class on the body
-      document.body.classList.add('force-sidebar-visible');
-      setTimeout(() => {
-        document.body.classList.remove('force-sidebar-visible');
-      }, 100);
+    if (user) {
+      // Add a small delay to ensure DOM is ready
+      const timer = setTimeout(() => {
+        const sidebarElement = document.querySelector('.sidebar-container');
+        if (!sidebarElement) {
+          console.log('Sidebar element not found, forcing sidebar to be visible');
+          // Force the sidebar to appear by triggering an expand
+          expandSidebar();
+        }
+      }, 200);
+      
+      return () => clearTimeout(timer);
     }
-  }, [user]);
+  }, [user, expandSidebar]);
   
   if (!user) {
     return <PageLoader />;

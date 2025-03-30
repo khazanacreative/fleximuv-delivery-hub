@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -20,6 +21,13 @@ const Sidebar = () => {
   const [activeDescription, setActiveDescription] = useState('');
   const [hoveredLink, setHoveredLink] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // Force sidebar to be rendered with appropriate className
+  useEffect(() => {
+    if (sidebarRef.current) {
+      sidebarRef.current.classList.add('sidebar-container');
+    }
+  }, []);
 
   // Close sidebar on mobile when navigating
   useEffect(() => {
@@ -190,7 +198,7 @@ const Sidebar = () => {
     <div 
       ref={sidebarRef}
       className={cn(
-        "flex flex-col h-[calc(100vh-4rem)] bg-sidebar border-r border-sidebar-border fixed top-16 left-0 transition-all duration-300",
+        "sidebar-container flex flex-col h-[calc(100vh-4rem)] bg-sidebar border-r border-sidebar-border fixed top-16 left-0 transition-all duration-300 z-40",
         collapsed ? "w-16" : "w-64",
         isMobile && !collapsed && "z-50 shadow-lg"
       )}

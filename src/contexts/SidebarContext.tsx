@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -18,15 +17,11 @@ export const SidebarProvider = ({ children }: { children: React.ReactNode }) => 
   const [collapsed, setCollapsed] = useState(() => {
     // Get initial state from localStorage if available
     const savedState = localStorage.getItem(SIDEBAR_STATE_KEY);
+    // On mobile devices, default to collapsed
+    if (isMobile) return true;
+    // Otherwise use saved state or default to expanded (false)
     return savedState ? JSON.parse(savedState) : false;
   });
-
-  // Auto-collapse on mobile
-  useEffect(() => {
-    if (isMobile) {
-      setCollapsed(true);
-    }
-  }, [isMobile]);
 
   // Save to localStorage when state changes
   useEffect(() => {

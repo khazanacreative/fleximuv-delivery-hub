@@ -6,7 +6,7 @@ export const migrateData = async () => {
     console.log('Calling database function to initialize demo users');
     
     // Using explicit type annotation to fix the infinite type instantiation error
-    const { data, error } = await supabase.rpc('initialize_demo_users') as {
+    const { data, error } = await supabase.rpc('initialize_demo_users') as unknown as {
       data: any;
       error: any;
     };
@@ -23,7 +23,7 @@ export const migrateData = async () => {
       .from('profiles')
       .select('*')
       .eq('email', 'admin@fleximov.com')
-      .maybeSingle() as { data: any; error: any };
+      .maybeSingle() as unknown as { data: any; error: any };
       
     if (adminError) {
       console.error('Error checking admin user:', adminError);
@@ -48,7 +48,7 @@ const createAdminUser = async () => {
       email: 'admin@fleximov.com',
       password: 'password123',
       email_confirm: true,
-    }) as { data: any; error: any };
+    }) as unknown as { data: any; error: any };
     
     if (authError && authError.message !== 'User already registered') {
       console.error('Error creating admin auth user:', authError);
@@ -64,7 +64,7 @@ const createAdminUser = async () => {
         .from('profiles')
         .select('id')
         .eq('role', 'admin')
-        .maybeSingle() as { data: any; error: any };
+        .maybeSingle() as unknown as { data: any; error: any };
         
       if (!existingAdmin?.id) {
         console.error('Could not find or create admin user');
@@ -80,7 +80,7 @@ const createAdminUser = async () => {
         full_name: 'Bambang Supratman',
         role: 'admin',
         status: 'active',
-      }) as { data: any; error: any };
+      }) as unknown as { data: any; error: any };
       
     if (profileError) {
       console.error('Error creating admin profile:', profileError);
