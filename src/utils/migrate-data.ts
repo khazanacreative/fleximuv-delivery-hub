@@ -4,8 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 export const migrateData = async () => {
   try {
     console.log('Calling database function to initialize demo users');
-    // Using proper type annotation for the RPC function
-    const { data, error } = await supabase.rpc('initialize_demo_users');
+    // Using explicit type annotation to fix the infinite type instantiation error
+    const { data, error } = await supabase.rpc('initialize_demo_users') as {
+      data: any;
+      error: any;
+    };
     
     if (error) {
       console.error('Error initializing demo users:', error);
