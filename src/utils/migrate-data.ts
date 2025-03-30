@@ -22,7 +22,7 @@ export const migrateData = async () => {
       .from('profiles')
       .select('*')
       .eq('email', 'admin@fleximov.com')
-      .maybeSingle();
+      .maybeSingle() as { data: any; error: any };
       
     if (adminError) {
       console.error('Error checking admin user:', adminError);
@@ -47,7 +47,7 @@ const createAdminUser = async () => {
       email: 'admin@fleximov.com',
       password: 'password123',
       email_confirm: true,
-    });
+    }) as { data: any; error: any };
     
     if (authError && authError.message !== 'User already registered') {
       console.error('Error creating admin auth user:', authError);
@@ -63,7 +63,7 @@ const createAdminUser = async () => {
         .from('profiles')
         .select('id')
         .eq('role', 'admin')
-        .maybeSingle();
+        .maybeSingle() as { data: any; error: any };
         
       if (!existingAdmin?.id) {
         console.error('Could not find or create admin user');
@@ -79,7 +79,7 @@ const createAdminUser = async () => {
         full_name: 'Bambang Supratman',
         role: 'admin',
         status: 'active',
-      });
+      }) as { data: any; error: any };
       
     if (profileError) {
       console.error('Error creating admin profile:', profileError);
