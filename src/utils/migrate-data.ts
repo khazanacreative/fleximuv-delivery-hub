@@ -5,10 +5,9 @@ export const migrateData = async () => {
   try {
     console.log('Calling database function to initialize demo users');
     
-    // Explicitly type the response to avoid deep type instantiation
-    const response = await supabase.rpc('initialize_demo_users');
-    const data = response.data;
-    const error = response.error;
+    // Cast to any to avoid deep type instantiation issues
+    const result: any = await supabase.rpc('initialize_demo_users');
+    const { data, error } = result;
     
     if (error) {
       console.error('Error initializing demo users:', error);
@@ -18,15 +17,16 @@ export const migrateData = async () => {
     console.log('Demo users initialized successfully:', data);
     
     // Let's make sure the admin user exists by explicitly checking
-    const adminResponse = await supabase
+    // Again using any type to prevent excessive type recursion
+    const adminResult: any = await supabase
       .from('profiles')
       .select('*')
       .eq('email', 'admin@fleximov.com')
       .maybeSingle();
       
-    if (adminResponse.error) {
-      console.error('Error checking admin user:', adminResponse.error);
-    } else if (!adminResponse.data) {
+    if (adminResult.error) {
+      console.error('Error checking admin user:', adminResult.error);
+    } else if (!adminResult.data) {
       console.log('Admin user not found, creating explicitly');
       // Try to create admin user explicitly if missing
       await createAdminUser();
@@ -43,31 +43,31 @@ export const migrateData = async () => {
 const createAdminUser = async () => {
   try {
     // First attempt to create the auth user
-    const authResponse = await supabase.auth.admin.createUser({
+    const authResult: any = await supabase.auth.admin.createUser({
       email: 'admin@fleximov.com',
       password: 'password123',
       email_confirm: true,
     });
     
-    const userId = authResponse.data?.user?.id;
+    const userId = authResult.data?.user?.id;
     
     if (!userId) {
       console.log('No user ID available, attempting to find existing admin');
       // Check profiles table for admin instead of users table
-      const existingAdminResponse = await supabase
+      const existingAdminResult: any = await supabase
         .from('profiles')
         .select('id')
         .eq('role', 'admin')
         .maybeSingle();
         
-      if (!existingAdminResponse.data?.id) {
+      if (!existingAdminResult.data?.id) {
         console.error('Could not find or create admin user');
         return;
       }
     }
     
     // Ensure profile exists with admin role
-    const profileResponse = await supabase
+    const profileResult: any = await supabase
       .from('profiles')
       .upsert({
         id: userId,
@@ -76,8 +76,8 @@ const createAdminUser = async () => {
         status: 'active',
       });
       
-    if (profileResponse.error) {
-      console.error('Error creating admin profile:', profileResponse.error);
+    if (profileResult.error) {
+      console.error('Error creating admin profile:', profileResult.error);
     }
     
   } catch (error) {
