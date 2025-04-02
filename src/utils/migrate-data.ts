@@ -18,11 +18,14 @@ export const migrateData = async () => {
     console.log('Demo users initialized successfully:', data);
     
     // Let's make sure the admin user exists by explicitly checking
-    const adminResult = await supabase
+    // Break the type inference chain with a type assertion before calling maybeSingle
+    const adminQuery = supabase
       .from('profiles')
       .select('*')
-      .eq('email', 'admin@fleximov.com')
-      .maybeSingle();
+      .eq('email', 'admin@fleximov.com');
+      
+    // Use type assertion to prevent deep type instantiation
+    const adminResult = await (adminQuery as any).maybeSingle();
       
     if (adminResult.error) {
       console.error('Error checking admin user:', adminResult.error);
@@ -54,11 +57,13 @@ const createAdminUser = async () => {
     if (!userId) {
       console.log('No user ID available, attempting to find existing admin');
       // Check profiles table for admin instead of users table
-      const existingAdminResult = await supabase
+      const existingAdminQuery = supabase
         .from('profiles')
         .select('id')
-        .eq('role', 'admin')
-        .maybeSingle();
+        .eq('role', 'admin');
+        
+      // Use type assertion to prevent deep type instantiation
+      const existingAdminResult = await (existingAdminQuery as any).maybeSingle();
         
       if (!existingAdminResult.data?.id) {
         console.error('Could not find or create admin user');
