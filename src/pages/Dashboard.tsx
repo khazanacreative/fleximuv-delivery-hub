@@ -16,7 +16,7 @@ const Dashboard = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatisticCard
           title="Total Revenue"
-          value="$45,231.89"
+          value="Rp 4.020.500"
           description="+20.1% from last month"
           trend="up"
         />
