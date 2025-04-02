@@ -9,6 +9,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
+import { formatRupiah } from '@/utils/formatters';
 
 const data = [
   {
@@ -58,10 +59,10 @@ export function Overview() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `Rp ${value}`}
+          tickFormatter={(value) => `${value}`}
         />
         <Tooltip 
-          formatter={(value) => [`Rp ${value}`, 'Revenue']}
+          formatter={(value) => [formatRupiah(value), 'Revenue']}
           cursor={{fill: 'rgba(0, 0, 0, 0.05)'}}
         />
         <Bar 
