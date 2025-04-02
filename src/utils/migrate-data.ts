@@ -18,18 +18,17 @@ export const migrateData = async () => {
     console.log('Demo users initialized successfully:', data);
     
     // Let's make sure the admin user exists by explicitly checking
-    // Break the type inference chain with a type assertion before calling maybeSingle
-    const adminQuery = supabase
+    // Break the inference chain by using a simpler approach without chaining
+    const { data: adminData, error: adminError } = await supabase
       .from('profiles')
       .select('*')
-      .eq('email', 'admin@fleximov.com');
+      .eq('email', 'admin@fleximov.com')
+      .limit(1)
+      .single();
       
-    // Use type assertion to prevent deep type instantiation
-    const adminResult = await (adminQuery as any).maybeSingle();
-      
-    if (adminResult.error) {
-      console.error('Error checking admin user:', adminResult.error);
-    } else if (!adminResult.data) {
+    if (adminError && adminError.code !== 'PGRST116') {
+      console.error('Error checking admin user:', adminError);
+    } else if (!adminData) {
       console.log('Admin user not found, creating explicitly');
       // Try to create admin user explicitly if missing
       await createAdminUser();
@@ -57,15 +56,20 @@ const createAdminUser = async () => {
     if (!userId) {
       console.log('No user ID available, attempting to find existing admin');
       // Check profiles table for admin instead of users table
-      const existingAdminQuery = supabase
+      // Avoid complex type inference by using a simpler approach
+      const { data: existingAdmin, error: existingAdminError } = await supabase
         .from('profiles')
         .select('id')
-        .eq('role', 'admin');
+        .eq('role', 'admin')
+        .limit(1)
+        .single();
         
-      // Use type assertion to prevent deep type instantiation
-      const existingAdminResult = await (existingAdminQuery as any).maybeSingle();
-        
-      if (!existingAdminResult.data?.id) {
+      if (existingAdminError && existingAdminError.code !== 'PGRST116') {
+        console.error('Error finding admin:', existingAdminError);
+        return;
+      }
+      
+      if (!existingAdmin?.id) {
         console.error('Could not find or create admin user');
         return;
       }
