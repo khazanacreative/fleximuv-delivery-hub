@@ -139,14 +139,14 @@ const Finances = () => {
                     <h4 className="font-medium">What are delivery tokens?</h4>
                     <p className="text-sm text-muted-foreground">
                       Delivery tokens are credits that you can use to pay for delivery services.
-                      Each token equals one credit for a delivery.
+                      Each token equals one delivery transaction.
                     </p>
                   </div>
                   
                   <div className="space-y-2">
                     <h4 className="font-medium">Token Pricing</h4>
                     <p className="text-sm text-muted-foreground">
-                      Each token costs $ 0,1. You can purchase tokens in bulk to ensure 
+                      Each token costs $0.10. You can purchase tokens in bulk to ensure 
                       smooth operations for all your delivery needs.
                     </p>
                   </div>
@@ -154,8 +154,8 @@ const Finances = () => {
                   <div className="space-y-2">
                     <h4 className="font-medium">How to use tokens</h4>
                     <p className="text-sm text-muted-foreground">
-                      When creating a new order, your token balance will be automatically used.
-                      One delivery = one token deducted from your balance.
+                      When creating a new order, one token will be automatically deducted from your balance.
+                      One delivery = one token.
                     </p>
                   </div>
                   

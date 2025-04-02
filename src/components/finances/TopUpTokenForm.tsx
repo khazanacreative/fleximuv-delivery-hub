@@ -16,8 +16,8 @@ const TopUpTokenForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('creditCard');
   
-  // Flat rate of 1000 rupiah per token
-  const tokenRate = 1000;
+  // Flat rate of $0.1 per token
+  const tokenRate = 0.1;
 
   const handleTopUp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,10 +54,6 @@ const TopUpTokenForm = () => {
 
   const predefinedAmounts = [5, 10, 20, 50];
   
-  // Calculate rupiah values for predefined token amounts
-  const tokenToRupiah = (tokens) => tokens * tokenRate;
-  const rupiahToToken = (rupiah) => Math.floor(rupiah / tokenRate);
-
   return (
     <Card className="border-fleximuv-100 overflow-hidden">
       <CardHeader className="bg-gradient-to-r from-fleximuv-50 to-white border-b border-fleximuv-100/50">
@@ -71,7 +67,7 @@ const TopUpTokenForm = () => {
         <form onSubmit={handleTopUp}>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="amount">Number of Tokens (Rp {tokenRate} each)</Label>
+              <Label htmlFor="amount">Number of Tokens (${tokenRate.toFixed(1)} each)</Label>
               <div className="relative mt-1">
                 <Input
                   id="amount"
@@ -142,7 +138,7 @@ const TopUpTokenForm = () => {
             </div>
             <div className="flex justify-between mt-2">
               <span className="text-sm font-medium text-gray-600">Total Price:</span>
-              <span className="font-semibold">Rp {amount ? parseInt(amount) * tokenRate : 0}</span>
+              <span className="font-semibold">${amount ? (parseInt(amount) * tokenRate).toFixed(2) : '0.00'}</span>
             </div>
             <div className="border-t border-gray-200 my-2"></div>
             <div className="flex justify-between">
