@@ -19,14 +19,16 @@ export const migrateData = async () => {
     
     // Let's make sure the admin user exists by explicitly checking
     // Break the inference chain by using a simpler approach without chaining
-    const { data: adminData, error: adminError } = await supabase
+    const adminCheck = await supabase
       .from('profiles')
       .select('*')
       .eq('email', 'admin@fleximov.com')
-      .limit(1)
-      .single();
+      .limit(1);
       
-    if (adminError && adminError.code !== 'PGRST116') {
+    const adminData = adminCheck.data?.[0];
+    const adminError = adminCheck.error;
+      
+    if (adminError) {
       console.error('Error checking admin user:', adminError);
     } else if (!adminData) {
       console.log('Admin user not found, creating explicitly');
@@ -57,14 +59,16 @@ const createAdminUser = async () => {
       console.log('No user ID available, attempting to find existing admin');
       // Check profiles table for admin instead of users table
       // Avoid complex type inference by using a simpler approach
-      const { data: existingAdmin, error: existingAdminError } = await supabase
+      const existingAdminCheck = await supabase
         .from('profiles')
         .select('id')
         .eq('role', 'admin')
-        .limit(1)
-        .single();
+        .limit(1);
         
-      if (existingAdminError && existingAdminError.code !== 'PGRST116') {
+      const existingAdmin = existingAdminCheck.data?.[0];
+      const existingAdminError = existingAdminCheck.error;
+      
+      if (existingAdminError) {
         console.error('Error finding admin:', existingAdminError);
         return;
       }
