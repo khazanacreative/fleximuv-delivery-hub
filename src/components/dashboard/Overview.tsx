@@ -62,7 +62,7 @@ export function Overview() {
           tickFormatter={(value) => `${value}`}
         />
         <Tooltip 
-          formatter={(value) => [formatRupiah(value), 'Revenue']}
+          formatter={(value: number | string) => [formatRupiah(value), 'Revenue']}
           cursor={{fill: 'rgba(0, 0, 0, 0.05)'}}
         />
         <Bar 
