@@ -75,8 +75,8 @@ const Header = () => {
             <span className="text-white font-bold text-sm">FM</span>
           </div>
           <div className="ml-2 flex flex-col">
-            <span className="font-display font-semibold text-lg tracking-wide leading-tight">FlexiMuv</span>
-            <p className="text-xs text-muted-foreground leading-tight tracking-wide">delivery hub</p>
+            <span className="font-display font-semibold text-lg tracking-wide leading-tight">Fleximuv</span>
+            <p className="text-xs text-muted-foreground leading-tight tracking-wide">Delivery Hub</p>
           </div>
         </div>
         
