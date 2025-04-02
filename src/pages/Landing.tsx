@@ -17,7 +17,7 @@ const Landing = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-display font-semibold text-lg tracking-wide leading-tight">FlexiMuv</span>
-              <span className="text-xs text-muted-foreground leading-tight">delivery hub</span>
+              <span className="text-xs text-muted-foreground leading-tight tracking-wide">delivery hub</span>
             </div>
           </div>
           <Link to="/login">

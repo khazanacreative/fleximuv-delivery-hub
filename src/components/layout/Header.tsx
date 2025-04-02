@@ -76,7 +76,7 @@ const Header = () => {
           </div>
           <div className="ml-2 flex flex-col">
             <span className="font-display font-semibold text-lg tracking-wide leading-tight">FlexiMuv</span>
-            <p className="text-xs text-muted-foreground leading-tight">delivery hub</p>
+            <p className="text-xs text-muted-foreground leading-tight tracking-wide">delivery hub</p>
           </div>
         </div>
         
@@ -153,7 +153,7 @@ const Header = () => {
                 className="rounded-full h-8 w-8 ml-1 hover:bg-accent/50"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-fleximov-100 text-fleximov-700">
+                  <AvatarFallback className="bg-fleximuv-100 text-fleximuv-700">
                     {user?.name?.charAt(0) || 'U'}
                   </AvatarFallback>
                 </Avatar>

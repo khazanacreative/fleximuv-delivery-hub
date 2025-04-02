@@ -13,6 +13,7 @@ import Landing from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
 import Dashboard from "@/pages/Dashboard";
 import PageLoader from "@/components/shared/PageLoader";
+import DriverEarnings from "@/components/dashboard/DriverEarnings";
 
 // Lazy-loaded pages for future implementation
 const Partners = lazy(() => import("@/pages/Partners"));
@@ -60,6 +61,14 @@ const ReportsPage = () => (
   </Suspense>
 );
 
+const EarningsPage = () => (
+  <Suspense fallback={<PageLoader />}>
+    <div className="space-y-4">
+      <DriverEarnings />
+    </div>
+  </Suspense>
+);
+
 const TrackingPage = () => (
   <Suspense fallback={<PageLoader />}>
     <OrderTracker />
@@ -89,6 +98,7 @@ const App = () => (
               <Route path="finances" element={<FinancesPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="reports" element={<ReportsPage />} />
+              <Route path="earnings" element={<EarningsPage />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />

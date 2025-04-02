@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { Package, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -15,6 +16,7 @@ import OrderForm from "@/components/orders/OrderForm";
 import LocationMap from "@/components/orders/LocationMap";
 import OrderFilters from "@/components/orders/OrderFilters";
 import DriverEarnings from "@/components/dashboard/DriverEarnings";
+import DriverOrdersContent from "@/components/drivers/DriverOrdersContent";
 
 const Orders = () => {
   const { user } = useAuth();
@@ -38,7 +40,7 @@ const Orders = () => {
   });
 
   useEffect(() => {
-    const savedOrders = localStorage.getItem('fleximov_orders');
+    const savedOrders = localStorage.getItem('fleximuv_orders');
     if (savedOrders) {
       try {
         const parsedOrders = JSON.parse(savedOrders);
@@ -130,7 +132,7 @@ const Orders = () => {
     const updatedOrders = orders.map(o => o.id === order.id ? updatedOrder : o);
     setOrders(updatedOrders);
     
-    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
+    localStorage.setItem('fleximuv_orders', JSON.stringify(updatedOrders));
     
     toast({
       title: "Order Cancelled",
@@ -148,7 +150,7 @@ const Orders = () => {
     const updatedOrders = orders.map(o => o.id === order.id ? updatedOrder : o);
     setOrders(updatedOrders);
     
-    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
+    localStorage.setItem('fleximuv_orders', JSON.stringify(updatedOrders));
     
     toast({
       title: "Order Accepted",
@@ -160,7 +162,7 @@ const Orders = () => {
     const updatedOrders = [newOrderData, ...orders];
     setOrders(updatedOrders);
     
-    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
+    localStorage.setItem('fleximuv_orders', JSON.stringify(updatedOrders));
     
     toast({
       title: "Order Created",
@@ -189,7 +191,7 @@ const Orders = () => {
     );
     
     setOrders(updatedOrders);
-    localStorage.setItem('fleximov_orders', JSON.stringify(updatedOrders));
+    localStorage.setItem('fleximuv_orders', JSON.stringify(updatedOrders));
     
     toast({
       title: "Order Updated",
@@ -207,18 +209,7 @@ const Orders = () => {
         <div className="space-y-8">
           <DriverEarnings />
           <div className="border-t pt-6">
-            <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2 mb-6">
-              <Package className="h-8 w-8" />
-              Your Assigned Orders
-            </h2>
-            <OrdersTable 
-              filteredOrders={filteredOrders}
-              handleViewDetails={handleViewDetails}
-              handleShowLocation={handleShowLocation}
-              handleShareLocation={handleShareLocation}
-              handleAcceptOrder={handleAcceptOrder}
-              handleCancelOrder={handleCancelOrder}
-            />
+            <DriverOrdersContent />
           </div>
         </div>
       ) : (

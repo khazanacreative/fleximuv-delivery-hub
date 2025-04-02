@@ -17,10 +17,10 @@ const Login = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md text-center mb-8">
         <Link to="/landing" className="inline-flex items-center justify-center gap-2 mb-5">
-          <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
+          <div className="w-10 h-10 bg-fleximuv-500 rounded-md flex items-center justify-center">
             <span className="text-white font-bold">FM</span>
           </div>
-          <h1 className="text-2xl font-bold">Fleximov Delivery Hub</h1>
+          <h1 className="text-2xl font-bold">FlexiMuv Delivery Hub</h1>
         </Link>
         <p className="text-muted-foreground">
           The complete delivery management platform for your business
@@ -33,7 +33,7 @@ const Login = () => {
         Don't have an account?{' '}
         <button 
           onClick={() => setRegisterOpen(true)}
-          className="font-medium text-fleximov-500 hover:text-fleximov-600"
+          className="font-medium text-fleximuv-500 hover:text-fleximuv-600"
         >
           Contact us to get started
         </button>
