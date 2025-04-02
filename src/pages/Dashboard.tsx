@@ -22,7 +22,7 @@ const Dashboard = () => {
         />
         <StatisticCard
           title="Active Orders"
-          value="12"
+          value="145"
           description="+2 from yesterday"
           trend="up"
         />
