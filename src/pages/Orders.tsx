@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { Package, Plus } from "lucide-react";
+import { Package, Plus, Coins } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useToast } from "@/hooks/use-toast";
