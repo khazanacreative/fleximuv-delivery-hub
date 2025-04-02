@@ -1,214 +1,93 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { mockUsers } from '../data/mock-data';
+import { User, UserRole } from '../types';
+import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from './use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { User as AppUser } from '@/types';
-import { toast as sonnerToast } from "sonner";
-import { AuthContextType } from '@/types/auth';
-import { fetchUserProfile } from '@/utils/auth-utils';
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  isAuthenticated: boolean;
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<AppUser | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Function to refresh user data
-  const refreshUser = async () => {
-    if (session?.user?.id) {
-      try {
-        console.log('Refreshing user data for ID:', session.user.id);
-        const userData = await fetchUserProfile(session.user.id, session);
-        if (userData) {
-          console.log('User data refreshed:', userData);
-          setUser(userData);
-        }
-      } catch (error) {
-        console.error('Error refreshing user:', error);
-      }
-    }
-  };
-
   useEffect(() => {
-    console.log('Setting up auth state listener');
+    // Check for saved user in localStorage
+    const savedUser = localStorage.getItem('fleximov_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    setIsLoading(false);
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
     
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, currentSession) => {
-        console.log('Auth state changed:', event, currentSession?.user?.email || 'No user');
-        
-        // Update session state immediately
-        setSession(currentSession);
-
-        if (currentSession?.user) {
-          // Defer profile fetching to prevent deadlocks
-          setTimeout(async () => {
-            try {
-              console.log('Fetching user profile after auth change');
-              const userData = await fetchUserProfile(currentSession.user.id, currentSession);
-              console.log('User profile fetched:', userData);
-              setUser(userData);
-              
-              if (event === 'SIGNED_IN') {
-                console.log('User signed in, navigating to dashboard');
-                navigate('/dashboard');
-                sonnerToast.success("Login Successful", {
-                  description: "Welcome back!",
-                });
-              }
-            } catch (error) {
-              console.error('Error fetching user profile:', error);
-            } finally {
-              setIsLoading(false);
-            }
-          }, 0);
-        } else {
-          setUser(null);
-          setIsLoading(false);
-          if (event === 'SIGNED_OUT') {
-            console.log('User signed out');
-          }
-        }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
-      console.log('Initial session check:', currentSession?.user?.email || 'No session');
-      
-      // Update session state
-      setSession(currentSession);
-
-      if (currentSession?.user) {
-        try {
-          console.log('Fetching initial user profile with ID:', currentSession.user.id);
-          const userData = await fetchUserProfile(currentSession.user.id, currentSession);
-          console.log('Initial user profile:', userData);
-          setUser(userData);
-        } catch (error) {
-          console.error('Error fetching initial user profile:', error);
-        }
-      }
-      
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Simple mock authentication
+    if (password !== 'password') {
+      toast({
+        title: "Login Failed",
+        description: "Invalid email or password",
+        variant: "destructive",
+      });
       setIsLoading(false);
+      throw new Error('Invalid email or password');
+    }
+    
+    const foundUser = mockUsers.find(u => u.email === email);
+    
+    if (!foundUser) {
+      toast({
+        title: "Login Failed",
+        description: "User not found",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      throw new Error('User not found');
+    }
+    
+    setUser(foundUser);
+    localStorage.setItem('fleximov_user', JSON.stringify(foundUser));
+    
+    toast({
+      title: "Login Successful",
+      description: `Welcome back, ${foundUser.name}!`,
     });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [navigate]);
-
-  const login = async (email: string, password: string): Promise<void> => {
-    console.log('Login attempt with email:', email);
-    setIsLoading(true);
     
-    try {
-      console.log('Sending login request to Supabase with credentials:', { email, passwordLength: password.length });
-      
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (error) {
-        console.error('Login error from Supabase:', error);
-        sonnerToast.error("Login Failed", {
-          description: error.message,
-        });
-        throw error;
-      }
-      
-      console.log('Login successful response:', data);
-      console.log('User authenticated:', data.user?.email);
-      
-      // The session will be handled by the onAuthStateChange listener
-    } catch (error: any) {
-      console.error('Login error details:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   };
 
-  const signup = async (email: string, password: string, userData: Partial<AppUser>) => {
-    setIsLoading(true);
-    
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: userData.name,
-            role: userData.role || 'customer',
-            partner_type: userData.partnerType,
-          },
-        },
-      });
-      
-      if (error) {
-        toast({
-          title: "Signup Failed",
-          description: error.message,
-          variant: "destructive",
-        });
-        throw error;
-      }
-      
-      toast({
-        title: "Sign Up Successful",
-        description: "Your account has been created. Please verify your email if required.",
-      });
-      
-    } catch (error: any) {
-      console.error('Signup error:', error);
-      toast({
-        title: "Signup Failed",
-        description: error.message || "An error occurred during signup",
-        variant: "destructive",
-      });
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const logout = async () => {
-    try {
-      await supabase.auth.signOut();
-      setUser(null);
-      setSession(null);
-      toast({
-        title: "Logged Out",
-        description: "You have been successfully logged out",
-      });
-      navigate('/login');
-    } catch (error) {
-      console.error('Error signing out:', error);
-      toast({
-        title: "Error",
-        description: "Failed to log out",
-        variant: "destructive",
-      });
-    }
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('fleximov_user');
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out",
+    });
+    navigate('/login');
   };
 
   return (
     <AuthContext.Provider 
       value={{ 
         user, 
-        session,
         isLoading, 
         login, 
-        signup,
         logout, 
-        isAuthenticated: !!session,
-        refreshUser
+        isAuthenticated: !!user
       }}
     >
       {children}
@@ -224,4 +103,14 @@ export const useAuth = () => {
   return context;
 };
 
-export { useRole } from './use-role';
+export const useRole = (role: UserRole | UserRole[]) => {
+  const { user } = useAuth();
+  
+  if (!user) return false;
+  
+  if (Array.isArray(role)) {
+    return role.includes(user.role);
+  }
+  
+  return user.role === role;
+};

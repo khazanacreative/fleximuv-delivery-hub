@@ -1,5 +1,5 @@
 
-import { User } from "@/types";
+import { User, UserRole } from "@/types";
 
 // Define permission types
 export type Permission = 

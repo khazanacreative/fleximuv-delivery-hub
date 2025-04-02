@@ -2,23 +2,14 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import LoginForm from '@/components/authentication/LoginForm';
-import { useState } from 'react';
 import RegisterDialog from '@/components/authentication/RegisterDialog';
+import { useState } from 'react';
 
 const Login = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [registerOpen, setRegisterOpen] = useState(false);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-fleximov-500 rounded-full border-t-transparent"></div>
-      </div>
-    );
-  }
-
   if (isAuthenticated) {
-    console.log('Redirecting to dashboard from login page');
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -39,7 +30,7 @@ const Login = () => {
       <LoginForm />
       
       <p className="mt-8 text-center text-sm text-muted-foreground">
-        Need a business account?{' '}
+        Don't have an account?{' '}
         <button 
           onClick={() => setRegisterOpen(true)}
           className="font-medium text-fleximov-500 hover:text-fleximov-600"

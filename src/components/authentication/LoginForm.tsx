@@ -1,19 +1,20 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { mockUsers } from '@/data/mock-data';
 import { Eye, EyeOff } from 'lucide-react';
-import { toast } from "sonner";
-import { migrateData } from '@/utils/migrate-data';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('password123');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,23 +22,10 @@ const LoginForm = () => {
     setIsLoading(true);
     
     try {
-      console.log('Attempting to login with:', { email, passwordProvided: !!password });
-      
-      if (!email || !password) {
-        throw new Error('Email and password are required');
-      }
-      
-      // Attempt login with clear console logs
-      console.log(`Login form submitting with email: ${email}`);
       await login(email, password);
-      console.log('Login function called successfully');
-      
-      // Navigation happens in the auth provider after successful login
-    } catch (error: any) {
-      console.error('Login form error:', error);
-      toast.error('Login failed', {
-        description: error.message || 'Please check your credentials and try again'
-      });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -47,46 +35,13 @@ const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
-  // Set both email and password when selecting a demo account
-  const handleDemoAccountClick = (demoEmail: string) => {
-    setEmail(demoEmail);
-    setPassword('password123');
-    toast.info(`Demo account selected`, {
-      description: `Email: ${demoEmail}, Password: password123`
-    });
-  };
-
-  const initializeDemoUsers = async () => {
-    setIsLoading(true);
-    try {
-      const result = await migrateData();
-      console.log('Demo users initialization result:', result);
-      if (result.success) {
-        toast.success('Demo users initialized', {
-          description: 'You can now login with the demo accounts'
-        });
-      } else {
-        toast.error('Failed to initialize demo users', {
-          description: result.message || 'Please try again'
-        });
-      }
-    } catch (error: any) {
-      console.error('Error initializing demo users:', error);
-      toast.error('Failed to initialize demo users', {
-        description: error.message || 'Please try again'
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Define the demo accounts
+  // Define the demo accounts we want to show with English translations
   const demoAccounts = [
-    { name: "Bambang Supratman (Admin)", email: "admin@fleximov.com" },
-    { name: "Joko Widodo (Fleet Partner)", email: "fleet@partner.com" },
-    { name: "Agus Santoso (Independent Courier)", email: "courier@partner.com" },
-    { name: "Siti Rahayu (Business Partner)", email: "business@partner.com" },
-    { name: "Budi Setiawan (Driver)", email: "driver@fleximov.com" },
+    { name: "Bambang Supratman (Admin)", email: "bambang@fleximov.com" },
+    { name: "Joko Widodo (Fleet Partner)", email: "joko@surabayaexpress.com" },
+    { name: "Agus Santoso (Independent Courier)", email: "agus@eastjavacourier.com" },
+    { name: "Siti Rahayu (Business Partner)", email: "siti@surabayamart.com" },
+    { name: "Budi Setiawan (Driver)", email: "budi@gmail.com" },
   ];
 
   return (
@@ -113,9 +68,9 @@ const LoginForm = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <Button variant="link" size="sm" className="p-0 h-auto text-xs text-fleximov-500" asChild>
-                <a href="#" className="text-sm">Forgot password?</a>
-              </Button>
+              <a href="#" className="text-sm text-fleximov-500 hover:underline">
+                Forgot password?
+              </a>
             </div>
             <div className="relative">
               <Input
@@ -138,14 +93,14 @@ const LoginForm = () => {
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <p>Test Accounts (password: password123):</p>
+            <p>Demo Accounts (use password: 'password'):</p>
             <ul className="mt-2 space-y-1">
               {demoAccounts.map((account, index) => (
                 <li key={index} className="text-xs">
                   <button
                     type="button"
                     className="text-fleximov-500 hover:underline"
-                    onClick={() => handleDemoAccountClick(account.email)}
+                    onClick={() => setEmail(account.email)}
                   >
                     {account.name}
                   </button>
@@ -154,7 +109,7 @@ const LoginForm = () => {
             </ul>
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        <CardFooter>
           <Button 
             type="submit" 
             className="w-full bg-fleximov-500 hover:bg-fleximov-600"
@@ -162,27 +117,6 @@ const LoginForm = () => {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </Button>
-
-          <Button 
-            type="button" 
-            className="w-full"
-            variant="outline"
-            onClick={initializeDemoUsers}
-            disabled={isLoading}
-          >
-            Reset Demo Accounts
-          </Button>
-          
-          <div className="text-center text-sm">
-            <span className="text-muted-foreground">Don't have an account? </span>
-            <Button 
-              variant="link" 
-              className="p-0 h-auto text-fleximov-500"
-              type="button"
-            >
-              Sign up
-            </Button>
-          </div>
         </CardFooter>
       </form>
     </Card>

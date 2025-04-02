@@ -1,14 +1,13 @@
 
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/hooks/use-auth";
+import { AuthProvider } from "@/hooks/use-auth";
 import Layout from "@/components/layout/Layout";
 import Login from "@/pages/Login";
-import Register from "@/pages/Register";
 import Index from "@/pages/Index";
 import Landing from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
@@ -69,66 +68,35 @@ const TrackingPage = () => (
 
 const queryClient = new QueryClient();
 
-// Protected route wrapper
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuth();
-  
-  if (isLoading) {
-    return <PageLoader />;
-  }
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return <>{children}</>;
-};
-
-const AppRoutes = () => (
-  <Routes>
-    <Route path="/" element={<Index />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
-    <Route path="/landing" element={<Landing />} />
-    <Route path="/track/:trackingCode" element={<TrackingPage />} />
-    
-    <Route path="/" element={
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    }>
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="partners" element={<PartnersPage />} />
-      <Route path="drivers" element={<DriversPage />} />
-      <Route path="orders" element={<OrdersPage />} />
-      <Route path="finances" element={<FinancesPage />} />
-      <Route path="settings" element={<SettingsPage />} />
-      <Route path="reports" element={<ReportsPage />} />
-    </Route>
-    
-    <Route path="*" element={<NotFound />} />
-  </Routes>
-);
-
-const App = () => {
-  // Log supabase client configuration
-  useEffect(() => {
-    console.log('Supabase client configured');
-  }, []);
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+const App = () => (
+  <BrowserRouter>
+    <TooltipProvider>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <AppRoutes />
-          </TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/track/:trackingCode" element={<TrackingPage />} />
+            
+            <Route path="/" element={<Layout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="partners" element={<PartnersPage />} />
+              <Route path="drivers" element={<DriversPage />} />
+              <Route path="orders" element={<OrdersPage />} />
+              <Route path="finances" element={<FinancesPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+            </Route>
+            
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </AuthProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
-  );
-};
+      </QueryClientProvider>
+    </TooltipProvider>
+  </BrowserRouter>
+);
 
 export default App;
