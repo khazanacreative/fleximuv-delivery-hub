@@ -5,7 +5,7 @@ export const mockUsers: User[] = [
   {
     id: '1',
     name: 'Bambang Supratman',
-    email: 'bambang@fleximov.com',
+    email: 'bambang@fleximuv.com',
     phone: '+6281234567890',
     role: 'admin',
     avatar: '/avatars/bambang.jpg',
@@ -19,8 +19,8 @@ export const mockUsers: User[] = [
     email: 'joko@surabayaexpress.com',
     phone: '+6281234567891',
     role: 'partner',
-    partnerType: 'fleet',  // Changed to 'fleet' for clarity
-    hasDrivers: true,  // Fleet partner with drivers
+    partnerType: 'fleet',
+    hasDrivers: true,
     avatar: '/avatars/joko.jpg',
     createdAt: new Date('2023-02-10'),
     balance: 5000000,
@@ -29,11 +29,11 @@ export const mockUsers: User[] = [
   {
     id: '3',
     name: 'Siti Rahayu',
-    email: 'siti@surabayamart.com',  // Changed from eastjavacourier.com to surabayamart.com
+    email: 'siti@surabayamart.com',
     phone: '+6281234567892',
     role: 'partner',
-    partnerType: 'business',  // Changed to 'business' for partner without fleet
-    hasDrivers: false,  // Business partner without drivers
+    partnerType: 'business',
+    hasDrivers: false,
     avatar: '/avatars/siti.jpg',
     createdAt: new Date('2023-03-05'),
     balance: 3500000,
@@ -42,11 +42,11 @@ export const mockUsers: User[] = [
   {
     id: '4',
     name: 'Agus Santoso',
-    email: 'agus@eastjavacourier.com',  // Changed from surabayamart.com to eastjavacourier.com
+    email: 'agus@eastjavacourier.com',
     phone: '+6281234567893',
     role: 'partner',
-    partnerType: 'courier',  // Changed to 'courier' for independent courier
-    hasDrivers: true,  // Independent courier can have drivers (including themselves)
+    partnerType: 'courier',
+    hasDrivers: true,
     avatar: '/avatars/agus.jpg',
     createdAt: new Date('2023-04-12'),
     balance: 1200000,
