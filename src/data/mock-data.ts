@@ -23,7 +23,7 @@ export const mockUsers: User[] = [
     hasDrivers: true,
     avatar: '/avatars/joko.jpg',
     createdAt: new Date('2023-02-10'),
-    balance: 5000,
+    balance: 5000000,
     status: 'active'
   },
   {
@@ -36,7 +36,7 @@ export const mockUsers: User[] = [
     hasDrivers: false,
     avatar: '/avatars/siti.jpg',
     createdAt: new Date('2023-03-05'),
-    balance: 3500,
+    balance: 3500000,
     status: 'active'
   },
   {
