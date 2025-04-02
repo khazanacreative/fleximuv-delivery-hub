@@ -95,7 +95,7 @@ const DriverOrdersContent = () => {
                           <div className="text-sm text-muted-foreground flex items-center gap-1">
                             <MapPin className="h-3 w-3" /> {order.deliveryAddress?.substring(0, 30)}...
                           </div>
-                          <div className="text-sm font-medium mt-2">${order.totalAmount}</div>
+                          <div className="text-sm font-medium mt-2">${order.amount}</div>
                         </div>
                         <div className="flex flex-col items-end gap-2">
                           <div className="flex gap-2">
@@ -146,7 +146,7 @@ const DriverOrdersContent = () => {
                       <div className="flex justify-between">
                         <div className="space-y-1">
                           <div className="text-sm font-medium">{order.customerName}</div>
-                          <div className="text-sm text-muted-foreground">${order.totalAmount}</div>
+                          <div className="text-sm text-muted-foreground">${order.amount}</div>
                         </div>
                         <div>
                           <Button size="sm" variant="outline" className="h-8 text-xs rounded-lg">
