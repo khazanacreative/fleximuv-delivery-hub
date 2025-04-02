@@ -16,8 +16,8 @@ const TopUpTokenForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('creditCard');
   
-  // Flat rate of $0.1 per token
-  const tokenRate = 0.1;
+  // Flat rate of Rp 1000 per token
+  const tokenRate = 1000;
 
   const handleTopUp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +67,7 @@ const TopUpTokenForm = () => {
         <form onSubmit={handleTopUp}>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="amount">Number of Tokens (${tokenRate.toFixed(1)} each)</Label>
+              <Label htmlFor="amount">Number of Tokens (Rp {tokenRate.toLocaleString()} each)</Label>
               <div className="relative mt-1">
                 <Input
                   id="amount"
@@ -138,7 +138,7 @@ const TopUpTokenForm = () => {
             </div>
             <div className="flex justify-between mt-2">
               <span className="text-sm font-medium text-gray-600">Total Price:</span>
-              <span className="font-semibold">${amount ? (parseInt(amount) * tokenRate).toFixed(2) : '0.00'}</span>
+              <span className="font-semibold">Rp {amount ? (parseInt(amount) * tokenRate).toLocaleString() : '0'}</span>
             </div>
             <div className="border-t border-gray-200 my-2"></div>
             <div className="flex justify-between">

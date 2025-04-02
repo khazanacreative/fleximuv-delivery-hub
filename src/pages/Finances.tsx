@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { usePermissions } from '@/hooks/use-permissions';
@@ -146,7 +145,7 @@ const Finances = () => {
                   <div className="space-y-2">
                     <h4 className="font-medium">Token Pricing</h4>
                     <p className="text-sm text-muted-foreground">
-                      Each token costs $0.10. You can purchase tokens in bulk to ensure 
+                      Each token costs Rp 1.000. You can purchase tokens in bulk to ensure 
                       smooth operations for all your delivery needs.
                     </p>
                   </div>
