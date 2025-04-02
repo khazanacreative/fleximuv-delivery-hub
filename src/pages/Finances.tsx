@@ -146,7 +146,7 @@ const Finances = () => {
                   <div className="space-y-2">
                     <h4 className="font-medium">Token Pricing</h4>
                     <p className="text-sm text-muted-foreground">
-                      Each token costs Rp 1,000. You can purchase tokens in bulk to ensure 
+                      Each token costs $ 0,1. You can purchase tokens in bulk to ensure 
                       smooth operations for all your delivery needs.
                     </p>
                   </div>
