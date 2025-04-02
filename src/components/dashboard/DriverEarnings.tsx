@@ -86,15 +86,15 @@ const DriverEarnings = () => {
   
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Earnings Dashboard</h2>
+      <h2 className="text-2xl font-display font-bold">Earnings Dashboard</h2>
       
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+        <Card className="bg-gradient-to-br from-white to-fleximuv-50 border-fleximuv-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Earnings (This Week)
             </CardTitle>
-            <Wallet className="h-4 w-4 text-muted-foreground" />
+            <Wallet className="h-4 w-4 text-fleximuv-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${totalEarnings}</div>
@@ -107,12 +107,12 @@ const DriverEarnings = () => {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-gradient-to-br from-white to-fleximuv-50 border-fleximuv-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Deliveries
             </CardTitle>
-            <CalendarDays className="h-4 w-4 text-muted-foreground" />
+            <CalendarDays className="h-4 w-4 text-fleximuv-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalDeliveries}</div>
@@ -125,12 +125,12 @@ const DriverEarnings = () => {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-gradient-to-br from-white to-fleximuv-50 border-fleximuv-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Average Per Delivery
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-fleximuv-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${averagePerDelivery}</div>
@@ -144,9 +144,9 @@ const DriverEarnings = () => {
         </Card>
       </div>
       
-      <Card className="col-span-3">
-        <CardHeader>
-          <CardTitle>Earnings Overview</CardTitle>
+      <Card className="col-span-3 border-fleximuv-100 overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-fleximuv-50 to-white border-b border-fleximuv-100/50">
+          <CardTitle className="font-display">Earnings Overview</CardTitle>
           <CardDescription>
             View your earnings performance over time
           </CardDescription>
@@ -156,47 +156,49 @@ const DriverEarnings = () => {
             value={activeTab}
             onValueChange={setActiveTab}
           >
-            <TabsList className="grid w-full max-w-sm grid-cols-2">
-              <TabsTrigger value="daily">Daily</TabsTrigger>
-              <TabsTrigger value="monthly">Monthly</TabsTrigger>
+            <TabsList className="grid w-full max-w-sm grid-cols-2 bg-fleximuv-100/50">
+              <TabsTrigger value="daily" className="data-[state=active]:bg-fleximuv-500 data-[state=active]:text-white">Daily</TabsTrigger>
+              <TabsTrigger value="monthly" className="data-[state=active]:bg-fleximuv-500 data-[state=active]:text-white">Monthly</TabsTrigger>
             </TabsList>
           </Tabs>
         </CardHeader>
-        <CardContent className="pl-2">
+        <CardContent className="pl-2 pt-6">
           <ResponsiveContainer width="100%" height={300}>
             {activeTab === "daily" ? (
               <BarChart data={earningsData.dailyData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                 <XAxis dataKey="day" />
                 <YAxis />
                 <Tooltip 
                   formatter={(value) => [`$${value}`, 'Earnings']}
                   labelFormatter={(value) => `${value}`}
+                  contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', borderRadius: '8px', border: '1px solid #e0e0e0' }}
                 />
                 <Bar 
                   dataKey="earnings" 
-                  fill="#4f46e5" 
+                  fill="#3366FF" 
                   name="Earnings"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
             ) : (
               <LineChart data={earningsData.monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip 
                   formatter={(value) => [`$${value}`, 'Earnings']}
                   labelFormatter={(value) => `${value}`}
+                  contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', borderRadius: '8px', border: '1px solid #e0e0e0' }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="earnings" 
-                  stroke="#4f46e5" 
+                  stroke="#3366FF" 
                   name="Earnings"
                   strokeWidth={2}
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
+                  dot={{ r: 4, fill: "#3366FF" }}
+                  activeDot={{ r: 6, fill: "#3366FF" }}
                 />
               </LineChart>
             )}
@@ -204,26 +206,26 @@ const DriverEarnings = () => {
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Transactions</CardTitle>
+      <Card className="border-fleximuv-100">
+        <CardHeader className="bg-gradient-to-r from-fleximuv-50 to-white border-b border-fleximuv-100/50">
+          <CardTitle className="font-display">Recent Transactions</CardTitle>
           <CardDescription>
             Your latest earnings activities
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+        <CardContent className="p-0">
+          <div className="divide-y divide-gray-100">
             {earningsData.transactions.map((transaction) => (
               <div 
                 key={transaction.id} 
-                className="flex items-center justify-between p-2 border-b last:border-0"
+                className="flex items-center justify-between p-4 hover:bg-fleximuv-50/50 transition-colors"
               >
                 <div>
                   <p className="font-medium">{transaction.description}</p>
                   <p className="text-sm text-muted-foreground">{transaction.date}</p>
                 </div>
                 <div className={`font-medium ${
-                  transaction.type === 'bonus' ? 'text-green-600' : ''
+                  transaction.type === 'bonus' ? 'text-green-600' : 'text-fleximuv-600'
                 }`}>
                   +${transaction.amount}
                 </div>

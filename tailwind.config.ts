@@ -19,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'display': ['"Poppins"', 'sans-serif'],
+				'sans': ['"Inter"', 'system-ui', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -63,7 +67,7 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				fleximov: {
+				fleximuv: {
 					50: "#F5F7FF",
 					100: "#E5EBFF",
 					200: "#CCD8FF",

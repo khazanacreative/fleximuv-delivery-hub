@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight, Package, Shield, Truck, Users, MessageCircle, SmartphoneNfc } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,16 +12,16 @@ const Landing = () => {
       <header className="border-b bg-white z-10">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
+            <div className="w-10 h-10 bg-fleximuv-500 rounded-md flex items-center justify-center">
               <span className="text-white font-bold">FM</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-semibold text-lg">Fleximov</span>
-              <span className="text-xs text-muted-foreground -mt-1">Delivery Hub</span>
+              <span className="font-display font-semibold text-lg tracking-wide leading-tight">FlexiMuv</span>
+              <span className="text-xs text-muted-foreground leading-tight">delivery hub</span>
             </div>
           </div>
           <Link to="/login">
-            <Button className="bg-fleximov-600 text-white hover:bg-fleximov-700" size="sm">
+            <Button className="bg-fleximuv-600 text-white hover:bg-fleximuv-700" size="sm">
               Login
             </Button>
           </Link>
@@ -30,11 +29,11 @@ const Landing = () => {
       </header>
 
       {/* Hero Section with solid background instead of image */}
-      <section className="py-16 md:py-24 bg-fleximov-50 relative">
+      <section className="py-16 md:py-24 bg-fleximuv-50 relative">
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Simplified <span className="text-fleximov-500">UMKM</span> Delivery Management
+            <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tight">
+              Simplified <span className="text-fleximuv-500">UMKM</span> Delivery Management
             </h1>
             <p className="text-xl text-muted-foreground">
               Helping small and medium enterprises manage orders and deliveries without changing your existing workflow.
@@ -53,7 +52,7 @@ const Landing = () => {
             </div>
           </div>
           <div className="relative hidden md:block">
-            <div className="absolute inset-0 bg-fleximov-500/10 rounded-lg transform rotate-3"></div>
+            <div className="absolute inset-0 bg-fleximuv-500/10 rounded-lg transform rotate-3"></div>
             <div className="relative bg-white border rounded-lg shadow-lg p-4">
               <div className="aspect-[4/3] rounded-md flex items-center justify-center overflow-hidden">
                 <img 
@@ -126,7 +125,7 @@ const Landing = () => {
                 <ul className="space-y-1">
                   {userRole.benefits.map((benefit, j) => (
                     <li key={j} className="text-sm flex items-start gap-2">
-                      <span className="text-fleximov-500 text-lg leading-none">•</span>
+                      <span className="text-fleximuv-500 text-lg leading-none">•</span>
                       {benefit}
                     </li>
                   ))}
@@ -138,7 +137,7 @@ const Landing = () => {
       </section>
 
       {/* User Roles Section with Terms and Conditions (Redesigned with morph UI) */}
-      <section className="py-16 bg-gradient-to-r from-fleximov-50 to-white">
+      <section className="py-16 bg-gradient-to-r from-fleximuv-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold">Multi-User Platform</h2>
@@ -148,7 +147,7 @@ const Landing = () => {
           </div>
           
           <Tabs defaultValue="admin" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8 bg-fleximov-100/50 p-1 rounded-xl backdrop-blur-sm">
+            <TabsList className="grid w-full grid-cols-4 mb-8 bg-fleximuv-100/50 p-1 rounded-xl backdrop-blur-sm">
               <TabsTrigger 
                 value="admin" 
                 className="data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg transition-all duration-200"
@@ -177,7 +176,7 @@ const Landing = () => {
             
             <TabsContent value="admin" className="space-y-4">
               <Card className="morph-card overflow-hidden border-none">
-                <CardHeader className="bg-gradient-to-r from-fleximov-100 to-fleximov-50 border-b">
+                <CardHeader className="bg-gradient-to-r from-fleximuv-100 to-fleximuv-50 border-b">
                   <CardTitle>Administrator (Admin)</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 p-6">
@@ -360,7 +359,7 @@ const Landing = () => {
               <h3 className="text-2xl font-bold">Stay Updated With Live Tracking</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="bg-fleximov-100 p-2 rounded-md text-fleximov-700">
+                  <div className="bg-fleximuv-100 p-2 rounded-md text-fleximuv-700">
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
@@ -369,7 +368,7 @@ const Landing = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="bg-fleximov-100 p-2 rounded-md text-fleximov-700">
+                  <div className="bg-fleximuv-100 p-2 rounded-md text-fleximuv-700">
                     <Truck className="h-5 w-5" />
                   </div>
                   <div>
@@ -378,7 +377,7 @@ const Landing = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="bg-fleximov-100 p-2 rounded-md text-fleximov-700">
+                  <div className="bg-fleximuv-100 p-2 rounded-md text-fleximuv-700">
                     <Share2 className="h-5 w-5" />
                   </div>
                   <div>
@@ -405,7 +404,7 @@ const Landing = () => {
       </section>
 
       {/* Features */}
-      <section className="py-16 bg-fleximov-50">
+      <section className="py-16 bg-fleximuv-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold">Why UMKM Choose Fleximov</h2>
@@ -415,17 +414,17 @@ const Landing = () => {
               {
                 title: "Keep Using WhatsApp",
                 description: "Continue using WhatsApp as your primary communication tool while gaining delivery management features.",
-                icon: <MessageCircle className="h-10 w-10 text-fleximov-500" />
+                icon: <MessageCircle className="h-10 w-10 text-fleximuv-500" />
               },
               {
                 title: "Simple Order Management",
                 description: "Easily manage orders, assign drivers, and track deliveries without complex technical knowledge.",
-                icon: <Package className="h-10 w-10 text-fleximov-500" />
+                icon: <Package className="h-10 w-10 text-fleximuv-500" />
               },
               {
                 title: "Flexible Driver Options",
                 description: "Use your own drivers or request drivers from our network when you need extra delivery capacity.",
-                icon: <Truck className="h-10 w-10 text-fleximov-500" />
+                icon: <Truck className="h-10 w-10 text-fleximuv-500" />
               }
             ].map((feature, i) => (
               <div key={i} className="morph-card p-6 hover:shadow-md transition-shadow text-left">
@@ -484,7 +483,7 @@ const Landing = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-fleximov-50">
+      <section className="py-16 bg-fleximuv-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold">What UMKM Owners Say</h2>
@@ -505,8 +504,8 @@ const Landing = () => {
               <div key={i} className="morph-card p-6 shadow-sm text-left">
                 <p className="italic mb-4">"{testimonial.testimonial}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-fleximov-200 flex items-center justify-center">
-                    <span className="text-fleximov-700 font-medium">
+                  <div className="w-10 h-10 rounded-full bg-fleximuv-200 flex items-center justify-center">
+                    <span className="text-fleximuv-700 font-medium">
                       {testimonial.name.charAt(0)}
                     </span>
                   </div>
@@ -522,14 +521,14 @@ const Landing = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-fleximov-600 text-white">
+      <section className="py-16 bg-fleximuv-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Simplify Your Delivery Operations?</h2>
-          <p className="text-fleximov-100 max-w-2xl mx-auto mb-8">
+          <p className="text-fleximuv-100 max-w-2xl mx-auto mb-8">
             Join small and medium businesses who are using Fleximov Delivery Hub to manage orders and deliveries while maintaining their familiar workflows.
           </p>
           <Link to="/login">
-            <Button size="lg" variant="outline" className="bg-white text-fleximov-600 hover:bg-fleximov-50">
+            <Button size="lg" variant="outline" className="bg-white text-fleximuv-600 hover:bg-fleximuv-50">
               Get Started Today
             </Button>
           </Link>
@@ -542,10 +541,10 @@ const Landing = () => {
           <div className="flex flex-col md:flex-row justify-between gap-8">
             <div className="md:w-1/3 text-left">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-fleximov-500 rounded-md flex items-center justify-center">
+                <div className="w-8 h-8 bg-fleximuv-500 rounded-md flex items-center justify-center">
                   <span className="text-white font-bold text-xs">FM</span>
                 </div>
-                <span className="font-semibold text-white">Fleximov</span>
+                <span className="font-display font-semibold text-white">FlexiMuv</span>
               </div>
               <p className="text-sm">
                 The complete delivery management platform designed for UMKM business needs, integrating with your existing workflows.
@@ -579,7 +578,7 @@ const Landing = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-sm text-center">
-            <p>&copy; {new Date().getFullYear()} Fleximov Delivery Hub. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} FlexiMuv Delivery Hub. All rights reserved.</p>
           </div>
         </div>
       </footer>

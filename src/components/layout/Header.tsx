@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Bell, Search, MapPin, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -70,12 +71,12 @@ const Header = () => {
     <header className="h-16 border-b bg-background/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-30">
       <div className="flex items-center justify-between h-full px-4">
         <div className="flex items-center">
-          <div className="w-10 h-10 bg-fleximov-500 rounded-md flex items-center justify-center">
+          <div className="w-10 h-10 bg-fleximuv-500 rounded-md flex items-center justify-center">
             <span className="text-white font-bold text-sm">FM</span>
           </div>
-          <div className="ml-2">
-            <span className="font-semibold text-lg hidden md:inline-block">Fleximov</span>
-            <p className="text-xs text-muted-foreground hidden md:block">delivery hub</p>
+          <div className="ml-2 flex flex-col">
+            <span className="font-display font-semibold text-lg tracking-wide leading-tight">FlexiMuv</span>
+            <p className="text-xs text-muted-foreground leading-tight">delivery hub</p>
           </div>
         </div>
         

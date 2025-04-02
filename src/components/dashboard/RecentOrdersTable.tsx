@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, MapPin, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePermissions } from '@/hooks/use-permissions';
 
 interface Order {
   id: string;
@@ -75,10 +76,16 @@ interface RecentOrdersTableProps {
 }
 
 const RecentOrdersTable = ({ className }: RecentOrdersTableProps) => {
+  const { isDriver } = usePermissions();
+  
   return (
-    <Card className={cn("md:col-span-4", className)}>
-      <CardHeader>
-        <CardTitle>Recent Orders</CardTitle>
+    <Card className={cn(
+      "md:col-span-4", 
+      className,
+      isDriver ? "border-fleximuv-100 overflow-hidden" : ""
+    )}>
+      <CardHeader className={isDriver ? "bg-gradient-to-r from-fleximuv-50 to-white border-b border-fleximuv-100/50" : ""}>
+        <CardTitle className={isDriver ? "font-display" : ""}>Recent Orders</CardTitle>
         <CardDescription>View and manage your most recent orders</CardDescription>
       </CardHeader>
       <CardContent>
@@ -86,18 +93,21 @@ const RecentOrdersTable = ({ className }: RecentOrdersTableProps) => {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b bg-muted/50">
-                  <th className="px-4 py-3 text-left">Order</th>
-                  <th className="px-4 py-3 text-left">Customer</th>
-                  <th className="px-4 py-3 text-left">Status</th>
-                  <th className="px-4 py-3 text-left">Date</th>
-                  <th className="px-4 py-3 text-left">Amount</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+                <tr className={cn(
+                  "border-b",
+                  isDriver ? "bg-fleximuv-50/80" : "bg-muted/50"
+                )}>
+                  <th className="px-4 py-3 text-left font-medium">Order</th>
+                  <th className="px-4 py-3 text-left font-medium">Customer</th>
+                  <th className="px-4 py-3 text-left font-medium">Status</th>
+                  <th className="px-4 py-3 text-left font-medium">Date</th>
+                  <th className="px-4 py-3 text-left font-medium">Amount</th>
+                  <th className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {mockOrders.map((order) => (
-                  <tr key={order.id} className="border-b hover:bg-muted/30">
+                  <tr key={order.id} className="border-b hover:bg-fleximuv-50/30">
                     <td className="px-4 py-3 font-medium">{order.id}</td>
                     <td className="px-4 py-3">{order.customer}</td>
                     <td className="px-4 py-3">
@@ -109,15 +119,15 @@ const RecentOrdersTable = ({ className }: RecentOrdersTableProps) => {
                     <td className="px-4 py-3">{order.amount}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-2">
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
+                        <Button size="icon" variant="ghost" className="h-8 w-8 text-fleximuv-700 hover:text-fleximuv-800 hover:bg-fleximuv-100">
                           <Eye className="h-4 w-4" />
                           <span className="sr-only">View details</span>
                         </Button>
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
+                        <Button size="icon" variant="ghost" className="h-8 w-8 text-fleximuv-700 hover:text-fleximuv-800 hover:bg-fleximuv-100">
                           <MapPin className="h-4 w-4" />
                           <span className="sr-only">View location</span>
                         </Button>
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
+                        <Button size="icon" variant="ghost" className="h-8 w-8 text-fleximuv-700 hover:text-fleximuv-800 hover:bg-fleximuv-100">
                           <Edit className="h-4 w-4" />
                           <span className="sr-only">Edit order</span>
                         </Button>
