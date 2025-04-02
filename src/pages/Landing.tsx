@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, Package, Shield, Truck, Users, MessageCircle, SmartphoneNfc } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,8 +17,8 @@ const Landing = () => {
               <span className="text-white font-bold">FM</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-semibold text-lg tracking-wide leading-tight">FlexiMuv</span>
-              <span className="text-xs text-muted-foreground leading-tight tracking-wide">delivery hub</span>
+              <span className="font-display font-semibold text-lg tracking-wide leading-tight">Fleximuv</span>
+              <span className="text-xs text-muted-foreground leading-tight tracking-wide">Delivery Hub</span>
             </div>
           </div>
           <Link to="/login">
@@ -36,7 +37,7 @@ const Landing = () => {
               Simplified <span className="text-fleximuv-500">UMKM</span> Delivery Management
             </h1>
             <p className="text-xl text-muted-foreground">
-              Helping small and medium enterprises manage orders and deliveries without changing your existing workflow.
+              Helping small and medium enterprises manage orders and deliveries easily
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/login">

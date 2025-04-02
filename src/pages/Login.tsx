@@ -20,7 +20,10 @@ const Login = () => {
           <div className="w-10 h-10 bg-fleximuv-500 rounded-md flex items-center justify-center">
             <span className="text-white font-bold">FM</span>
           </div>
-          <h1 className="text-2xl font-bold">FlexiMuv Delivery Hub</h1>
+          <div className="flex flex-col items-start">
+            <h1 className="text-2xl font-bold font-display">Fleximuv</h1>
+            <span className="text-sm tracking-wide leading-tight text-muted-foreground">Delivery Hub</span>
+          </div>
         </Link>
         <p className="text-muted-foreground">
           The complete delivery management platform for your business

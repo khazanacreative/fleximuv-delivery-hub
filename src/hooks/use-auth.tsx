@@ -23,9 +23,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Check for saved user in localStorage
-    const savedUser = localStorage.getItem('fleximov_user');
+    const savedUser = localStorage.getItem('fleximuv_user');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Error parsing saved user:", error);
+      }
     }
     setIsLoading(false);
   }, []);
@@ -60,7 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     
     setUser(foundUser);
-    localStorage.setItem('fleximov_user', JSON.stringify(foundUser));
+    localStorage.setItem('fleximuv_user', JSON.stringify(foundUser));
     
     toast({
       title: "Login Successful",
@@ -72,7 +77,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('fleximov_user');
+    localStorage.removeItem('fleximuv_user');
     toast({
       title: "Logged Out",
       description: "You have been successfully logged out",

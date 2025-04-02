@@ -37,7 +37,7 @@ const LoginForm = () => {
 
   // Define the demo accounts we want to show with English translations
   const demoAccounts = [
-    { name: "Bambang Supratman (Admin)", email: "bambang@fleximov.com" },
+    { name: "Bambang Supratman (Admin)", email: "bambang@fleximuv.com" },
     { name: "Joko Widodo (Fleet Partner)", email: "joko@surabayaexpress.com" },
     { name: "Agus Santoso (Independent Courier)", email: "agus@eastjavacourier.com" },
     { name: "Siti Rahayu (Business Partner)", email: "siti@surabayamart.com" },
@@ -47,7 +47,7 @@ const LoginForm = () => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Login to Fleximov</CardTitle>
+        <CardTitle className="text-2xl font-bold">Login to Fleximuv</CardTitle>
         <CardDescription>
           Enter your credentials to access your account
         </CardDescription>
@@ -68,7 +68,7 @@ const LoginForm = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <a href="#" className="text-sm text-fleximov-500 hover:underline">
+              <a href="#" className="text-sm text-fleximuv-500 hover:underline">
                 Forgot password?
               </a>
             </div>
@@ -99,7 +99,7 @@ const LoginForm = () => {
                 <li key={index} className="text-xs">
                   <button
                     type="button"
-                    className="text-fleximov-500 hover:underline"
+                    className="text-fleximuv-500 hover:underline"
                     onClick={() => setEmail(account.email)}
                   >
                     {account.name}
@@ -109,13 +109,13 @@ const LoginForm = () => {
             </ul>
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex flex-col space-y-2">
           <Button 
             type="submit" 
-            className="w-full bg-fleximov-500 hover:bg-fleximov-600"
+            className="w-full bg-fleximuv-500 hover:bg-fleximuv-600"
             disabled={isLoading}
           >
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? 'Logging in...' : 'Sign In'}
           </Button>
         </CardFooter>
       </form>
