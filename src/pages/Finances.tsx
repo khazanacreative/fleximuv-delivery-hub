@@ -1,15 +1,27 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { usePermissions } from '@/hooks/use-permissions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Wallet, Coins, ArrowUpRight, ArrowDownRight, CreditCard, Receipt } from "lucide-react";
 import TopUpTokenForm from '@/components/finances/TopUpTokenForm';
+import { useLocation } from 'react-router-dom';
 
 const Finances = () => {
   const { user } = useAuth();
   const { isPartner, isAdmin, isDriver } = usePermissions();
+  const location = useLocation();
+  const [activeTab, setActiveTab] = React.useState("transactions");
+  
+  // Check if there's a tab parameter in the URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tabParam = params.get('tab');
+    if (tabParam && ['transactions', 'top-up', 'payouts', 'earnings'].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [location]);
 
   return (
     <div className="space-y-6">
@@ -71,7 +83,7 @@ const Finances = () => {
         </Card>
       </div>
 
-      <Tabs defaultValue="transactions" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="transactions">Transactions</TabsTrigger>
           {isPartner && <TabsTrigger value="top-up">Top Up Tokens</TabsTrigger>}
@@ -128,6 +140,14 @@ const Finances = () => {
                     <p className="text-sm text-muted-foreground">
                       Delivery tokens are credits that you can use to pay for delivery services.
                       Each token equals one credit for a delivery.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Token Pricing</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Each token costs Rp 1,000. You can purchase tokens in bulk to ensure 
+                      smooth operations for all your delivery needs.
                     </p>
                   </div>
                   

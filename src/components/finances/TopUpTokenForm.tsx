@@ -15,6 +15,9 @@ const TopUpTokenForm = () => {
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('creditCard');
+  
+  // Flat rate of 1000 rupiah per token
+  const tokenRate = 1000;
 
   const handleTopUp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +52,11 @@ const TopUpTokenForm = () => {
     }, 1500);
   };
 
-  const predefinedAmounts = [100, 500, 1000, 5000];
+  const predefinedAmounts = [5, 10, 20, 50];
+  
+  // Calculate rupiah values for predefined token amounts
+  const tokenToRupiah = (tokens) => tokens * tokenRate;
+  const rupiahToToken = (rupiah) => Math.floor(rupiah / tokenRate);
 
   return (
     <Card className="border-fleximuv-100 overflow-hidden">
@@ -64,33 +71,29 @@ const TopUpTokenForm = () => {
         <form onSubmit={handleTopUp}>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="amount">Amount</Label>
+              <Label htmlFor="amount">Number of Tokens (Rp {tokenRate} each)</Label>
               <div className="relative mt-1">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <span className="text-gray-500">Rp</span>
-                </div>
                 <Input
                   id="amount"
                   type="number"
-                  placeholder="Enter amount"
+                  placeholder="Enter number of tokens"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="pl-10"
                   min="1"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-4 gap-2">
-              {predefinedAmounts.map((amt) => (
+              {predefinedAmounts.map((tokens) => (
                 <Button
-                  key={amt}
+                  key={tokens}
                   type="button"
                   variant="outline"
                   className="border-fleximuv-200 hover:bg-fleximuv-50"
-                  onClick={() => setAmount(amt.toString())}
+                  onClick={() => setAmount(tokens.toString())}
                 >
-                  {amt}
+                  {tokens} tokens
                 </Button>
               ))}
             </div>
@@ -136,6 +139,10 @@ const TopUpTokenForm = () => {
             <div className="flex justify-between mt-2">
               <span className="text-sm font-medium text-gray-600">Top-up Amount:</span>
               <span className="font-semibold">{amount ? parseInt(amount) : 0} tokens</span>
+            </div>
+            <div className="flex justify-between mt-2">
+              <span className="text-sm font-medium text-gray-600">Total Price:</span>
+              <span className="font-semibold">Rp {amount ? parseInt(amount) * tokenRate : 0}</span>
             </div>
             <div className="border-t border-gray-200 my-2"></div>
             <div className="flex justify-between">

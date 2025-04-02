@@ -15,7 +15,6 @@ import OrderDetails from "@/components/orders/OrderDetails";
 import OrderForm from "@/components/orders/OrderForm";
 import LocationMap from "@/components/orders/LocationMap";
 import OrderFilters from "@/components/orders/OrderFilters";
-import DriverEarnings from "@/components/dashboard/DriverEarnings";
 import DriverOrdersContent from "@/components/drivers/DriverOrdersContent";
 
 const Orders = () => {
@@ -207,10 +206,7 @@ const Orders = () => {
     <div className="space-y-6">
       {isDriver && !isIndependentCourier ? (
         <div className="space-y-8">
-          <DriverEarnings />
-          <div className="border-t pt-6">
-            <DriverOrdersContent />
-          </div>
+          <DriverOrdersContent />
         </div>
       ) : (
         <>
@@ -239,6 +235,17 @@ const Orders = () => {
                 >
                   <Plus className="h-5 w-5" />
                   Create Order
+                </Button>
+              )}
+
+              {isPartner && (
+                <Button
+                  onClick={() => window.location.href = '/finances?tab=top-up'}
+                  className="flex items-center gap-2 px-5 py-2 h-11 bg-fleximuv-500 hover:bg-fleximuv-600"
+                  size="lg"
+                >
+                  <Coins className="h-5 w-5" />
+                  Top Up Tokens
                 </Button>
               )}
             </div>
