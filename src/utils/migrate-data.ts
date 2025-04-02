@@ -16,12 +16,12 @@ export const migrateData = async () => {
     console.log('Demo users initialized successfully:', data);
     
     // Let's make sure the admin user exists by explicitly checking
-    // Use any to prevent type issues
-    const adminCheck = await supabase
+    // Use any to prevent type issues and break the chain before maybeSingle()
+    const adminCheck = await (supabase
       .from('profiles')
       .select('*')
-      .eq('email', 'admin@fleximov.com')
-      .maybeSingle() as any;
+      .eq('email', 'admin@fleximov.com') as any)
+      .maybeSingle();
       
     if (adminCheck.error) {
       console.error('Error checking admin user:', adminCheck.error);
@@ -53,11 +53,12 @@ const createAdminUser = async () => {
     if (!userId) {
       console.log('No user ID available, attempting to find existing admin');
       // Check profiles table for admin instead of users table
-      const existingAdmin = await supabase
+      // Use any to break the type chain before maybeSingle() call
+      const existingAdmin = await (supabase
         .from('profiles')
         .select('id')
-        .eq('role', 'admin')
-        .maybeSingle() as any;
+        .eq('role', 'admin') as any)
+        .maybeSingle();
         
       if (!existingAdmin.data?.id) {
         console.error('Could not find or create admin user');
