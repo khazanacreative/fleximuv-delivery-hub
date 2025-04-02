@@ -58,10 +58,10 @@ export function Overview() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) => `Rp ${value}`}
         />
         <Tooltip 
-          formatter={(value) => [`$${value}`, 'Revenue']}
+          formatter={(value) => [`Rp ${value}`, 'Revenue']}
           cursor={{fill: 'rgba(0, 0, 0, 0.05)'}}
         />
         <Bar 
