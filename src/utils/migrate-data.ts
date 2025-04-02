@@ -5,11 +5,10 @@ export const migrateData = async () => {
   try {
     console.log('Calling database function to initialize demo users');
     
-    // Break type inference chain completely with unknown type
-    const { data, error } = await supabase.rpc('initialize_demo_users') as unknown as {
-      data: any;
-      error: any;
-    };
+    // Use a simple explicit type instead of letting TypeScript infer complex types
+    const result = await supabase.rpc('initialize_demo_users');
+    const data = result.data;
+    const error = result.error;
     
     if (error) {
       console.error('Error initializing demo users:', error);
@@ -19,20 +18,15 @@ export const migrateData = async () => {
     console.log('Demo users initialized successfully:', data);
     
     // Let's make sure the admin user exists by explicitly checking
-    // Use unknown type to completely break the type inference chain
-    const adminQuery = supabase
+    const adminResult = await supabase
       .from('profiles')
       .select('*')
-      .eq('email', 'admin@fleximov.com');
+      .eq('email', 'admin@fleximov.com')
+      .maybeSingle();
       
-    // Cast to unknown first, then to a simple object type
-    const adminCheck = await (adminQuery as unknown as {
-      maybeSingle(): Promise<{ data: any; error: any }>
-    }).maybeSingle();
-      
-    if (adminCheck.error) {
-      console.error('Error checking admin user:', adminCheck.error);
-    } else if (!adminCheck.data) {
+    if (adminResult.error) {
+      console.error('Error checking admin user:', adminResult.error);
+    } else if (!adminResult.data) {
       console.log('Admin user not found, creating explicitly');
       // Try to create admin user explicitly if missing
       await createAdminUser();
@@ -53,27 +47,20 @@ const createAdminUser = async () => {
       email: 'admin@fleximov.com',
       password: 'password123',
       email_confirm: true,
-    }) as unknown as {
-      data: { user?: { id: string } };
-      error: any;
-    };
+    });
     
     const userId = authResult.data?.user?.id;
     
     if (!userId) {
       console.log('No user ID available, attempting to find existing admin');
       // Check profiles table for admin instead of users table
-      const adminQuery = supabase
+      const existingAdminResult = await supabase
         .from('profiles')
         .select('id')
-        .eq('role', 'admin');
+        .eq('role', 'admin')
+        .maybeSingle();
         
-      // Cast to unknown first, then to a simple object type
-      const existingAdmin = await (adminQuery as unknown as {
-        maybeSingle(): Promise<{ data: { id?: string }; error: any }>
-      }).maybeSingle();
-        
-      if (!existingAdmin.data?.id) {
+      if (!existingAdminResult.data?.id) {
         console.error('Could not find or create admin user');
         return;
       }
@@ -87,10 +74,7 @@ const createAdminUser = async () => {
         full_name: 'Bambang Supratman',
         role: 'admin',
         status: 'active',
-      }) as unknown as {
-        data: any;
-        error: any;
-      };
+      });
       
     if (profileResult.error) {
       console.error('Error creating admin profile:', profileResult.error);
