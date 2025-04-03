@@ -37,6 +37,39 @@ import PartnerEditDialog from "@/components/partners/PartnerEditDialog";
 const initialPartners = [
   {
     id: "part-1",
+    name: "Joko Widodo",
+    address: "Jl. Patimura 45, Jakarta",
+    phone: "+6282134567123",
+    email: "jokowi@fleximov.id",
+    totalDrivers: 15,
+    status: "active",
+    joinDate: "2024-08-15",
+    type: "fleet"
+  },
+  {
+    id: "part-2",
+    name: "Agus Santoso",
+    address: "Jl. Ahmad Yani 78, Surabaya",
+    phone: "+6281234567321",
+    email: "agus@courier.id",
+    totalDrivers: 1,
+    status: "active",
+    joinDate: "2024-07-22",
+    type: "courier"
+  },
+  {
+    id: "part-3",
+    name: "Siti Rahayu",
+    address: "Jl. Thamrin 88, Jakarta",
+    phone: "+6287812345678",
+    email: "siti.rahayu@business.co.id",
+    totalDrivers: 0,
+    status: "active",
+    joinDate: "2024-09-10",
+    type: "business"
+  },
+  {
+    id: "part-4",
     name: "Rumah Makan Padang Sederhana",
     address: "Jl. Raya Darmo 45, Surabaya",
     phone: "+6282134567890",
@@ -44,9 +77,10 @@ const initialPartners = [
     totalDrivers: 12,
     status: "active",
     joinDate: "2023-04-15",
+    type: "business"
   },
   {
-    id: "part-2",
+    id: "part-5",
     name: "Ayam Geprek Bu Tini",
     address: "Jl. Diponegoro 78, Surabaya",
     phone: "+6281234567890",
@@ -54,9 +88,10 @@ const initialPartners = [
     totalDrivers: 8,
     status: "active",
     joinDate: "2023-06-22",
+    type: "business"
   },
   {
-    id: "part-3",
+    id: "part-6",
     name: "Seafood Pak Karyo",
     address: "Jl. Mayjen Sungkono 120, Surabaya",
     phone: "+6287812345678",
@@ -64,6 +99,7 @@ const initialPartners = [
     totalDrivers: 15,
     status: "pending",
     joinDate: "2023-09-08",
+    type: "business"
   },
 ];
 

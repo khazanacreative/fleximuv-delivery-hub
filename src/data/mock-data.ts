@@ -1,4 +1,3 @@
-
 import { User, Driver, Order, Transaction, ServiceType } from '../types';
 
 // Mock data for users
@@ -16,41 +15,41 @@ export const mockUsers: User[] = [
   },
   {
     id: '2',
-    name: 'Hendra Wijaya',
-    email: 'hendra@surabayaexpress.com',
-    phone: '+6281234567891',
+    name: 'Joko Widodo',
+    email: 'jokowi@fleximov.id',
+    phone: '+6282134567123',
     role: 'partner',
     partnerType: 'fleet',
     hasDrivers: true,
-    avatar: '/avatars/hendra.jpg',
-    createdAt: new Date('2024-02-10'),
-    balance: 5000000,
+    avatar: '/avatars/jokowi.jpg',
+    createdAt: new Date('2024-08-15'),
+    balance: 12000000,
     status: 'active'
   },
   {
     id: '3',
     name: 'Siti Rahayu',
-    email: 'siti@surabayamart.com',
-    phone: '+6281234567892',
+    email: 'siti.rahayu@business.co.id',
+    phone: '+6287812345678',
     role: 'partner',
     partnerType: 'business',
     hasDrivers: false,
     avatar: '/avatars/siti.jpg',
-    createdAt: new Date('2024-03-05'),
-    balance: 3500000,
+    createdAt: new Date('2024-09-10'),
+    balance: 7500000,
     status: 'active'
   },
   {
     id: '4',
     name: 'Agus Santoso',
-    email: 'agus@eastjavacourier.com',
-    phone: '+6281234567893',
+    email: 'agus@courier.id',
+    phone: '+6281234567321',
     role: 'partner',
     partnerType: 'courier',
     hasDrivers: true,
     avatar: '/avatars/agus.jpg',
-    createdAt: new Date('2024-04-12'),
-    balance: 12000000,
+    createdAt: new Date('2024-07-22'),
+    balance: 9000000,
     status: 'active'
   },
   {
