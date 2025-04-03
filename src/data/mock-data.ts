@@ -10,7 +10,7 @@ export const mockUsers: User[] = [
     role: 'admin',
     avatar: '/avatars/bambang.jpg',
     createdAt: new Date('2024-01-15'),
-    balance: 15000000,
+    balance: 15000,
     status: 'active'
   },
   {
@@ -23,7 +23,7 @@ export const mockUsers: User[] = [
     hasDrivers: true,
     avatar: '/avatars/jokowi.jpg',
     createdAt: new Date('2024-08-15'),
-    balance: 12000000,
+    balance: 12000,
     status: 'active'
   },
   {
@@ -36,7 +36,7 @@ export const mockUsers: User[] = [
     hasDrivers: false,
     avatar: '/avatars/siti.jpg',
     createdAt: new Date('2024-09-10'),
-    balance: 7500000,
+    balance: 7500,
     status: 'active'
   },
   {
@@ -49,7 +49,7 @@ export const mockUsers: User[] = [
     hasDrivers: true,
     avatar: '/avatars/agus.jpg',
     createdAt: new Date('2024-07-22'),
-    balance: 9000000,
+    balance: 9000,
     status: 'active'
   },
   {
