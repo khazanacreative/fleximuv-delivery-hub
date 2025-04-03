@@ -16,7 +16,7 @@ export const mockUsers: User[] = [
   {
     id: '2',
     name: 'Joko Widodo',
-    email: 'jokowi@fleximov.id',
+    email: 'joko@surabayaexpress.com',
     phone: '+6282134567123',
     role: 'partner',
     partnerType: 'fleet',
@@ -29,7 +29,7 @@ export const mockUsers: User[] = [
   {
     id: '3',
     name: 'Siti Rahayu',
-    email: 'siti.rahayu@business.co.id',
+    email: 'siti@surabayamart.com',
     phone: '+6287812345678',
     role: 'partner',
     partnerType: 'business',
@@ -42,7 +42,7 @@ export const mockUsers: User[] = [
   {
     id: '4',
     name: 'Agus Santoso',
-    email: 'agus@courier.id',
+    email: 'agus@eastjavacourier.com',
     phone: '+6281234567321',
     role: 'partner',
     partnerType: 'courier',
