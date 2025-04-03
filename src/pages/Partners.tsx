@@ -17,7 +17,7 @@ const initialPartners = [
     address: "Jl. Patimura 45, Jakarta",
     phone: "+6282134567123",
     email: "jokowi@fleximov.id",
-    totalDrivers: 15,
+    totalDrivers: 8,
     status: "active",
     joinDate: "2024-08-15",
     type: "fleet"
@@ -50,7 +50,7 @@ const initialPartners = [
     address: "Jl. Raya Darmo 45, Surabaya",
     phone: "+6282134567890",
     email: "rm.padang@example.com",
-    totalDrivers: 12,
+    totalDrivers: 3,
     status: "active",
     joinDate: "2023-04-15",
     type: "business"
@@ -61,7 +61,7 @@ const initialPartners = [
     address: "Jl. Diponegoro 78, Surabaya",
     phone: "+6281234567890",
     email: "ayamgeprek@example.com",
-    totalDrivers: 8,
+    totalDrivers: 3,
     status: "active",
     joinDate: "2023-06-22",
     type: "business"
@@ -72,7 +72,7 @@ const initialPartners = [
     address: "Jl. Mayjen Sungkono 120, Surabaya",
     phone: "+6287812345678",
     email: "seafood.karyo@example.com",
-    totalDrivers: 15,
+    totalDrivers: 3,
     status: "pending",
     joinDate: "2023-09-08",
     type: "business"
