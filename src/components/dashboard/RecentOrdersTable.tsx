@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, MapPin, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePermissions } from '@/hooks/use-permissions';
+import { formatRupiah } from '@/utils/formatters';
 
 interface Order {
   id: string;
@@ -13,49 +14,49 @@ interface Order {
   status: 'pending' | 'accepted' | 'assigned' | 'in_progress' | 'completed' | 'cancelled';
   date: string;
   address: string;
-  amount: string;
+  amount: string | number;
 }
 
 const mockOrders: Order[] = [
   {
     id: "ORD-5692",
-    customer: "John Smith",
+    customer: "Andi Pratama",
     status: "pending",
-    date: "2023-09-12",
-    address: "123 Main St, City",
-    amount: "$24.50"
+    date: "2025-03-12",
+    address: "Jl. Pahlawan No. 17, Surabaya",
+    amount: 245000
   },
   {
     id: "ORD-5693",
-    customer: "Sarah Johnson",
+    customer: "Sari Rahmawati",
     status: "in_progress",
-    date: "2023-09-12",
-    address: "456 Oak St, City",
-    amount: "$36.20"
+    date: "2025-03-12",
+    address: "Jl. Diponegoro No. 42, Surabaya",
+    amount: 362000
   },
   {
     id: "ORD-5694",
-    customer: "Michael Brown",
+    customer: "Bambang Wijaya",
     status: "completed",
-    date: "2023-09-11",
-    address: "789 Pine St, City",
-    amount: "$19.99"
+    date: "2025-03-11",
+    address: "Jl. Ahmad Yani No. 89, Surabaya",
+    amount: 199000
   },
   {
     id: "ORD-5695",
-    customer: "Emily Davis",
+    customer: "Dian Purnama",
     status: "cancelled",
-    date: "2023-09-11",
-    address: "101 Maple St, City",
-    amount: "$42.80"
+    date: "2025-03-11",
+    address: "Jl. Raya Darmo No. 15, Surabaya",
+    amount: 428000
   },
   {
     id: "ORD-5696",
-    customer: "Daniel Wilson",
+    customer: "Eko Santoso",
     status: "assigned",
-    date: "2023-09-10",
-    address: "202 Cedar St, City",
-    amount: "$31.25"
+    date: "2025-03-10",
+    address: "Jl. Pemuda No. 33, Surabaya",
+    amount: 312500
   }
 ];
 
@@ -116,7 +117,7 @@ const RecentOrdersTable = ({ className }: RecentOrdersTableProps) => {
                       </Badge>
                     </td>
                     <td className="px-4 py-3">{order.date}</td>
-                    <td className="px-4 py-3">{order.amount}</td>
+                    <td className="px-4 py-3">{formatRupiah(order.amount)}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-2">
                         <Button size="icon" variant="ghost" className="h-8 w-8 text-fleximuv-700 hover:text-fleximuv-800 hover:bg-fleximuv-100">

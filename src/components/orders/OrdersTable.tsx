@@ -24,6 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 import RoleGate from "@/components/permissions/RoleGate";
 import { Order, OrderStatus } from "@/types";
+import { formatRupiah } from "@/utils/formatters";
 
 interface OrdersTableProps {
   filteredOrders: Order[];
@@ -71,7 +72,7 @@ const OrdersTable = ({
   const formatDate = (date) => {
     if (!date) return '';
     const d = new Date(date);
-    return d.toLocaleString('en-US', {
+    return d.toLocaleString('id-ID', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -98,6 +99,7 @@ const OrdersTable = ({
             </TableHead>
             <TableHead>Items</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Amount</TableHead>
             <TableHead>Driver</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -114,6 +116,7 @@ const OrdersTable = ({
                   {formatStatus(order.status)}
                 </Badge>
               </TableCell>
+              <TableCell>{formatRupiah(order.amount)}</TableCell>
               <TableCell>{order.driver || (order.driverId ? `Driver #${order.driverId}` : "Unassigned")}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>

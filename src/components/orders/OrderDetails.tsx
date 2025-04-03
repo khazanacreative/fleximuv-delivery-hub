@@ -14,6 +14,7 @@ import { Order } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { formatRupiah } from "@/utils/formatters";
 
 interface OrderDetailsProps {
   viewOrderDetails: Order | null;
@@ -58,7 +59,7 @@ const OrderDetails = ({
   const formatDate = (date) => {
     if (!date) return '';
     const d = new Date(date);
-    return d.toLocaleString('en-US', {
+    return d.toLocaleString('id-ID', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -159,6 +160,11 @@ const OrderDetails = ({
                 <p className="text-sm text-muted-foreground">Delivery Location</p>
                 <p className="font-medium">{viewOrderDetails.deliveryAddress}</p>
               </div>
+            </div>
+            
+            <div>
+              <p className="text-sm text-muted-foreground">Amount</p>
+              <p className="font-medium">{formatRupiah(viewOrderDetails.amount)}</p>
             </div>
             
             <div>

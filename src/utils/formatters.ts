@@ -16,10 +16,51 @@ export const formatRupiah = (value: number | string, includeSymbol: boolean = tr
     return 'Invalid amount';
   }
   
-  return new Intl.NumberFormat('id-ID', { 
+  const formatter = new Intl.NumberFormat('id-ID', { 
     style: 'currency', 
     currency: 'IDR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
-  }).format(value);
+  });
+  
+  const formatted = formatter.format(value);
+  
+  if (!includeSymbol) {
+    // Remove the 'Rp' symbol and any non-breaking space if present
+    return formatted.replace(/^Rp\s*/, '');
+  }
+  
+  return formatted;
+};
+
+/**
+ * Formats a value in thousands of Rupiah
+ * @param value The number to format in thousands
+ * @param includeSymbol Whether to include the Rp symbol
+ * @returns Formatted currency string in thousands
+ */
+export const formatRupiahInThousands = (value: number | string, includeSymbol: boolean = true): string => {
+  if (typeof value === 'string') {
+    value = parseFloat(value);
+  }
+  
+  if (isNaN(value)) {
+    return 'Invalid amount';
+  }
+  
+  // Convert to thousands
+  const valueInThousands = value / 1000;
+  
+  const formatter = new Intl.NumberFormat('id-ID', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1
+  });
+  
+  const formatted = formatter.format(valueInThousands);
+  
+  if (includeSymbol) {
+    return `Rp ${formatted}K`;
+  }
+  
+  return `${formatted}K`;
 };

@@ -9,36 +9,36 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
-import { formatRupiah } from '@/utils/formatters';
+import { formatRupiah, formatRupiahInThousands } from '@/utils/formatters';
 
 const data = [
   {
     name: 'Jan',
-    total: 2400,
+    total: 12400000,
   },
   {
     name: 'Feb',
-    total: 1398,
+    total: 21398000,
   },
   {
     name: 'Mar',
-    total: 9800,
+    total: 19800000,
   },
   {
     name: 'Apr',
-    total: 3908,
+    total: 23908000,
   },
   {
     name: 'May',
-    total: 4800,
+    total: 34800000,
   },
   {
     name: 'Jun',
-    total: 3800,
+    total: 33800000,
   },
   {
     name: 'Jul',
-    total: 4300,
+    total: 42300000,
   },
 ];
 
@@ -59,7 +59,7 @@ export function Overview() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `${value}`}
+          tickFormatter={(value) => formatRupiahInThousands(value, false)}
         />
         <Tooltip 
           formatter={(value: number | string) => [formatRupiah(value), 'Revenue']}

@@ -7,6 +7,7 @@ import TransactionsList from "@/components/dashboard/TransactionsList";
 import RecentOrdersTable from "@/components/dashboard/RecentOrdersTable";
 import { Overview } from "@/components/dashboard/Overview";
 import { FAQ } from "@/components/dashboard/FAQ";
+import { formatRupiah } from "@/utils/formatters";
 
 const Dashboard = () => {
   return (
@@ -16,7 +17,7 @@ const Dashboard = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatisticCard
           title="Total Revenue"
-          value="Rp 4.020.500"
+          value={formatRupiah(4020500)}
           description="+20.1% from last month"
           trend="up"
         />
