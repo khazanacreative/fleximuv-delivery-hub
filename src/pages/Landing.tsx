@@ -37,7 +37,7 @@ const Landing = () => {
               Simplified <span className="text-fleximuv-500">UMKM</span> Delivery Management
             </h1>
             <p className="text-xl text-muted-foreground">
-              Helping small and medium enterprises manage orders and deliveries easily.
+            Helping small and medium enterprises manage orders and deliveries easily. All communications are integrated with WhatsApp, and the app charges a low fee of only 1,000 rupiahs per transaction.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/login">
