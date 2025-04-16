@@ -17,10 +17,10 @@ const Login = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md text-center mb-8">
         <Link to="/landing" className="inline-flex items-center justify-center gap-2 mb-5">
-        <div className="w-10 h-10 bg-fleximuv-500 rounded-md flex items-center justify-center">
-            <img src="https://www.svgrepo.com/show/34953/courier.svg" alt="Courier Icon" className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 bg-fleximuv-500 rounded-md flex items-center justify-center">
+            <span className="text-white font-bold">FM</span>
           </div>
-        <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start">
             <h1 className="text-2xl font-bold font-display">FlexiMuv</h1>
             <span className="text-sm tracking-wide leading-tight text-muted-foreground">Delivery Hub</span>
           </div>
