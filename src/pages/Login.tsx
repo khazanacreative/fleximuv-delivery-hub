@@ -21,7 +21,7 @@ const Login = () => {
             <span className="text-white font-bold">FM</span>
           </div>
           <div className="flex flex-col items-start">
-            <h1 className="text-2xl font-bold font-display">Fleximuv</h1>
+            <h1 className="text-2xl font-bold font-display">FlexiMuv</h1>
             <span className="text-sm tracking-wide leading-tight text-muted-foreground">Delivery Hub</span>
           </div>
         </Link>

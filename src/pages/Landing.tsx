@@ -17,7 +17,7 @@ const Landing = () => {
               <span className="text-white font-bold">FM</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-semibold text-lg tracking-wide leading-tight">Fleximuv</span>
+              <span className="font-display font-semibold text-lg tracking-wide leading-tight">FlexiMuv</span>
               <span className="text-xs text-muted-foreground leading-tight tracking-wide">Delivery Hub</span>
             </div>
           </div>
