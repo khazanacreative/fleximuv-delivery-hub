@@ -80,12 +80,12 @@ const Header = () => {
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
-          <div className="relative">
+        <div className="flex items-center gap-1 sm:gap-3">
+          <div className="relative hidden sm:block">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
             <Input 
               placeholder="Search..." 
-              className="pl-10 bg-muted/30 border-muted/50 w-[180px] md:w-[240px] h-9 rounded-xl"
+              className="pl-10 bg-muted/30 border-muted/50 w-[160px] md:w-[240px] h-9 rounded-xl"
             />
           </div>
           
@@ -100,7 +100,7 @@ const Header = () => {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-0" align="end">
+            <PopoverContent className="w-[calc(100vw-2rem)] sm:w-80 p-0" align="end">
               <div className="p-3 border-b">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium">Notifications</h4>
