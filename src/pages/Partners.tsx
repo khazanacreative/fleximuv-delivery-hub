@@ -130,7 +130,7 @@ const Partners = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
             <Building className="h-8 w-8" />
@@ -141,7 +141,7 @@ const Partners = () => {
           </p>
         </div>
         
-        <Button onClick={() => setAddDialogOpen(true)}>Add Partner</Button>
+        <Button onClick={() => setAddDialogOpen(true)} className="w-full md:w-auto">Add Partner</Button>
       </div>
 
       <PartnerList 
