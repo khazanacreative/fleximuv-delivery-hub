@@ -156,18 +156,18 @@ const Reports = () => {
             Analyze your business performance and delivery metrics
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
+        <div className="flex flex-col gap-2 w-full md:w-auto md:flex-row md:flex-wrap md:items-center">
+          <Button variant="outline" size="sm" className="gap-2 justify-start">
             <Calendar className="h-4 w-4" />
             <span className="hidden sm:inline">Date Range</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2 justify-start">
             <Filter className="h-4 w-4" />
             <span className="hidden sm:inline">Filter</span>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 justify-start">
                 <Download className="h-4 w-4" />
                 <span className="hidden sm:inline">Export</span>
               </Button>
@@ -179,7 +179,7 @@ const Reports = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <RoleGate allowedRoles={['admin', 'partner']}>
-            <Button variant="outline" size="sm" className="gap-2" onClick={handleShareReport}>
+            <Button variant="outline" size="sm" className="gap-2 justify-start" onClick={handleShareReport}>
               <Share2 className="h-4 w-4" />
               <span className="hidden sm:inline">Share</span>
             </Button>

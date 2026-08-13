@@ -26,7 +26,7 @@ const DriversHeader = ({
   canManageDrivers,
 }: DriversHeaderProps) => {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
       <div>
         <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
           <Truck className="h-8 w-8" />
@@ -37,7 +37,7 @@ const DriversHeader = ({
         </p>
       </div>
       
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 w-full md:w-auto md:flex-row">
         <DriverFilters
           statusFilters={statusFilters}
           onFilterChange={onFilterChange}
