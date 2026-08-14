@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Bell, Search, MapPin, Package, Settings, User, LogOut } from 'lucide-react';
+import { Bell, Search, MapPin, Package, Settings, User, LogOut, BarChart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -172,12 +172,21 @@ const Header = () => {
                 <User size={16} />
                 Profile
               </DropdownMenuItem>
+              {(user?.role === 'admin' || user?.role === 'partner') && (
+                <DropdownMenuItem asChild className="md:hidden cursor-pointer rounded-lg hover:bg-accent/50 gap-2">
+                  <Link to="/reports">
+                    <BarChart size={16} />
+                    Reports
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem asChild className="cursor-pointer rounded-lg hover:bg-accent/50 gap-2">
                 <Link to="/settings">
                   <Settings size={16} />
                   Settings
                 </Link>
               </DropdownMenuItem>
+
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer rounded-lg hover:bg-destructive/10 hover:text-destructive gap-2" onClick={logout}>
                 <LogOut size={16} />
