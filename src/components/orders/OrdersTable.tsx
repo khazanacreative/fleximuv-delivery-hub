@@ -86,7 +86,7 @@ const OrdersTable = ({
   };
 
   return (
-    <div className="border rounded-lg overflow-hidden">
+    <div className="border rounded-lg overflow-x-auto w-full max-w-full">
       <Table>
         <TableHeader>
           <TableRow>
