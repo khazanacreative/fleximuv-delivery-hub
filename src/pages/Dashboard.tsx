@@ -41,8 +41,8 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="md:col-span-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 min-w-0">
+        <Card className="md:col-span-4 min-w-0">
           <CardHeader>
             <CardTitle>Revenue Overview</CardTitle>
             <CardDescription>
@@ -56,9 +56,9 @@ const Dashboard = () => {
         <DriverStatusCard />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 min-w-0">
         <RecentOrdersTable />
-        <Card className="md:col-span-3">
+        <Card className="md:col-span-3 min-w-0">
           <CardHeader>
             <CardTitle>Recent Transactions</CardTitle>
             <CardDescription>Recent financial activity</CardDescription>
