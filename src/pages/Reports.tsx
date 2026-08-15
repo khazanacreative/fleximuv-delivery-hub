@@ -331,7 +331,7 @@ const Reports = () => {
                 <CardTitle className="text-left">Monthly Performance</CardTitle>
                 <CardDescription className="text-left">Orders and revenue over time</CardDescription>
               </CardHeader>
-              <CardContent className="h-80">
+              <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsBarChart
                     data={monthlyData}
@@ -360,7 +360,7 @@ const Reports = () => {
                 <CardTitle className="text-left">Order Distribution</CardTitle>
                 <CardDescription className="text-left">By service type</CardDescription>
               </CardHeader>
-              <CardContent className="h-80">
+              <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPieChart>
                     <Pie
@@ -368,7 +368,7 @@ const Reports = () => {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -399,7 +399,7 @@ const Reports = () => {
                 <CardTitle className="text-left">Daily Order Volume</CardTitle>
                 <CardDescription className="text-left">Last 7 days order count</CardDescription>
               </CardHeader>
-              <CardContent className="h-80">
+              <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
                     data={dailyOrdersData}
@@ -426,7 +426,7 @@ const Reports = () => {
                 <CardTitle className="text-left">Order Status Breakdown</CardTitle>
                 <CardDescription className="text-left">Current order statuses</CardDescription>
               </CardHeader>
-              <CardContent className="h-80">
+              <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPieChart>
                     <Pie
@@ -439,7 +439,7 @@ const Reports = () => {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -462,7 +462,7 @@ const Reports = () => {
                 <CardTitle className="text-left">Order Processing Time Analysis</CardTitle>
                 <CardDescription className="text-left">Average processing time by order type</CardDescription>
               </CardHeader>
-              <CardContent className="h-80">
+              <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsBarChart
                     data={[
@@ -545,7 +545,7 @@ const Reports = () => {
                 <CardTitle className="text-left">Driver Performance</CardTitle>
                 <CardDescription className="text-left">On-time vs. late deliveries by team</CardDescription>
               </CardHeader>
-              <CardContent className="h-80">
+              <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsBarChart
                     data={courierPerformanceData}
@@ -633,7 +633,7 @@ const Reports = () => {
                   <CardTitle className="text-left">Revenue by Service Type</CardTitle>
                   <CardDescription className="text-left">Distribution of earnings</CardDescription>
                 </CardHeader>
-                <CardContent className="h-80">
+                <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                   <ResponsiveContainer width="100%" height="100%">
                     <RechartsPieChart>
                       <Pie
@@ -646,7 +646,7 @@ const Reports = () => {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="value"
@@ -667,7 +667,7 @@ const Reports = () => {
                   <CardTitle className="text-left">Monthly Revenue Trend</CardTitle>
                   <CardDescription className="text-left">Last 6 months</CardDescription>
                 </CardHeader>
-                <CardContent className="h-80">
+                <CardContent className="h-80 overflow-hidden px-2 sm:px-6">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={[

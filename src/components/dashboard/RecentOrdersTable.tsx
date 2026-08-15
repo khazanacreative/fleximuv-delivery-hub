@@ -81,7 +81,7 @@ const RecentOrdersTable = ({ className }: RecentOrdersTableProps) => {
   
   return (
     <Card className={cn(
-      "md:col-span-4", 
+      "md:col-span-4 min-w-0 w-full max-w-full", 
       className,
       isDriver ? "border-fleximuv-100 overflow-hidden" : ""
     )}>
@@ -90,9 +90,9 @@ const RecentOrdersTable = ({ className }: RecentOrdersTableProps) => {
         <CardDescription>View and manage your most recent orders</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="rounded-md border">
+        <div className="rounded-md border max-w-full overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[640px]">
               <thead>
                 <tr className={cn(
                   "border-b",
