@@ -34,14 +34,14 @@ export const getMobileNavItems = (role?: string): NavItem[] => {
     case 'driver':
       return [
         { name: 'Dashboard', path: '/dashboard', icon: Home },
-        { name: 'My Orders', path: '/orders', icon: Package },
+        { name: 'My Orders', path: '/my-orders', icon: Package },
         { name: 'Earnings', path: '/earnings', icon: CreditCard },
       ];
     case 'customer':
       return [
         { name: 'Dashboard', path: '/dashboard', icon: Home },
         { name: 'Orders', path: '/orders', icon: Package },
-        { name: 'Wallet', path: '/wallet', icon: Wallet },
+        { name: 'Wallet', path: '/finances', icon: Wallet },
       ];
     default:
       return [{ name: 'Dashboard', path: '/dashboard', icon: Home }];

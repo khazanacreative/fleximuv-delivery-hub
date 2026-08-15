@@ -15,7 +15,8 @@ const BottomNav = () => {
     <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 border-t border-border/60 bg-background/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)]">
       <ul className="flex items-stretch justify-around">
         {items.map((item) => {
-          const active = pathname === item.path;
+          const active =
+            pathname === item.path || pathname.startsWith(`${item.path}/`);
 
           return (
             <li key={item.name} className="flex-1 flex">
