@@ -91,9 +91,21 @@
     @apply border-border;
   }
 
+  html, body {
+    @apply overflow-x-hidden;
+    max-width: 100%;
+  }
+
   body {
     @apply bg-background text-foreground font-sans;
     font-family: 'Inter', sans-serif;
+  }
+
+  /* recharts offscreen measurement helper must never widen the page */
+  #recharts_measurement_span {
+    position: absolute !important;
+    top: -20000px !important;
+    left: -20000px !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
